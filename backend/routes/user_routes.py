@@ -1,15 +1,12 @@
-"""
-TaskPilotAI – User API Routes
-File: backend/routes/user_routes.py
+from fastapi import APIRouter, Depends
+from services.auth_service import get_current_user
 
-NOTE: User authentication and profile storage are managed by Supabase Auth
-and the Supabase `profiles` table. This router exists only for user-related
-operations that require server-side processing — for example, syncing
-user preferences that affect AI model behaviour.
+router = APIRouter(prefix="/users", tags=["users"])
 
-Endpoints (to be defined as needed):
-  GET  /users/me/preferences   – Fetch AI-relevant user preferences
-  PATCH /users/me/preferences  – Update AI-relevant user preferences
 
-Implementation deferred to the backend development step.
-"""
+@router.get("/me")
+def get_me(current_user=Depends(get_current_user)):
+    return {
+        "id": getattr(current_user, "id", None),
+        "email": getattr(current_user, "email", None),
+    }

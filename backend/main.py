@@ -1,18 +1,29 @@
-"""
-TaskPilotAI – FastAPI Application Entry Point
-File: backend/main.py
+from fastapi import FastAPI
+from routes.user_routes import router as user_router
+from routes.task_routes import router as task_router
+from routes.reminder_routes import router as reminder_router
+from routes.planner_routes import router as planner_router
+from routes.analytics_routes import router as analytics_router
+from routes.ai_routes import router as ai_router
 
-Responsibilities:
-  - Create and configure the FastAPI application instance
-  - Register all API routers (ai_routes, task_routes, user_routes)
-  - Configure CORS middleware (restrict to frontend origin in production)
-  - Set up lifespan events (startup / shutdown) for resource management
-  - Mount the /health endpoint for liveness checks
+app = FastAPI(
+    title="TaskPilotAI API",
+    version="1.0.0"
+)
 
-Architecture Note:
-  Authentication and core data storage are handled by Supabase, NOT by
-  this FastAPI service. This backend exists primarily to expose AI-powered
-  endpoints that require server-side Gemini API calls.
+app.include_router(user_router)
+app.include_router(task_router)
+app.include_router(reminder_router)
+app.include_router(planner_router)
+app.include_router(analytics_router)
+app.include_router(ai_router)
 
-Implementation deferred to the backend development step.
-"""
+
+@app.get("/")
+def read_root():
+    return {"message": "TaskPilotAI API is running", "status": "success"}
+
+
+@app.get("/health")
+def health_check():
+    return {"status": "healthy"}

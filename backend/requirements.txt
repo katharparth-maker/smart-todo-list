@@ -1,23 +1,6 @@
-# TaskPilotAI – Backend Python Dependencies
-# File: backend/requirements.txt
-#
-# Install with: pip install -r requirements.txt
-#
-# ── Web Framework ─────────────────────────────────────────────────────────────
-fastapi==0.115.5          # Modern async web framework
-uvicorn[standard]==0.32.1 # ASGI server with hot-reload support
-
-# ── AI / Gemini ────────────────────────────────────────────────────────────────
-google-generativeai==0.8.3  # Official Google Generative AI (Gemini) SDK
-
-# ── Supabase (server-side admin access only) ──────────────────────────────────
-supabase==2.10.0          # supabase-py client (uses SERVICE_ROLE_KEY server-side)
-
-# ── Configuration & Environment ───────────────────────────────────────────────
-python-dotenv==1.0.1      # Load .env variables into the environment
-
-# ── Request Validation ────────────────────────────────────────────────────────
-pydantic==2.10.2          # Data validation (bundled with FastAPI but pinned here)
-
-# ── HTTP Client (async) ───────────────────────────────────────────────────────
-httpx==0.27.2             # Async HTTP client used internally by supabase-py
+fastapi
+uvicorn[standard]
+python-dotenv
+supabase
+pydantic
+google-genai

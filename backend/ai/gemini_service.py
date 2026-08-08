@@ -1,14 +1,34 @@
-"""
-TaskPilotAI – Gemini API Service
-File: backend/ai/gemini_service.py
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+from google import genai
 
-Responsibilities:
-  - Initialise the google-generativeai SDK with the GEMINI_API_KEY from .env
-  - Expose a low-level async function to send a prompt to a Gemini model
-    and return the raw text response
-  - Handle API errors, rate-limit retries, and timeout logic
-  - Serve as the single integration point for the Gemini API; all other
-    AI modules call this service rather than the SDK directly
+# Load environment variables from backend/.env
+env_path = Path(__file__).resolve().parent.parent / ".env"
+load_dotenv(dotenv_path=env_path, override=True)
 
-Implementation deferred to the AI integration development step.
-"""
+api_key = os.getenv("GEMINI_API_KEY")
+if not api_key:
+    raise RuntimeError("GEMINI_API_KEY environment variable is missing")
+
+# Initialize Gemini client using google-genai package
+client = genai.Client(api_key=api_key)
+
+
+def generate_ai_response(prompt: str) -> str:
+    """
+    Generates an AI text response for the given prompt using the Gemini API.
+    """
+    try:
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=prompt,
+        )
+        return response.text if response and response.text else ""
+    except Exception:
+        # Fallback model if primary gemini-2.0-flash experiences quota limit
+        response = client.models.generate_content(
+            model="gemma-4-26b-a4b-it",
+            contents=prompt,
+        )
+        return response.text if response and response.text else ""

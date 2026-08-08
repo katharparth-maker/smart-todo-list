@@ -2,22 +2,26 @@ from typing import Dict, Any, List, Optional
 from services.supabase_service import supabase
 
 
-def get_tasks_for_user(user_id: str) -> List[Dict[str, Any]]:
-    response = supabase.table("tasks").select("*").eq("user_id", user_id).execute()
+def get_planner_entries_for_user(user_id: str) -> List[Dict[str, Any]]:
+    response = supabase.table("planner").select("*").eq("user_id", user_id).execute()
     return response.data or []
 
 
-def create_task_for_user(user_id: str, task_data: Dict[str, Any]) -> Dict[str, Any]:
-    payload = {**task_data, "user_id": user_id}
-    response = supabase.table("tasks").insert(payload).execute()
+def create_planner_entry_for_user(
+    user_id: str, planner_data: Dict[str, Any]
+) -> Dict[str, Any]:
+    payload = {**planner_data, "user_id": user_id}
+    response = supabase.table("planner").insert(payload).execute()
     return response.data[0] if response.data else {}
 
 
-def get_task_by_id_for_user(task_id: str, user_id: str) -> Optional[Dict[str, Any]]:
+def get_planner_entry_by_id_for_user(
+    planner_id: str, user_id: str
+) -> Optional[Dict[str, Any]]:
     response = (
-        supabase.table("tasks")
+        supabase.table("planner")
         .select("*")
-        .eq("id", task_id)
+        .eq("id", planner_id)
         .eq("user_id", user_id)
         .execute()
     )
@@ -26,10 +30,10 @@ def get_task_by_id_for_user(task_id: str, user_id: str) -> Optional[Dict[str, An
     return None
 
 
-def update_task_for_user(
-    task_id: str, user_id: str, update_data: Dict[str, Any]
+def update_planner_entry_for_user(
+    planner_id: str, user_id: str, update_data: Dict[str, Any]
 ) -> Optional[Dict[str, Any]]:
-    existing = get_task_by_id_for_user(task_id, user_id)
+    existing = get_planner_entry_by_id_for_user(planner_id, user_id)
     if not existing:
         return None
 
@@ -38,9 +42,9 @@ def update_task_for_user(
         return existing
 
     response = (
-        supabase.table("tasks")
+        supabase.table("planner")
         .update(filtered_payload)
-        .eq("id", task_id)
+        .eq("id", planner_id)
         .eq("user_id", user_id)
         .execute()
     )
@@ -49,15 +53,17 @@ def update_task_for_user(
     return None
 
 
-def delete_task_for_user(task_id: str, user_id: str) -> Optional[Dict[str, Any]]:
-    existing = get_task_by_id_for_user(task_id, user_id)
+def delete_planner_entry_for_user(
+    planner_id: str, user_id: str
+) -> Optional[Dict[str, Any]]:
+    existing = get_planner_entry_by_id_for_user(planner_id, user_id)
     if not existing:
         return None
 
     response = (
-        supabase.table("tasks")
+        supabase.table("planner")
         .delete()
-        .eq("id", task_id)
+        .eq("id", planner_id)
         .eq("user_id", user_id)
         .execute()
     )
