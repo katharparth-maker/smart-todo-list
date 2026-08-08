@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 
-<html lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>TaskPilotAI - Executive Precision Productivity</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>TaskPilotAI - Executive Precision Productivity</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -91,152 +97,199 @@
                         "headline-lg": ["Inter"]
                     },
                     "fontSize": {
-                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
-                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
-                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
-                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
-                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
-                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
-                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
-                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
                     }
                 }
             }
         }
     </script>
-<style>
+    <style>
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
     </style>
 </head>
+
 <body class="bg-[#F7F7F2] text-[#172033] min-h-screen flex flex-col font-body-md overflow-x-hidden">
-<!-- TopNavBar -->
-<nav class="bg-[#F7F7F2] border-b border-[#E5E7EB] docked full-width top-0 sticky z-50">
-<div class="flex justify-between items-center h-16 px-margin-desktop w-full max-w-max-width mx-auto">
-<div class="flex items-center gap-sm">
-<img alt="TaskPilotAI Logo" class="h-8 w-8 object-contain rounded" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjArSauYvsXY9PgTs_vksHqFLD57m2qz9TFlXP72B7ZIRZuZJvvnd56bvrOWPr-jok-LqZmQQeUkf5VfX2osOROHLNMHn3ZIQpILQPtO-tC7CDgV95ZKPoBEv2OS287-pBl0NWIToWFX2oHzVbRakBH6tsWmT6Ge_iNkTOB1S-sjbCCdENLbcPL5sm7g_7HYboTELy5F9KdcBuTnI-kKFjXp89Fe_4i2oCrcHGiRSQXuWar0pU4Itnww"/>
-<span class="text-headline-md font-headline-md font-bold text-[#172033]">TaskPilotAI</span>
-</div>
-<div class="hidden md:flex items-center gap-lg">
-<a class="text-[#172033]/70 hover:text-[#166534] text-label-md font-label-md transition-colors" href="#">Features</a>
-<a class="text-[#172033]/70 hover:text-[#166534] text-label-md font-label-md transition-colors" href="#">How It Works</a>
-<a class="text-[#172033]/70 hover:text-[#166534] text-label-md font-label-md transition-colors" href="#">AI Features</a>
-<a class="text-[#172033]/70 hover:text-[#166534] text-label-md font-label-md transition-colors" href="#">About</a>
-</div>
-<div class="flex items-center gap-md">
-<button class="hidden md:block px-4 py-2 text-[#172033] border border-[#E5E7EB] bg-white rounded-lg hover:bg-gray-50 transition-colors text-label-md font-label-md">Login</button>
-<button class="px-4 py-2 bg-[#166534] text-white rounded-lg hover:opacity-90 transition-opacity text-label-md font-label-md">Get Started</button>
-</div>
-</div>
-</nav>
-<main class="flex-grow">
-<!-- Hero Section -->
-<section class="py-24 px-margin-desktop w-full max-w-max-width mx-auto flex flex-col md:flex-row items-center gap-xl">
-<div class="flex-1 flex flex-col gap-md">
-<h1 class="text-display-lg font-display-lg text-[#172033]">Plan Smarter.<br/>Work Better.<br/><span class="text-[#166534]">Let AI Handle the Rest.</span></h1>
-<p class="text-body-lg font-body-lg text-[#172033]/80 max-w-xl">Elevate your productivity with an executive workspace designed to orchestrate your tasks seamlessly. Experience a focused, low-friction environment powered by intelligent AI orchestration.</p>
-<div class="flex flex-wrap gap-md mt-sm">
-<button class="px-6 py-3 bg-[#166534] text-white rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity">Get Started</button>
-<button class="px-6 py-3 border border-[#166534] text-[#166534] bg-white rounded-lg font-label-md text-label-md hover:bg-gray-50 transition-colors">Explore Features</button>
-</div>
-</div>
-<div class="flex-1 w-full relative">
-<div class="absolute inset-0 bg-gradient-to-tr from-[#166534]/10 to-transparent rounded-xl blur-3xl -z-10"></div>
-<img alt="TaskPilotAI Dashboard Interface showcasing task management and AI assistant features." class="w-full h-auto rounded-xl border border-[#E5E7EB] shadow-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVCAbXXuGvJBBRz2EbXjkr68fpmDu_NyLW8a17id1b3QTDXT7k5MyrnPLUq40ik8s_CnqaYpk0CAkqRUbak_JSSS19KqgmMgQCa7vcDcepnoAs0ajDJ2mhZUU8ZSIo_WVVNgKaRoZMMReedX0f6iXwI7rKNZZlSC-AO6N5QWyiIfnTKCZanlg4omBda2IcaxykEoc8C5g7C3VlWFEChAEiTVjvPnBcKXviObNDQqLBCRBBLyQLBQH_gg"/>
-</div>
-</section>
-<!-- Features Section (Bento Grid) -->
-<section class="py-24 px-margin-desktop bg-[#F7F7F2] w-full">
-<div class="max-w-max-width mx-auto">
-<div class="text-center mb-16">
-<h2 class="text-headline-lg font-headline-lg text-[#172033] mb-4">Executive Tools for Precision</h2>
-<p class="text-body-md font-body-md text-[#172033]/80">A comprehensive suite designed for high-performing professionals.</p>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-<!-- Feature 1: Large Span -->
-<div class="col-span-1 md:col-span-2 bg-white border border-[#E5E7EB] rounded-xl p-lg flex flex-col justify-between hover:bg-gray-50 transition-colors shadow-sm hover:shadow-md">
-<div>
-<div class="h-12 w-12 rounded-full bg-[#166534]/10 flex items-center justify-center mb-md">
-<span class="material-symbols-outlined text-[#166534]">psychology</span>
-</div>
-<h3 class="text-headline-md font-headline-md text-[#172033] mb-sm">AI Task Recommendations</h3>
-<p class="text-body-md font-body-md text-[#172033]/70">Intelligent algorithms analyze your work patterns to suggest priorities and optimize your daily focus, minimizing decision fatigue.</p>
-</div>
-</div>
-<!-- Feature 2 -->
-<div class="bg-white border border-[#E5E7EB] rounded-xl p-lg hover:bg-gray-50 transition-colors shadow-sm hover:shadow-md">
-<div class="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center mb-md">
-<span class="material-symbols-outlined text-blue-700">task_alt</span>
-</div>
-<h3 class="text-body-lg font-body-lg font-bold text-[#172033] mb-xs">Smart Task Management</h3>
-<p class="text-body-sm font-body-sm text-[#172033]/70">Organize, delegate, and track complex projects with minimal friction.</p>
-</div>
-<!-- Feature 3 -->
-<div class="bg-white border border-[#E5E7EB] rounded-xl p-lg hover:bg-gray-50 transition-colors shadow-sm hover:shadow-md">
-<div class="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center mb-md">
-<span class="material-symbols-outlined text-purple-700">event_note</span>
-</div>
-<h3 class="text-body-lg font-body-lg font-bold text-[#172033] mb-xs">Intelligent Daily Planning</h3>
-<p class="text-body-sm font-body-sm text-[#172033]/70">Automated scheduling that adapts to your meetings and energy levels.</p>
-</div>
-<!-- Feature 4 -->
-<div class="bg-white border border-[#E5E7EB] rounded-xl p-lg hover:bg-gray-50 transition-colors shadow-sm hover:shadow-md">
-<div class="h-12 w-12 rounded-full bg-orange-100 flex items-center justify-center mb-md">
-<span class="material-symbols-outlined text-orange-700">insights</span>
-</div>
-<h3 class="text-body-lg font-body-lg font-bold text-[#172033] mb-xs">Productivity Insights</h3>
-<p class="text-body-sm font-body-sm text-[#172033]/70">Deep analytics on your team's output and velocity to drive better decisions.</p>
-</div>
-<!-- Feature 5 & 6 Stacked -->
-<div class="grid grid-rows-2 gap-gutter col-span-1">
-<div class="bg-white border border-[#E5E7EB] rounded-xl p-md hover:bg-gray-50 transition-colors shadow-sm flex items-center gap-md">
-<div class="h-10 w-10 rounded-full bg-yellow-100 flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-yellow-700">notifications_active</span>
-</div>
-<div>
-<h3 class="text-body-md font-body-md font-bold text-[#172033]">Smart Reminders</h3>
-<p class="text-body-sm font-body-sm text-[#172033]/70">Context-aware nudges.</p>
-</div>
-</div>
-<div class="bg-white border border-[#E5E7EB] rounded-xl p-md hover:bg-gray-50 transition-colors shadow-sm flex items-center gap-md">
-<div class="h-10 w-10 rounded-full bg-teal-100 flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-teal-700">sync</span>
-</div>
-<div>
-<h3 class="text-body-md font-body-md font-bold text-[#172033]">Real-time Updates</h3>
-<p class="text-body-sm font-body-sm text-[#172033]/70">Instant cross-device sync.</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<!-- CTA Section -->
-<section class="py-24 px-margin-desktop w-full max-w-max-width mx-auto text-center relative overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white shadow-md mt-24 mb-24">
-<div class="absolute inset-0 bg-gradient-to-b from-transparent to-[#166534]/5 pointer-events-none"></div>
-<div class="relative z-10 max-w-2xl mx-auto flex flex-col items-center">
-<h2 class="text-headline-lg font-headline-lg text-[#172033] mb-md">Ready to take control of your tasks?</h2>
-<p class="text-body-lg font-body-lg text-[#172033]/80 mb-lg">Join high-performing teams leveraging AI for executive precision.</p>
-<button class="px-8 py-4 bg-[#166534] text-white rounded-lg font-label-md text-label-md hover:opacity-90 transition-all transform hover:scale-105 shadow-lg shadow-[#166534]/20">Get Started Now</button>
-</div>
-</section>
-</main>
-<!-- Footer -->
-<footer class="bg-white border-t border-[#E5E7EB] full-width bottom-0">
-<div class="flex flex-col md:flex-row justify-between items-center py-lg px-margin-desktop w-full max-w-max-width mx-auto gap-md">
-<div class="flex items-center gap-sm">
-<span class="font-headline-md text-[#172033] text-headline-md font-bold">TaskPilotAI</span>
-</div>
-<div class="flex gap-lg flex-wrap justify-center">
-<a class="text-[#172033]/70 text-label-md font-label-md hover:text-[#166534] transition-colors" href="#">Privacy Policy</a>
-<a class="text-[#172033]/70 text-label-md font-label-md hover:text-[#166534] transition-colors" href="#">Terms of Service</a>
-<a class="text-[#172033]/70 text-label-md font-label-md hover:text-[#166534] transition-colors" href="#">Security</a>
-<a class="text-[#172033]/70 text-label-md font-label-md hover:text-[#166534] transition-colors" href="#">Status</a>
-</div>
-<div class="text-[#172033]/60 text-body-sm font-body-sm">
+    <!-- TopNavBar -->
+    <nav class="bg-[#F7F7F2] border-b border-[#E5E7EB] docked full-width top-0 sticky z-50">
+        <div class="flex justify-between items-center h-16 px-margin-desktop w-full max-w-max-width mx-auto">
+            <div class="flex items-center gap-sm">
+                <img alt="TaskPilotAI Logo" class="h-8 w-8 object-contain rounded"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjArSauYvsXY9PgTs_vksHqFLD57m2qz9TFlXP72B7ZIRZuZJvvnd56bvrOWPr-jok-LqZmQQeUkf5VfX2osOROHLNMHn3ZIQpILQPtO-tC7CDgV95ZKPoBEv2OS287-pBl0NWIToWFX2oHzVbRakBH6tsWmT6Ge_iNkTOB1S-sjbCCdENLbcPL5sm7g_7HYboTELy5F9KdcBuTnI-kKFjXp89Fe_4i2oCrcHGiRSQXuWar0pU4Itnww" />
+                <span class="text-headline-md font-headline-md font-bold text-[#172033]">TaskPilotAI</span>
+            </div>
+            <div class="hidden md:flex items-center gap-lg">
+                <a class="text-[#172033]/70 hover:text-[#166534] text-label-md font-label-md transition-colors"
+                    href="#">Features</a>
+                <a class="text-[#172033]/70 hover:text-[#166534] text-label-md font-label-md transition-colors"
+                    href="#">How It Works</a>
+                <a class="text-[#172033]/70 hover:text-[#166534] text-label-md font-label-md transition-colors"
+                    href="#">AI Features</a>
+                <a class="text-[#172033]/70 hover:text-[#166534] text-label-md font-label-md transition-colors"
+                    href="#">About</a>
+            </div>
+            <div class="flex items-center gap-md">
+                <button
+                    class="hidden md:block px-4 py-2 text-[#172033] border border-[#E5E7EB] bg-white rounded-lg hover:bg-gray-50 transition-colors text-label-md font-label-md">Login</button>
+                <button
+                    class="px-4 py-2 bg-[#166534] text-white rounded-lg hover:opacity-90 transition-opacity text-label-md font-label-md">Get
+                    Started</button>
+            </div>
+        </div>
+    </nav>
+    <main class="flex-grow">
+        <!-- Hero Section -->
+        <section
+            class="py-24 px-margin-desktop w-full max-w-max-width mx-auto flex flex-col md:flex-row items-center gap-xl">
+            <div class="flex-1 flex flex-col gap-md">
+                <h1 class="text-display-lg font-display-lg text-[#172033]">Plan Smarter.<br />Work Better.<br /><span
+                        class="text-[#166534]">Let AI Handle the Rest.</span></h1>
+                <p class="text-body-lg font-body-lg text-[#172033]/80 max-w-xl">Elevate your productivity with an
+                    executive workspace designed to orchestrate your tasks seamlessly. Experience a focused,
+                    low-friction environment powered by intelligent AI orchestration.</p>
+                <div class="flex flex-wrap gap-md mt-sm">
+                    <button
+                        class="px-6 py-3 bg-[#166534] text-white rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity">Get
+                        Started</button>
+                    <button
+                        class="px-6 py-3 border border-[#166534] text-[#166534] bg-white rounded-lg font-label-md text-label-md hover:bg-gray-50 transition-colors">Explore
+                        Features</button>
+                </div>
+            </div>
+            <div class="flex-1 w-full relative">
+                <div
+                    class="absolute inset-0 bg-gradient-to-tr from-[#166534]/10 to-transparent rounded-xl blur-3xl -z-10">
+                </div>
+                <img alt="TaskPilotAI Dashboard Interface showcasing task management and AI assistant features."
+                    class="w-full h-auto rounded-xl border border-[#E5E7EB] shadow-2xl"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVCAbXXuGvJBBRz2EbXjkr68fpmDu_NyLW8a17id1b3QTDXT7k5MyrnPLUq40ik8s_CnqaYpk0CAkqRUbak_JSSS19KqgmMgQCa7vcDcepnoAs0ajDJ2mhZUU8ZSIo_WVVNgKaRoZMMReedX0f6iXwI7rKNZZlSC-AO6N5QWyiIfnTKCZanlg4omBda2IcaxykEoc8C5g7C3VlWFEChAEiTVjvPnBcKXviObNDQqLBCRBBLyQLBQH_gg" />
+            </div>
+        </section>
+        <!-- Features Section (Bento Grid) -->
+        <section class="py-24 px-margin-desktop bg-[#F7F7F2] w-full">
+            <div class="max-w-max-width mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-headline-lg font-headline-lg text-[#172033] mb-4">Executive Tools for Precision</h2>
+                    <p class="text-body-md font-body-md text-[#172033]/80">A comprehensive suite designed for
+                        high-performing professionals.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+                    <!-- Feature 1: Large Span -->
+                    <div
+                        class="col-span-1 md:col-span-2 bg-white border border-[#E5E7EB] rounded-xl p-lg flex flex-col justify-between hover:bg-gray-50 transition-colors shadow-sm hover:shadow-md">
+                        <div>
+                            <div class="h-12 w-12 rounded-full bg-[#166534]/10 flex items-center justify-center mb-md">
+                                <span class="material-symbols-outlined text-[#166534]">psychology</span>
+                            </div>
+                            <h3 class="text-headline-md font-headline-md text-[#172033] mb-sm">AI Task Recommendations
+                            </h3>
+                            <p class="text-body-md font-body-md text-[#172033]/70">Intelligent algorithms analyze your
+                                work patterns to suggest priorities and optimize your daily focus, minimizing decision
+                                fatigue.</p>
+                        </div>
+                    </div>
+                    <!-- Feature 2 -->
+                    <div
+                        class="bg-white border border-[#E5E7EB] rounded-xl p-lg hover:bg-gray-50 transition-colors shadow-sm hover:shadow-md">
+                        <div class="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center mb-md">
+                            <span class="material-symbols-outlined text-blue-700">task_alt</span>
+                        </div>
+                        <h3 class="text-body-lg font-body-lg font-bold text-[#172033] mb-xs">Smart Task Management</h3>
+                        <p class="text-body-sm font-body-sm text-[#172033]/70">Organize, delegate, and track complex
+                            projects with minimal friction.</p>
+                    </div>
+                    <!-- Feature 3 -->
+                    <div
+                        class="bg-white border border-[#E5E7EB] rounded-xl p-lg hover:bg-gray-50 transition-colors shadow-sm hover:shadow-md">
+                        <div class="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center mb-md">
+                            <span class="material-symbols-outlined text-purple-700">event_note</span>
+                        </div>
+                        <h3 class="text-body-lg font-body-lg font-bold text-[#172033] mb-xs">Intelligent Daily Planning
+                        </h3>
+                        <p class="text-body-sm font-body-sm text-[#172033]/70">Automated scheduling that adapts to your
+                            meetings and energy levels.</p>
+                    </div>
+                    <!-- Feature 4 -->
+                    <div
+                        class="bg-white border border-[#E5E7EB] rounded-xl p-lg hover:bg-gray-50 transition-colors shadow-sm hover:shadow-md">
+                        <div class="h-12 w-12 rounded-full bg-orange-100 flex items-center justify-center mb-md">
+                            <span class="material-symbols-outlined text-orange-700">insights</span>
+                        </div>
+                        <h3 class="text-body-lg font-body-lg font-bold text-[#172033] mb-xs">Productivity Insights</h3>
+                        <p class="text-body-sm font-body-sm text-[#172033]/70">Deep analytics on your team's output and
+                            velocity to drive better decisions.</p>
+                    </div>
+                    <!-- Feature 5 & 6 Stacked -->
+                    <div class="grid grid-rows-2 gap-gutter col-span-1">
+                        <div
+                            class="bg-white border border-[#E5E7EB] rounded-xl p-md hover:bg-gray-50 transition-colors shadow-sm flex items-center gap-md">
+                            <div class="h-10 w-10 rounded-full bg-yellow-100 flex items-center justify-center shrink-0">
+                                <span class="material-symbols-outlined text-yellow-700">notifications_active</span>
+                            </div>
+                            <div>
+                                <h3 class="text-body-md font-body-md font-bold text-[#172033]">Smart Reminders</h3>
+                                <p class="text-body-sm font-body-sm text-[#172033]/70">Context-aware nudges.</p>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-white border border-[#E5E7EB] rounded-xl p-md hover:bg-gray-50 transition-colors shadow-sm flex items-center gap-md">
+                            <div class="h-10 w-10 rounded-full bg-teal-100 flex items-center justify-center shrink-0">
+                                <span class="material-symbols-outlined text-teal-700">sync</span>
+                            </div>
+                            <div>
+                                <h3 class="text-body-md font-body-md font-bold text-[#172033]">Real-time Updates</h3>
+                                <p class="text-body-sm font-body-sm text-[#172033]/70">Instant cross-device sync.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- CTA Section -->
+        <section
+            class="py-24 px-margin-desktop w-full max-w-max-width mx-auto text-center relative overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white shadow-md mt-24 mb-24">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-[#166534]/5 pointer-events-none"></div>
+            <div class="relative z-10 max-w-2xl mx-auto flex flex-col items-center">
+                <h2 class="text-headline-lg font-headline-lg text-[#172033] mb-md">Ready to take control of your tasks?
+                </h2>
+                <p class="text-body-lg font-body-lg text-[#172033]/80 mb-lg">Join high-performing teams leveraging AI
+                    for executive precision.</p>
+                <button
+                    class="px-8 py-4 bg-[#166534] text-white rounded-lg font-label-md text-label-md hover:opacity-90 transition-all transform hover:scale-105 shadow-lg shadow-[#166534]/20">Get
+                    Started Now</button>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer class="bg-white border-t border-[#E5E7EB] full-width bottom-0">
+        <div
+            class="flex flex-col md:flex-row justify-between items-center py-lg px-margin-desktop w-full max-w-max-width mx-auto gap-md">
+            <div class="flex items-center gap-sm">
+                <span class="font-headline-md text-[#172033] text-headline-md font-bold">TaskPilotAI</span>
+            </div>
+            <div class="flex gap-lg flex-wrap justify-center">
+                <a class="text-[#172033]/70 text-label-md font-label-md hover:text-[#166534] transition-colors"
+                    href="#">Privacy Policy</a>
+                <a class="text-[#172033]/70 text-label-md font-label-md hover:text-[#166534] transition-colors"
+                    href="#">Terms of Service</a>
+                <a class="text-[#172033]/70 text-label-md font-label-md hover:text-[#166534] transition-colors"
+                    href="#">Security</a>
+                <a class="text-[#172033]/70 text-label-md font-label-md hover:text-[#166534] transition-colors"
+                    href="#">Status</a>
+            </div>
+            <div class="text-[#172033]/60 text-body-sm font-body-sm">
                 © 2024 TaskPilotAI. Executive Precision Productivity.
             </div>
-</div>
-</footer>
-</body></html>
+        </div>
+    </footer>
+</body>
+
+</html>
