@@ -1,0 +1,17 @@
+/*
+ * TaskPilotAI – Global Stylesheet
+ * File: frontend/css/style.css
+ *
+ * Responsibilities:
+ *   - CSS custom properties (design tokens: colors, spacing, typography, shadows)
+ *   - CSS reset / base styles
+ *   - Utility classes
+ *   - Layout primitives (grid, flex containers)
+ *   - Component-level styles (navbar, sidebar, task card, buttons, forms, etc.)
+ *   - Page-specific overrides
+ *   - Responsive breakpoints
+ *   - Animations and transitions
+ *   - Dark mode support
+ *
+ * Implementation deferred to the UI development step.
+ */
