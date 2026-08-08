@@ -134,10 +134,10 @@
                     href="#">About</a>
             </div>
             <div class="flex items-center gap-md">
-                <button
-                    class="hidden md:block px-4 py-2 text-[#172033] border border-[#E5E7EB] bg-white rounded-lg hover:bg-gray-50 transition-colors text-label-md font-label-md">Login</button>
-                <button
-                    class="px-4 py-2 bg-[#166534] text-white rounded-lg hover:opacity-90 transition-opacity text-label-md font-label-md">Get
+                <button onclick="window.location.href='pages/login.html'"
+                    class="hidden md:block px-4 py-2 text-[#172033] border border-[#E5E7EB] bg-white rounded-lg hover:bg-gray-50 transition-colors text-label-md font-label-md cursor-pointer">Login</button>
+                <button onclick="window.location.href='pages/signup.html'"
+                    class="px-4 py-2 bg-[#166534] text-white rounded-lg hover:opacity-90 transition-opacity text-label-md font-label-md cursor-pointer">Get
                     Started</button>
             </div>
         </div>
@@ -153,11 +153,11 @@
                     executive workspace designed to orchestrate your tasks seamlessly. Experience a focused,
                     low-friction environment powered by intelligent AI orchestration.</p>
                 <div class="flex flex-wrap gap-md mt-sm">
-                    <button
-                        class="px-6 py-3 bg-[#166534] text-white rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity">Get
+                    <button onclick="window.location.href='pages/signup.html'"
+                        class="px-6 py-3 bg-[#166534] text-white rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity cursor-pointer">Get
                         Started</button>
-                    <button
-                        class="px-6 py-3 border border-[#166534] text-[#166534] bg-white rounded-lg font-label-md text-label-md hover:bg-gray-50 transition-colors">Explore
+                    <button onclick="document.getElementById('features')?.scrollIntoView({behavior: 'smooth'})"
+                        class="px-6 py-3 border border-[#166534] text-[#166534] bg-white rounded-lg font-label-md text-label-md hover:bg-gray-50 transition-colors cursor-pointer">Explore
                         Features</button>
                 </div>
             </div>
@@ -171,7 +171,7 @@
             </div>
         </section>
         <!-- Features Section (Bento Grid) -->
-        <section class="py-24 px-margin-desktop bg-[#F7F7F2] w-full">
+        <section id="features" class="py-24 px-margin-desktop bg-[#F7F7F2] w-full">
             <div class="max-w-max-width mx-auto">
                 <div class="text-center mb-16">
                     <h2 class="text-headline-lg font-headline-lg text-[#172033] mb-4">Executive Tools for Precision</h2>
@@ -188,9 +188,8 @@
                             </div>
                             <h3 class="text-headline-md font-headline-md text-[#172033] mb-sm">AI Task Recommendations
                             </h3>
-                            <p class="text-body-md font-body-md text-[#172033]/70">Intelligent algorithms analyze your
-                                work patterns to suggest priorities and optimize your daily focus, minimizing decision
-                                fatigue.</p>
+                            <p class="text-body-md font-body-md text-[#172033]/70 mb-lg">Context-aware task prioritisation
+                                that learns from your daily work habits, helping you focus on what moves the needle.</p>
                         </div>
                     </div>
                     <!-- Feature 2 -->
@@ -259,8 +258,8 @@
                 </h2>
                 <p class="text-body-lg font-body-lg text-[#172033]/80 mb-lg">Join high-performing teams leveraging AI
                     for executive precision.</p>
-                <button
-                    class="px-8 py-4 bg-[#166534] text-white rounded-lg font-label-md text-label-md hover:opacity-90 transition-all transform hover:scale-105 shadow-lg shadow-[#166534]/20">Get
+                <button onclick="window.location.href='pages/signup.html'"
+                    class="px-8 py-4 bg-[#166534] text-white rounded-lg font-label-md text-label-md hover:opacity-90 transition-all transform hover:scale-105 shadow-lg shadow-[#166534]/20 cursor-pointer">Get
                     Started Now</button>
             </div>
         </section>
@@ -282,11 +281,10 @@
                 <a class="text-[#172033]/70 text-label-md font-label-md hover:text-[#166534] transition-colors"
                     href="#">Status</a>
             </div>
-            <div class="text-[#172033]/60 text-body-sm font-body-sm">
-                © 2024 TaskPilotAI. Executive Precision Productivity.
             </div>
         </div>
     </footer>
+    <script type="module" src="js/main.js"></script>
 </body>
 
 </html>

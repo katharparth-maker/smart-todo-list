@@ -326,25 +326,6 @@
                 sText.className = 'font-label-sm text-secondary';
             }
         });
-
-        // Form Submit Simulation
-        document.getElementById('signupForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = this.querySelector('button[type="submit"]');
-            btn.classList.add('is-loading');
-            
-            setTimeout(() => {
-                btn.classList.remove('is-loading');
-                // Simulate success state briefly
-                btn.innerHTML = `<span class="material-symbols-outlined">check_circle</span> Account Created`;
-                btn.classList.remove('bg-secondary', 'hover:bg-on-secondary-container');
-                btn.classList.add('bg-secondary-container', 'text-on-secondary-container');
-                
-                setTimeout(() => {
-                     // Reset (in a real app, redirect here)
-                     window.location.href = '#';
-                }, 1500);
-            }, 2000);
-        });
     </script>
+    <script type="module" src="../js/main.js"></script>
 </body></html>
