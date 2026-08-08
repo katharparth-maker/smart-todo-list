@@ -1,9 +1,199 @@
-<!--
-  Component: Sidebar
-  Purpose: Collapsible left-side navigation panel on authenticated pages.
-           Contains links to Dashboard, Tasks, Planner, and Profile.
-           Injected into pages via js/ui.js.
--->
-<aside id="sidebar" aria-label="Sidebar navigation">
-  <!-- Sidebar markup will be implemented in a later step -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskPilot AI Sidebar</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&amp;family=Manrope:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#a6f4b5",
+                        "tertiary": "#000917",
+                        "secondary": "#1f6c3a",
+                        "surface-variant": "#e2e3de",
+                        "on-surface": "#1a1c19",
+                        "on-primary-fixed": "#121b2e",
+                        "surface-dim": "#dadad5",
+                        "on-secondary-fixed-variant": "#005226",
+                        "primary-container": "#172033",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#d3e4fe",
+                        "inverse-on-surface": "#f1f1ec",
+                        "surface-container-low": "#f4f4ef",
+                        "primary-fixed-dim": "#bdc6e0",
+                        "primary": "#01081a",
+                        "background": "#fafaf5",
+                        "on-primary-container": "#7f879f",
+                        "surface": "#fafaf5",
+                        "on-tertiary-fixed": "#0b1c30",
+                        "on-secondary-fixed": "#00210b",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#eeeee9",
+                        "surface-bright": "#fafaf5",
+                        "surface-container-highest": "#e2e3de",
+                        "inverse-surface": "#2f312e",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#3e475b",
+                        "on-secondary-container": "#24703e",
+                        "inverse-primary": "#bdc6e0",
+                        "on-tertiary-container": "#7989a0",
+                        "tertiary-fixed-dim": "#b7c8e1",
+                        "secondary-container": "#a4f1b2",
+                        "surface-container-high": "#e8e8e4",
+                        "on-surface-variant": "#45474c",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#555e74",
+                        "secondary-fixed-dim": "#8bd79b",
+                        "outline-variant": "#c6c6cd",
+                        "primary-fixed": "#d9e2fc",
+                        "on-tertiary-fixed-variant": "#38485d",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#102134",
+                        "outline": "#76777d",
+                        "on-error": "#ffffff",
+                        "on-background": "#1a1c19"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "gutter": "24px",
+                        "md": "24px",
+                        "xs": "4px",
+                        "margin-desktop": "40px",
+                        "margin-mobile": "16px",
+                        "xl": "80px",
+                        "sm": "12px",
+                        "lg": "48px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Work Sans"],
+                        "body-md": ["Work Sans"],
+                        "headline-xl": ["Manrope"],
+                        "body-sm": ["Work Sans"],
+                        "body-lg": ["Work Sans"],
+                        "label-sm": ["Work Sans"],
+                        "headline-md": ["Manrope"],
+                        "headline-lg": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-xl": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex">
+<!-- Mobile Overlay -->
+<div class="fixed inset-0 bg-primary/50 z-40 hidden md:hidden transition-opacity" id="mobile-overlay"></div>
+<!-- Sidebar Component -->
+<aside class="bg-surface-container-low dark:bg-surface-container-low border-r border-outline-variant dark:border-outline flat no shadows flex flex-col h-full p-md gap-base fixed left-0 top-0 w-64 z-50 transition-transform transform -translate-x-full md:translate-x-0 md:relative md:w-64 flex-shrink-0" id="sidebar">
+<!-- Mobile Close Button -->
+<button class="absolute top-sm right-sm md:hidden p-xs rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-colors" id="close-sidebar">
+<span class="material-symbols-outlined">close</span>
+</button>
+<!-- Branding -->
+<div class="flex flex-col mb-lg pl-sm">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed">TaskPilot AI</h1>
+<p class="font-label-sm text-label-sm text-secondary-container mt-xs">Plan. Focus. Achieve.</p>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 flex flex-col gap-xs">
+<a class="flex items-center gap-sm px-sm py-sm bg-secondary-container text-on-secondary-container rounded-lg font-bold transition-all active:scale-95 duration-150 group" href="../pages/dashboard.html">
+<span class="material-symbols-outlined group-hover:text-on-secondary-container" data-weight="fill">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-sm text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest dark:hover:bg-surface-container-highest transition-all rounded-lg active:scale-95 duration-150 group" href="../pages/tasks.html">
+<span class="material-symbols-outlined group-hover:text-secondary dark:hover:text-secondary-fixed">task</span>
+<span class="font-label-md text-label-md group-hover:text-secondary dark:hover:text-secondary-fixed">Tasks</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-sm text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest dark:hover:bg-surface-container-highest transition-all rounded-lg active:scale-95 duration-150 group" href="../pages/planner.html">
+<span class="material-symbols-outlined group-hover:text-secondary dark:hover:text-secondary-fixed">calendar_month</span>
+<span class="font-label-md text-label-md group-hover:text-secondary dark:hover:text-secondary-fixed">Planner</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-sm text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest dark:hover:bg-surface-container-highest transition-all rounded-lg active:scale-95 duration-150 group" href="../pages/profile.html">
+<span class="material-symbols-outlined group-hover:text-secondary dark:hover:text-secondary-fixed">person</span>
+<span class="font-label-md text-label-md group-hover:text-secondary dark:hover:text-secondary-fixed">Profile</span>
+</a>
+</nav>
+<!-- Bottom Section -->
+<div class="mt-auto pt-md border-t border-outline-variant dark:border-outline flex flex-col gap-sm">
+<div class="flex items-center gap-sm px-sm">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-headline-md text-headline-md font-bold">
+                    S
+                </div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-primary">Sanskruti</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate w-32" title="sanskruti@example.com">sanskruti@example.com</span>
+</div>
+</div>
+<button class="flex items-center gap-sm px-sm py-sm text-on-surface-variant hover:bg-error-container hover:text-error transition-all rounded-lg w-full text-left active:scale-95 duration-150 group">
+<span class="material-symbols-outlined group-hover:text-error">logout</span>
+<span class="font-label-md text-label-md group-hover:text-error">Logout</span>
+</button>
+</div>
 </aside>
+<!-- Main Content Area (Dummy for context) -->
+<main class="flex-1 p-lg md:ml-64 ml-0 w-full">
+<!-- Mobile Menu Trigger -->
+<button class="md:hidden p-sm text-primary mb-md rounded-lg hover:bg-surface-container-highest transition-colors" id="open-sidebar">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="max-w-7xl mx-auto">
+<h2 class="font-headline-xl text-headline-xl text-primary mb-md">Welcome back, Sanskruti</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<div class="bg-surface border border-outline-variant rounded-lg p-md shadow-sm h-64 flex items-center justify-center">
+<p class="font-body-md text-body-md text-on-surface-variant">Content Card 1</p>
+</div>
+<div class="bg-surface border border-outline-variant rounded-lg p-md shadow-sm h-64 flex items-center justify-center">
+<p class="font-body-md text-body-md text-on-surface-variant">Content Card 2</p>
+</div>
+<div class="bg-surface border border-outline-variant rounded-lg p-md shadow-sm h-64 flex items-center justify-center">
+<p class="font-body-md text-body-md text-on-surface-variant">Content Card 3</p>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Simple mobile sidebar toggle logic
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('mobile-overlay');
+        const openBtn = document.getElementById('open-sidebar');
+        const closeBtn = document.getElementById('close-sidebar');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        openBtn.addEventListener('click', toggleSidebar);
+        closeBtn.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
+    </script>
+</body></html>

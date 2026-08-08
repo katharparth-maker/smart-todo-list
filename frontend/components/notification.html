@@ -1,9 +1,320 @@
-<!--
-  Component: Notification Toast
-  Purpose: Non-blocking toast notification overlay.
-           Used app-wide to surface success, error, and info messages.
-           Triggered programmatically via js/ui.js.
--->
-<div id="notification-toast" role="alert" aria-live="polite" aria-atomic="true">
-  <!-- Notification markup will be implemented in a later step -->
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskPilot AI - Notifications</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#b7c8e1",
+                    "primary-container": "#172033",
+                    "inverse-surface": "#2f312e",
+                    "surface-dim": "#dadad5",
+                    "surface-tint": "#555e74",
+                    "primary-fixed": "#d9e2fc",
+                    "secondary-container": "#a4f1b2",
+                    "on-primary-fixed": "#121b2e",
+                    "on-secondary-fixed-variant": "#005226",
+                    "on-secondary": "#ffffff",
+                    "surface-container-high": "#e8e8e4",
+                    "on-tertiary-container": "#7989a0",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed": "#0b1c30",
+                    "on-secondary-fixed": "#00210b",
+                    "tertiary-fixed": "#d3e4fe",
+                    "surface-bright": "#fafaf5",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error": "#ffffff",
+                    "surface-container": "#eeeee9",
+                    "primary-fixed-dim": "#bdc6e0",
+                    "tertiary-container": "#102134",
+                    "outline-variant": "#c6c6cd",
+                    "on-background": "#1a1c19",
+                    "on-tertiary": "#ffffff",
+                    "inverse-primary": "#bdc6e0",
+                    "on-primary": "#ffffff",
+                    "surface-container-low": "#f4f4ef",
+                    "background": "#fafaf5",
+                    "secondary-fixed": "#a6f4b5",
+                    "error": "#ba1a1a",
+                    "secondary": "#1f6c3a",
+                    "on-primary-container": "#7f879f",
+                    "secondary-fixed-dim": "#8bd79b",
+                    "surface-variant": "#e2e3de",
+                    "on-secondary-container": "#24703e",
+                    "surface-container-highest": "#e2e3de",
+                    "inverse-on-surface": "#f1f1ec",
+                    "primary": "#01081a",
+                    "error-container": "#ffdad6",
+                    "on-surface": "#1a1c19",
+                    "outline": "#76777d",
+                    "tertiary": "#000917",
+                    "on-surface-variant": "#45474c",
+                    "on-primary-fixed-variant": "#3e475b",
+                    "surface": "#fafaf5",
+                    "on-tertiary-fixed-variant": "#38485d",
+                    // Specific requested colors
+                    "forest-green": "#166534",
+                    "secondary-gray": "#64748B",
+                    "off-white-bg": "#F7F7F2",
+                    "gray-border": "#E5E7EB"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px",
+                    "notif": "14px"
+            },
+            "spacing": {
+                    "sm": "12px",
+                    "lg": "48px",
+                    "margin-mobile": "16px",
+                    "base": "8px",
+                    "md": "24px",
+                    "gutter": "24px",
+                    "xs": "4px",
+                    "margin-desktop": "40px",
+                    "xl": "80px"
+            },
+            "fontFamily": {
+                    "body-md": ["Work Sans"],
+                    "headline-lg": ["Manrope"],
+                    "headline-xl": ["Manrope"],
+                    "label-md": ["Work Sans"],
+                    "body-lg": ["Work Sans"],
+                    "body-sm": ["Work Sans"],
+                    "label-sm": ["Work Sans"],
+                    "headline-md": ["Manrope"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            },
+            boxShadow: {
+              'level-1': '0px 2px 4px rgba(23, 32, 51, 0.04)',
+              'level-2': '0px 12px 24px rgba(23, 32, 51, 0.08)',
+              'notif': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #fafaf5; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .icon-fill { font-variation-settings: 'FILL' 1; }
+        
+        /* Transition for dropdown */
+        .dropdown-enter { opacity: 0; transform: scale(0.95) translateY(-10px); }
+        .dropdown-enter-active { opacity: 1; transform: scale(1) translateY(0); transition: opacity 0.2s ease-out, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .dropdown-exit { opacity: 1; transform: scale(1) translateY(0); }
+        .dropdown-exit-active { opacity: 0; transform: scale(0.95) translateY(-10px); transition: opacity 0.15s ease-in, transform 0.15s ease-in; }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex items-start justify-center pt-20">
+<!-- Top Navigation Simulation -->
+<header class="fixed top-0 left-0 w-full bg-surface border-b border-outline-variant shadow-sm z-50">
+<div class="flex justify-between items-center w-full px-margin-desktop max-w-7xl mx-auto h-16">
+<div class="font-headline-md text-headline-md font-bold text-primary">TaskPilot AI</div>
+<div class="flex items-center gap-md relative">
+<!-- Notification Component Starts Here -->
+<div class="relative" id="notification-component">
+<!-- Trigger -->
+<button aria-expanded="true" aria-haspopup="true" aria-label="Notifications, 2 unread" class="relative p-2 rounded-full hover:bg-surface-variant transition-colors focus:outline-none focus:ring-2 focus:ring-primary-container" id="notif-trigger">
+<span class="material-symbols-outlined text-primary-container">notifications</span>
+<!-- Unread Indicator -->
+<span class="absolute top-2 right-2 w-2 h-2 bg-forest-green rounded-full border border-surface" id="unread-badge"></span>
+</button>
+<!-- Panel -->
+<div aria-labelledby="notif-trigger" aria-orientation="vertical" class="absolute right-0 mt-2 w-[360px] bg-[#FFFFFF] border border-gray-border shadow-notif rounded-notif z-50 overflow-hidden transform origin-top-right dropdown-enter-active" id="notif-panel" role="menu">
+<!-- Header -->
+<div class="flex justify-between items-center p-4 border-b border-gray-border bg-[#FFFFFF]">
+<h2 class="font-label-md text-label-md text-primary-container">Notifications</h2>
+<button class="font-label-sm text-label-sm text-forest-green hover:underline focus:outline-none" id="mark-all-read">Mark all as read</button>
 </div>
+<!-- Notification List -->
+<div class="max-h-[400px] overflow-y-auto" id="notif-list">
+<!-- Notification 1 (Unread) -->
+<div class="notif-item unread p-4 border-b border-gray-border bg-off-white-bg hover:bg-gray-50 transition-colors cursor-pointer group relative flex gap-3" role="menuitem" tabindex="0">
+<div class="flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-primary-container">notifications</span>
+</div>
+<div class="flex-grow pr-4">
+<p class="font-label-md text-label-md text-primary-container mb-1">Task deadline approaching</p>
+<p class="font-body-sm text-body-sm text-secondary-gray mb-1">Project documentation is due today at 4:00 PM.</p>
+<p class="font-label-sm text-label-sm text-secondary-gray opacity-70">10 minutes ago</p>
+</div>
+<div class="absolute top-4 right-4 w-2 h-2 bg-forest-green rounded-full unread-dot"></div>
+</div>
+<!-- Notification 2 (Read) -->
+<div class="notif-item p-4 border-b border-gray-border bg-[#FFFFFF] hover:bg-gray-50 transition-colors cursor-pointer group relative flex gap-3" role="menuitem" tabindex="0">
+<div class="flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-forest-green">check_circle</span>
+</div>
+<div class="flex-grow">
+<p class="font-body-sm text-body-sm font-medium text-primary-container mb-1">Task completed</p>
+<p class="font-body-sm text-body-sm text-secondary-gray mb-1">Great! You completed your Python assignment.</p>
+<p class="font-label-sm text-label-sm text-secondary-gray opacity-70">1 hour ago</p>
+</div>
+</div>
+<!-- Notification 3 (Unread) -->
+<div class="notif-item unread p-4 border-b border-gray-border bg-off-white-bg hover:bg-gray-50 transition-colors cursor-pointer group relative flex gap-3" role="menuitem" tabindex="0">
+<div class="flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-primary-container">auto_awesome</span>
+</div>
+<div class="flex-grow pr-4">
+<p class="font-label-md text-label-md text-primary-container mb-1">AI recommendation</p>
+<p class="font-body-sm text-body-sm text-secondary-gray mb-1">TaskPilot AI has a new productivity suggestion for you.</p>
+<p class="font-label-sm text-label-sm text-secondary-gray opacity-70">2 hours ago</p>
+</div>
+<div class="absolute top-4 right-4 w-2 h-2 bg-forest-green rounded-full unread-dot"></div>
+</div>
+<!-- Notification 4 (Read) -->
+<div class="notif-item p-4 border-b border-gray-border bg-[#FFFFFF] hover:bg-gray-50 transition-colors cursor-pointer group relative flex gap-3" role="menuitem" tabindex="0">
+<div class="flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-primary-container">schedule</span>
+</div>
+<div class="flex-grow">
+<p class="font-body-sm text-body-sm font-medium text-primary-container mb-1">Weekly productivity summary</p>
+<p class="font-body-sm text-body-sm text-secondary-gray mb-1">Your weekly productivity score is 87%.</p>
+<p class="font-label-sm text-label-sm text-secondary-gray opacity-70">Yesterday</p>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="p-4 bg-[#FFFFFF] border-t border-gray-border text-center">
+<a class="font-label-sm text-label-sm text-forest-green hover:underline focus:outline-none" href="../pages/dashboard.html">View all notifications →</a>
+</div>
+<!-- Empty State placeholder -->
+<div class="hidden p-lg text-center" id="empty-state">
+<span class="material-symbols-outlined text-secondary-gray text-[32px] mb-2">notifications_paused</span>
+<p class="font-body-md text-body-md text-secondary-gray">You're all caught up!</p>
+</div>
+</div>
+</div>
+<!-- Notification Component Ends Here -->
+</div>
+</div>
+</header>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const trigger = document.getElementById('notif-trigger');
+            const panel = document.getElementById('notif-panel');
+            const badge = document.getElementById('unread-badge');
+            const markAllBtn = document.getElementById('mark-all-read');
+            const notifList = document.getElementById('notif-list');
+            const emptyState = document.getElementById('empty-state');
+            
+            let isOpen = true; // Open by default for preview
+
+            // Toggle Panel
+            function togglePanel() {
+                isOpen = !isOpen;
+                trigger.setAttribute('aria-expanded', isOpen);
+                
+                if (isOpen) {
+                    panel.classList.remove('hidden');
+                    // Trigger reflow for animation
+                    void panel.offsetWidth;
+                    panel.classList.add('dropdown-enter-active');
+                    panel.classList.remove('dropdown-enter', 'dropdown-exit', 'dropdown-exit-active');
+                } else {
+                    panel.classList.add('dropdown-exit-active');
+                    panel.classList.remove('dropdown-enter-active', 'dropdown-enter', 'dropdown-exit');
+                    setTimeout(() => {
+                        panel.classList.add('hidden');
+                        panel.classList.remove('dropdown-exit-active');
+                        panel.classList.add('dropdown-enter');
+                    }, 150);
+                }
+            }
+
+            trigger.addEventListener('click', togglePanel);
+
+            // Close on click outside
+            document.addEventListener('click', (e) => {
+                if (isOpen && !document.getElementById('notification-component').contains(e.target)) {
+                    togglePanel();
+                }
+            });
+
+            // Mark all as read
+            markAllBtn.addEventListener('click', () => {
+                const unreadItems = document.querySelectorAll('.notif-item.unread');
+                unreadItems.forEach(item => {
+                    markItemRead(item);
+                });
+                updateBadge();
+            });
+
+            // Handle individual clicks
+            notifList.addEventListener('click', (e) => {
+                const item = e.target.closest('.notif-item');
+                if (!item) return;
+
+                // Handle item click (mark read)
+                if (item.classList.contains('unread')) {
+                    markItemRead(item);
+                    updateBadge();
+                }
+            });
+
+            function markItemRead(item) {
+                item.classList.remove('unread', 'bg-off-white-bg');
+                item.classList.add('bg-[#FFFFFF]');
+                
+                // Adjust typography
+                const title = item.querySelector('p:first-of-type');
+                if(title) {
+                    title.classList.remove('font-label-md', 'text-label-md');
+                    title.classList.add('font-body-sm', 'text-body-sm', 'font-medium');
+                }
+                
+                // Remove dot
+                const dot = item.querySelector('.unread-dot');
+                if(dot) dot.remove();
+            }
+
+            function updateBadge() {
+                const unreadCount = document.querySelectorAll('.notif-item.unread').length;
+                if (unreadCount === 0) {
+                    badge.style.display = 'none';
+                    trigger.setAttribute('aria-label', 'Notifications, 0 unread');
+                } else {
+                    trigger.setAttribute('aria-label', `Notifications, ${unreadCount} unread`);
+                }
+            }
+
+            function checkEmptyState() {
+                if (notifList.children.length === 0) {
+                    notifList.classList.add('hidden');
+                    emptyState.classList.remove('hidden');
+                    markAllBtn.style.display = 'none';
+                }
+            }
+
+            // Keyboard navigation (Escape to close)
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && isOpen) {
+                    togglePanel();
+                    trigger.focus();
+                }
+            });
+        });
+    </script>
+</body></html>

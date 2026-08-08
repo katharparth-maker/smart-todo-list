@@ -1,9 +1,321 @@
-<!--
-  Component: Task Card
-  Purpose: Reusable card UI element representing a single task.
-           Displays task title, priority badge, due date, category, and
-           a completion checkbox. Rendered dynamically via js/tasks.js.
--->
-<article class="task-card" aria-label="Task card">
-  <!-- Task card markup will be implemented in a later step -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskPilot AI - Task Card Components</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary": "#ffffff",
+                      "inverse-surface": "#2f312e",
+                      "secondary-fixed": "#a6f4b5",
+                      "inverse-on-surface": "#f1f1ec",
+                      "tertiary": "#000917",
+                      "on-background": "#1a1c19",
+                      "surface-variant": "#e2e3de",
+                      "on-primary-fixed": "#121b2e",
+                      "outline-variant": "#c6c6cd",
+                      "primary-fixed-dim": "#bdc6e0",
+                      "primary-container": "#172033",
+                      "on-primary-container": "#7f879f",
+                      "on-surface-variant": "#45474c",
+                      "outline": "#76777d",
+                      "surface-bright": "#fafaf5",
+                      "error": "#ba1a1a",
+                      "tertiary-fixed": "#d3e4fe",
+                      "on-error": "#ffffff",
+                      "surface": "#fafaf5",
+                      "on-secondary-container": "#24703e",
+                      "surface-container-high": "#e8e8e4",
+                      "on-secondary-fixed": "#00210b",
+                      "on-surface": "#1a1c19",
+                      "surface-container-low": "#f4f4ef",
+                      "surface-dim": "#dadad5",
+                      "surface-container": "#eeeee9",
+                      "on-secondary-fixed-variant": "#005226",
+                      "on-primary": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed-dim": "#8bd79b",
+                      "secondary": "#1f6c3a",
+                      "on-primary-fixed-variant": "#3e475b",
+                      "surface-tint": "#555e74",
+                      "background": "#fafaf5",
+                      "primary-fixed": "#d9e2fc",
+                      "on-error-container": "#93000a",
+                      "primary": "#01081a",
+                      "tertiary-container": "#102134",
+                      "error-container": "#ffdad6",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#38485d",
+                      "on-tertiary-fixed": "#0b1c30",
+                      "tertiary-fixed-dim": "#b7c8e1",
+                      "secondary-container": "#a4f1b2",
+                      "surface-container-highest": "#e2e3de",
+                      "inverse-primary": "#bdc6e0",
+                      "on-tertiary-container": "#7989a0",
+                      // Custom extensions requested in prompt
+                      "task-high": "#EF4444",
+                      "task-medium": "#FBBF24",
+                      "task-low": "#166534",
+                      "task-success": "#DCFCE7",
+                      "task-card-border": "#E5E7EB",
+                      "task-navy": "#172033",
+                      "task-secondary-text": "#64748B"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem", // 12px roughly
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "8px",
+                      "xl": "80px",
+                      "md": "24px",
+                      "gutter": "24px",
+                      "xs": "4px",
+                      "margin-mobile": "16px",
+                      "margin-desktop": "40px",
+                      "lg": "48px",
+                      "sm": "12px"
+              },
+              "fontFamily": {
+                      "headline-xl": ["Manrope"],
+                      "body-lg": ["Work Sans"],
+                      "headline-md": ["Manrope"],
+                      "body-md": ["Work Sans"],
+                      "label-sm": ["Work Sans"],
+                      "headline-lg": ["Manrope"],
+                      "label-md": ["Work Sans"],
+                      "body-sm": ["Work Sans"]
+              },
+              "fontSize": {
+                      "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .task-card {
+            transition: all 0.2s ease-in-out;
+        }
+        .task-card:hover {
+            box-shadow: 0px 4px 12px rgba(23, 32, 51, 0.08);
+            transform: translateY(-1px);
+        }
+        /* Custom Checkbox styles */
+        .task-checkbox-wrapper {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .task-checkbox-input {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #64748B;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: white;
+        }
+        .task-checkbox-input:checked {
+            background-color: #166534;
+            border-color: #166534;
+        }
+        .task-checkbox-icon {
+            position: absolute;
+            color: white;
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.5);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .task-checkbox-input:checked + .task-checkbox-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Completed State Overrides */
+        .task-card[data-status="completed"] .task-title {
+            text-decoration: line-through;
+            color: #64748B; /* Muted text */
+        }
+        .task-card[data-status="completed"] .task-desc {
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased p-margin-mobile md:p-margin-desktop min-h-screen flex flex-col items-center justify-center">
+<div class="w-full max-w-4xl mx-auto space-y-md">
+<header class="mb-lg text-center md:text-left">
+<h1 class="font-headline-lg text-headline-lg text-task-navy mb-xs">Task Cards Overview</h1>
+<p class="font-body-md text-body-md text-task-secondary-text">Reusable UI components for TaskPilot AI.</p>
+</header>
+<!-- Task Card 1: High Priority, Due Today -->
+<article class="task-card bg-surface-container-lowest border border-task-card-border rounded-xl shadow-sm p-md flex flex-col md:flex-row md:items-center gap-base md:gap-md group" data-priority="high" data-status="pending">
+<div class="flex items-start gap-md flex-1">
+<div class="task-checkbox-wrapper mt-1 flex-shrink-0">
+<input aria-label="Mark task as complete" class="task-checkbox-input" id="task-1-check" type="checkbox"/>
+<span class="material-symbols-outlined task-checkbox-icon" style="font-size: 16px; font-weight: 700;">check</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-base flex-wrap mb-xs">
+<span class="inline-flex items-center px-2 py-0.5 rounded-DEFAULT bg-task-success text-task-low font-label-sm text-label-sm">Project</span>
+<span class="inline-flex items-center gap-1 text-task-high font-label-sm text-label-sm">
+<span class="material-symbols-outlined" style="font-size: 14px;">warning</span>
+                            Due Today
+                        </span>
+</div>
+<label class="task-title font-headline-md text-body-lg text-task-navy cursor-pointer block truncate mb-1" for="task-1-check">Complete project documentation</label>
+<p class="task-desc font-body-sm text-body-sm text-task-secondary-text truncate">Finalize the API specs and user guides for v2.0 release.</p>
+</div>
+</div>
+<div class="flex items-center justify-between md:justify-end gap-md mt-sm md:mt-0 pl-[44px] md:pl-0 border-t md:border-t-0 border-task-card-border pt-sm md:pt-0">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center justify-center px-3 py-1 rounded-full border border-task-high/30 text-task-high font-label-sm text-label-sm bg-task-high/5">
+                        High Priority
+                    </span>
+</div>
+<div class="flex items-center gap-2 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+<button aria-label="Edit task" class="p-2 text-task-secondary-text hover:text-task-navy hover:bg-surface-container rounded-lg transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">edit</span>
+</button>
+<button aria-label="Delete task" class="p-2 text-task-secondary-text hover:text-task-high hover:bg-error-container/50 rounded-lg transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">delete</span>
+</button>
+</div>
+</div>
 </article>
+<!-- Task Card 2: Medium Priority, Due Today -->
+<article class="task-card bg-surface-container-lowest border border-task-card-border rounded-xl shadow-sm p-md flex flex-col md:flex-row md:items-center gap-base md:gap-md group" data-priority="medium" data-status="pending">
+<div class="flex items-start gap-md flex-1">
+<div class="task-checkbox-wrapper mt-1 flex-shrink-0">
+<input aria-label="Mark task as complete" class="task-checkbox-input" id="task-2-check" type="checkbox"/>
+<span class="material-symbols-outlined task-checkbox-icon" style="font-size: 16px; font-weight: 700;">check</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-base flex-wrap mb-xs">
+<span class="inline-flex items-center px-2 py-0.5 rounded-DEFAULT bg-task-success text-task-low font-label-sm text-label-sm">Assignment</span>
+<span class="inline-flex items-center gap-1 text-task-medium font-label-sm text-label-sm">
+<span class="material-symbols-outlined" style="font-size: 14px;">schedule</span>
+                            Due Today
+                        </span>
+</div>
+<label class="task-title font-headline-md text-body-lg text-task-navy cursor-pointer block truncate mb-1" for="task-2-check">Review Python assignment</label>
+<p class="task-desc font-body-sm text-body-sm text-task-secondary-text truncate">Check student submissions for the data structures module.</p>
+</div>
+</div>
+<div class="flex items-center justify-between md:justify-end gap-md mt-sm md:mt-0 pl-[44px] md:pl-0 border-t md:border-t-0 border-task-card-border pt-sm md:pt-0">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center justify-center px-3 py-1 rounded-full border border-task-medium/30 text-task-medium font-label-sm text-label-sm bg-task-medium/5">
+                        Medium Priority
+                    </span>
+</div>
+<div class="flex items-center gap-2 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+<button aria-label="Edit task" class="p-2 text-task-secondary-text hover:text-task-navy hover:bg-surface-container rounded-lg transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">edit</span>
+</button>
+<button aria-label="Delete task" class="p-2 text-task-secondary-text hover:text-task-high hover:bg-error-container/50 rounded-lg transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">delete</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Task Card 3: Completed State -->
+<article class="task-card bg-surface-container-lowest border border-task-card-border rounded-xl shadow-sm p-md flex flex-col md:flex-row md:items-center gap-base md:gap-md group" data-priority="none" data-status="completed">
+<div class="flex items-start gap-md flex-1">
+<div class="task-checkbox-wrapper mt-1 flex-shrink-0">
+<input aria-label="Mark task as complete" checked="" class="task-checkbox-input" id="task-3-check" type="checkbox"/>
+<span class="material-symbols-outlined task-checkbox-icon" style="font-size: 16px; font-weight: 700;">check</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-base flex-wrap mb-xs">
+<span class="inline-flex items-center px-2 py-0.5 rounded-DEFAULT bg-surface-variant text-on-surface-variant font-label-sm text-label-sm">Assignment</span>
+<span class="inline-flex items-center gap-1 text-task-secondary-text font-label-sm text-label-sm">
+<span class="material-symbols-outlined" style="font-size: 14px;">check_circle</span>
+                            Completed yesterday
+                        </span>
+</div>
+<label class="task-title font-headline-md text-body-lg cursor-pointer block truncate mb-1" for="task-3-check">Submit assignment</label>
+<p class="task-desc font-body-sm text-body-sm truncate">Upload the final PDF report to the portal.</p>
+</div>
+</div>
+<div class="flex items-center justify-between md:justify-end gap-md mt-sm md:mt-0 pl-[44px] md:pl-0 border-t md:border-t-0 border-task-card-border pt-sm md:pt-0">
+<div class="flex items-center gap-2 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+<button aria-label="Edit task" class="p-2 text-task-secondary-text hover:text-task-navy hover:bg-surface-container rounded-lg transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">edit</span>
+</button>
+<button aria-label="Delete task" class="p-2 text-task-secondary-text hover:text-task-high hover:bg-error-container/50 rounded-lg transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">delete</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Task Card 4: Low Priority -->
+<article class="task-card bg-surface-container-lowest border border-task-card-border rounded-xl shadow-sm p-md flex flex-col md:flex-row md:items-center gap-base md:gap-md group" data-priority="low" data-status="pending">
+<div class="flex items-start gap-md flex-1">
+<div class="task-checkbox-wrapper mt-1 flex-shrink-0">
+<input aria-label="Mark task as complete" class="task-checkbox-input" id="task-4-check" type="checkbox"/>
+<span class="material-symbols-outlined task-checkbox-icon" style="font-size: 16px; font-weight: 700;">check</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-base flex-wrap mb-xs">
+<span class="inline-flex items-center px-2 py-0.5 rounded-DEFAULT bg-task-success text-task-low font-label-sm text-label-sm">Self-Study</span>
+<span class="inline-flex items-center gap-1 text-task-secondary-text font-label-sm text-label-sm">
+<span class="material-symbols-outlined" style="font-size: 14px;">event</span>
+                            Next week
+                        </span>
+</div>
+<label class="task-title font-headline-md text-body-lg text-task-navy cursor-pointer block truncate mb-1" for="task-4-check">Practice coding problems</label>
+<p class="task-desc font-body-sm text-body-sm text-task-secondary-text truncate">Work through Leetcode array section.</p>
+</div>
+</div>
+<div class="flex items-center justify-between md:justify-end gap-md mt-sm md:mt-0 pl-[44px] md:pl-0 border-t md:border-t-0 border-task-card-border pt-sm md:pt-0">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center justify-center px-3 py-1 rounded-full border border-task-low/30 text-task-low font-label-sm text-label-sm bg-task-success/30">
+                        Low Priority
+                    </span>
+</div>
+<div class="flex items-center gap-2 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+<button aria-label="Edit task" class="p-2 text-task-secondary-text hover:text-task-navy hover:bg-surface-container rounded-lg transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">edit</span>
+</button>
+<button aria-label="Delete task" class="p-2 text-task-secondary-text hover:text-task-high hover:bg-error-container/50 rounded-lg transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">delete</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+<script>
+        // Simple script to toggle completed state visual for demonstration
+        document.querySelectorAll('.task-checkbox-input').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const card = this.closest('.task-card');
+                if(this.checked) {
+                    card.setAttribute('data-status', 'completed');
+                } else {
+                    card.setAttribute('data-status', 'pending');
+                }
+            });
+        });
+    </script>
+</body></html>

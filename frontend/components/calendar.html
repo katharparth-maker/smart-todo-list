@@ -1,9 +1,359 @@
-<!--
-  Component: Calendar
-  Purpose: Interactive mini-calendar widget used on the Planner page.
-           Highlights days with scheduled tasks and supports day selection.
-           Rendered and managed via js/planner.js.
--->
-<section id="calendar-widget" aria-label="Calendar">
-  <!-- Calendar markup will be implemented in a later step -->
-</section>
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskPilot AI - Monthly Calendar Component</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#000917",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#2f312e",
+                        "surface-container": "#eeeee9",
+                        "surface-container-high": "#e8e8e4",
+                        "secondary-fixed": "#a6f4b5",
+                        "on-surface-variant": "#45474c",
+                        "outline-variant": "#c6c6cd",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#8bd79b",
+                        "on-secondary-container": "#24703e",
+                        "on-primary-fixed-variant": "#3e475b",
+                        "on-surface": "#1a1c19",
+                        "background": "#fafaf5",
+                        "surface-container-highest": "#e2e3de",
+                        "outline": "#76777d",
+                        "secondary": "#1f6c3a",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#a4f1b2",
+                        "inverse-on-surface": "#f1f1ec",
+                        "on-secondary-fixed-variant": "#005226",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#00210b",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#38485d",
+                        "surface-container-low": "#f4f4ef",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#dadad5",
+                        "primary-container": "#172033",
+                        "inverse-primary": "#bdc6e0",
+                        "primary-fixed": "#d9e2fc",
+                        "surface": "#fafaf5",
+                        "on-tertiary-container": "#7989a0",
+                        "tertiary-fixed": "#d3e4fe",
+                        "tertiary-fixed-dim": "#b7c8e1",
+                        "tertiary-container": "#102134",
+                        "primary": "#01081a",
+                        "on-background": "#1a1c19",
+                        "on-primary-fixed": "#121b2e",
+                        "surface-bright": "#fafaf5",
+                        "on-tertiary-fixed": "#0b1c30",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#555e74",
+                        "primary-fixed-dim": "#bdc6e0",
+                        "surface-variant": "#e2e3de",
+                        "on-primary-container": "#7f879f",
+                        "tp-navy": "#172033",
+                        "tp-forest": "#166534",
+                        "tp-soft-green": "#DCFCE7",
+                        "tp-gray-border": "#E5E7EB",
+                        "tp-gray-bg": "#F7F7F2",
+                        "tp-gray-muted": "#CBD5E1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "margin-desktop": "40px",
+                        "margin-mobile": "16px",
+                        "xl": "80px",
+                        "xs": "4px",
+                        "base": "8px",
+                        "lg": "48px",
+                        "md": "24px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Work Sans"],
+                        "label-md": ["Work Sans"],
+                        "headline-xl": ["Manrope"],
+                        "body-lg": ["Work Sans"],
+                        "body-md": ["Work Sans"],
+                        "headline-lg": ["Manrope"],
+                        "body-sm": ["Work Sans"],
+                        "headline-md": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-xl": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #F7F7F2; }
+    </style>
+</head>
+<body class="font-body-md text-on-surface antialiased min-h-screen flex items-center justify-center p-4">
+<!-- Calendar Component Container -->
+<div class="bg-white rounded-lg border border-tp-gray-border shadow-[0px_2px_4px_rgba(23,32,51,0.04)] w-full max-w-md overflow-hidden">
+<!-- Header -->
+<div class="p-md border-b border-tp-gray-border flex items-center justify-between">
+<h2 aria-live="polite" class="font-headline-md text-headline-md text-tp-navy" id="calendar-month-year">August 2026</h2>
+<div class="flex items-center space-x-1">
+<button aria-label="Previous month" class="w-8 h-8 flex items-center justify-center rounded border border-tp-gray-border text-tp-navy hover:text-tp-forest hover:border-tp-forest transition-colors focus:outline-none focus:ring-2 focus:ring-tp-forest focus:ring-opacity-50" onclick="prevMonth()">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button aria-label="Today" class="px-3 h-8 flex items-center justify-center rounded border border-tp-gray-border font-label-sm text-label-sm text-tp-navy hover:text-tp-forest hover:border-tp-forest transition-colors focus:outline-none focus:ring-2 focus:ring-tp-forest focus:ring-opacity-50" onclick="goToToday()">
+                    Today
+                </button>
+<button aria-label="Next month" class="w-8 h-8 flex items-center justify-center rounded border border-tp-gray-border text-tp-navy hover:text-tp-forest hover:border-tp-forest transition-colors focus:outline-none focus:ring-2 focus:ring-tp-forest focus:ring-opacity-50" onclick="nextMonth()">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Grid Days -->
+<div class="px-md pt-sm pb-2 grid grid-cols-7 gap-1 text-center font-label-sm text-label-sm text-on-surface-variant">
+<div aria-hidden="true">Mon</div>
+<div aria-hidden="true">Tue</div>
+<div aria-hidden="true">Wed</div>
+<div aria-hidden="true">Thu</div>
+<div aria-hidden="true">Fri</div>
+<div aria-hidden="true">Sat</div>
+<div aria-hidden="true">Sun</div>
+</div>
+<!-- Calendar Grid -->
+<div aria-labelledby="calendar-month-year" class="px-md pb-md grid grid-cols-7 gap-1" id="calendar-grid" role="grid">
+<!-- Grid is populated by JS -->
+</div>
+<!-- Selected Date / Task List Area -->
+<div class="bg-surface-container-low border-t border-tp-gray-border p-md">
+<div class="flex justify-between items-center mb-sm">
+<h3 class="font-label-md text-label-md text-tp-navy" id="selected-date-display">Friday, August 8</h3>
+<span class="font-label-sm text-label-sm text-tp-forest bg-tp-soft-green px-2 py-0.5 rounded-full" id="task-count-badge">2 Tasks</span>
+</div>
+<div class="space-y-2" id="task-list">
+<!-- Tasks populated by JS -->
+</div>
+<div class="hidden text-center py-4" id="empty-state">
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-3">No tasks scheduled</p>
+<button class="w-full h-11 flex items-center justify-center rounded border border-tp-gray-border text-tp-navy font-label-md text-label-md hover:bg-tp-gray-border/20 transition-colors focus:outline-none focus:ring-2 focus:ring-tp-forest focus:ring-opacity-50">
+<span class="material-symbols-outlined mr-2 text-sm">add</span>
+                    Add Task
+                </button>
+</div>
+</div>
+</div>
+<script>
+        // Mock Data: Tasks for August 2026
+        const mockTasks = {
+            "2026-08-08": [
+                { time: "09:00 AM", title: "Python Practice" },
+                { time: "11:00 AM", title: "Project Documentation" }
+            ],
+            "2026-08-09": [{ time: "02:00 PM", title: "Team Sync" }],
+            "2026-08-11": [
+                { time: "10:00 AM", title: "Design Review" },
+                { time: "01:00 PM", title: "Client Call" },
+                { time: "04:00 PM", title: "Code Deploy" }
+            ],
+            "2026-08-14": [{ time: "All Day", title: "Company Offsite" }],
+            "2026-08-18": [{ time: "09:30 AM", title: "Sprint Planning" }],
+            "2026-08-21": [{ time: "11:00 AM", title: "1:1 with Manager" }]
+        };
+
+        // State
+        let currentDate = new Date(2026, 7, 1); // Start August 2026
+        let selectedDate = new Date(2026, 7, 8); // Pre-select Aug 8
+        const todayReal = new Date(); // Actual today, but for UI demo we'll pretend it's some date in Aug 2026 if we want, or just leave actual today logic. Let's pretend today is Aug 5, 2026 for demo purposes.
+        const demoToday = new Date(2026, 7, 5);
+
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            document.getElementById('calendar-month-year').textContent = `${monthNames[month]} ${year}`;
+            
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            
+            // Adjust to Monday start
+            let startDayOfWeek = firstDay.getDay() - 1;
+            if (startDayOfWeek === -1) startDayOfWeek = 6; // Sunday becomes 6
+            
+            const prevMonthLastDay = new Date(year, month, 0).getDate();
+            
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = '';
+            
+            // Previous month days
+            for (let i = startDayOfWeek - 1; i >= 0; i--) {
+                const dayNum = prevMonthLastDay - i;
+                grid.appendChild(createDateCell(year, month - 1, dayNum, true));
+            }
+            
+            // Current month days
+            for (let i = 1; i <= lastDay.getDate(); i++) {
+                grid.appendChild(createDateCell(year, month, i, false));
+            }
+            
+            // Next month days to fill 6 rows (42 cells total)
+            const totalCells = startDayOfWeek + lastDay.getDate();
+            let nextMonthDay = 1;
+            while (grid.children.length < 42) {
+                grid.appendChild(createDateCell(year, month + 1, nextMonthDay++, true));
+            }
+
+            updateSelectedDateView();
+        }
+
+        function createDateCell(year, month, day, isMuted) {
+            // Handle month wrap-around for data keys
+            const dateObj = new Date(year, month, day);
+            const checkYear = dateObj.getFullYear();
+            const checkMonth = dateObj.getMonth();
+            const checkDay = dateObj.getDate();
+            
+            const dateKey = `${checkYear}-${String(checkMonth + 1).padStart(2, '0')}-${String(checkDay).padStart(2, '0')}`;
+            const isToday = checkYear === demoToday.getFullYear() && checkMonth === demoToday.getMonth() && checkDay === demoToday.getDate();
+            const isSelected = selectedDate && checkYear === selectedDate.getFullYear() && checkMonth === selectedDate.getMonth() && checkDay === selectedDate.getDate();
+            const hasTasks = mockTasks[dateKey] && mockTasks[dateKey].length > 0;
+
+            const btn = document.createElement('button');
+            btn.className = `w-10 h-10 rounded-full flex flex-col items-center justify-center mx-auto relative transition-colors focus:outline-none focus:ring-2 focus:ring-tp-forest focus:ring-offset-1 font-body-sm text-body-sm`;
+            btn.setAttribute('role', 'gridcell');
+            btn.setAttribute('aria-label', `${dateKey}`);
+            
+            if (isMuted) {
+                btn.classList.add('text-tp-gray-muted');
+                btn.classList.add('hover:bg-gray-50');
+            } else {
+                btn.classList.add('text-tp-navy');
+                if (!isSelected) btn.classList.add('hover:bg-gray-100');
+            }
+
+            if (isToday && !isSelected) {
+                btn.classList.add('border', 'border-tp-forest', 'text-tp-forest', 'font-bold');
+            }
+
+            if (isSelected) {
+                btn.classList.add('bg-tp-forest', 'text-white', 'font-bold');
+                btn.classList.remove('text-tp-navy', 'text-tp-gray-muted', 'hover:bg-gray-100', 'hover:bg-gray-50');
+                btn.setAttribute('aria-selected', 'true');
+            } else {
+                btn.setAttribute('aria-selected', 'false');
+            }
+
+            const daySpan = document.createElement('span');
+            daySpan.textContent = day;
+            btn.appendChild(daySpan);
+
+            if (hasTasks) {
+                const dot = document.createElement('span');
+                dot.className = `w-1 h-1 rounded-full absolute bottom-1 ${isSelected ? 'bg-white' : 'bg-tp-forest'}`;
+                btn.appendChild(dot);
+            }
+
+            btn.onclick = () => {
+                selectedDate = dateObj;
+                // If clicking muted date, jump to that month
+                if (isMuted) {
+                    currentDate = new Date(checkYear, checkMonth, 1);
+                }
+                renderCalendar();
+            };
+
+            return btn;
+        }
+
+        function updateSelectedDateView() {
+            if (!selectedDate) return;
+            
+            const dateStr = `${dayNames[selectedDate.getDay()]}, ${monthNames[selectedDate.getMonth()]} ${selectedDate.getDate()}`;
+            document.getElementById('selected-date-display').textContent = dateStr;
+
+            const dateKey = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
+            const tasks = mockTasks[dateKey] || [];
+            
+            const badge = document.getElementById('task-count-badge');
+            const taskList = document.getElementById('task-list');
+            const emptyState = document.getElementById('empty-state');
+
+            taskList.innerHTML = '';
+
+            if (tasks.length > 0) {
+                badge.textContent = `${tasks.length} Task${tasks.length > 1 ? 's' : ''}`;
+                badge.classList.remove('hidden');
+                emptyState.classList.add('hidden');
+                taskList.classList.remove('hidden');
+
+                tasks.slice(0, 3).forEach(task => {
+                    const taskEl = document.createElement('div');
+                    taskEl.className = 'flex items-center justify-between p-2 rounded bg-white border border-tp-gray-border';
+                    taskEl.innerHTML = `
+                        <div class="flex flex-col">
+                            <span class="font-label-sm text-label-sm text-on-surface-variant">${task.time}</span>
+                            <span class="font-body-sm text-body-sm text-tp-navy font-medium truncate">${task.title}</span>
+                        </div>
+                        <button class="text-tp-gray-muted hover:text-tp-forest transition-colors" aria-label="Complete task">
+                            <span class="material-symbols-outlined text-[18px]">radio_button_unchecked</span>
+                        </button>
+                    `;
+                    taskList.appendChild(taskEl);
+                });
+                
+                if (tasks.length > 3) {
+                     const moreEl = document.createElement('div');
+                     moreEl.className = 'text-center font-label-sm text-label-sm text-tp-forest cursor-pointer hover:underline py-1';
+                     moreEl.textContent = `+ ${tasks.length - 3} more`;
+                     taskList.appendChild(moreEl);
+                }
+            } else {
+                badge.classList.add('hidden');
+                taskList.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+            }
+        }
+
+        function prevMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        }
+
+        function goToToday() {
+            currentDate = new Date(demoToday.getFullYear(), demoToday.getMonth(), 1);
+            selectedDate = new Date(demoToday);
+            renderCalendar();
+        }
+
+        // Init
+        renderCalendar();
+    </script>
+</body></html>

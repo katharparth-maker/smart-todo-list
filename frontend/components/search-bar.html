@@ -1,9 +1,313 @@
-<!--
-  Component: Search Bar
-  Purpose: Global search overlay/bar for filtering tasks by keyword.
-           Queries the Supabase tasks table in real time.
-           Activated via the navbar search icon; managed by js/ui.js.
--->
-<div id="search-bar" role="search" aria-label="Search tasks">
-  <!-- Search bar markup will be implemented in a later step -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskPilot AI - Search Bar</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&amp;family=Manrope:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "surface-tint": "#555e74",
+                "on-background": "#1a1c19",
+                "error-container": "#ffdad6",
+                "on-secondary": "#ffffff",
+                "on-tertiary-container": "#7989a0",
+                "on-error-container": "#93000a",
+                "outline-variant": "#c6c6cd",
+                "primary-fixed-dim": "#bdc6e0",
+                "on-secondary-fixed-variant": "#005226",
+                "error": "#ba1a1a",
+                "tertiary": "#000917",
+                "on-tertiary-fixed-variant": "#38485d",
+                "surface-variant": "#e2e3de",
+                "secondary": "#1f6c3a",
+                "on-secondary-container": "#24703e",
+                "inverse-primary": "#bdc6e0",
+                "on-error": "#ffffff",
+                "primary": "#01081a",
+                "secondary-fixed-dim": "#8bd79b",
+                "on-surface-variant": "#45474c",
+                "tertiary-fixed": "#d3e4fe",
+                "on-surface": "#1a1c19",
+                "primary-container": "#172033",
+                "secondary-container": "#a4f1b2",
+                "on-primary-fixed-variant": "#3e475b",
+                "inverse-on-surface": "#f1f1ec",
+                "surface-container-highest": "#e2e3de",
+                "on-primary-container": "#7f879f",
+                "surface-container-low": "#f4f4ef",
+                "inverse-surface": "#2f312e",
+                "on-primary": "#ffffff",
+                "secondary-fixed": "#a6f4b5",
+                "tertiary-fixed-dim": "#b7c8e1",
+                "outline": "#76777d",
+                "surface-bright": "#fafaf5",
+                "surface-container-lowest": "#ffffff",
+                "on-tertiary-fixed": "#0b1c30",
+                "surface-dim": "#dadad5",
+                "surface-container": "#eeeee9",
+                "tertiary-container": "#102134",
+                "on-primary-fixed": "#121b2e",
+                "on-tertiary": "#ffffff",
+                "primary-fixed": "#d9e2fc",
+                "on-secondary-fixed": "#00210b",
+                "background": "#fafaf5",
+                "surface": "#fafaf5",
+                "surface-container-high": "#e8e8e4"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px",
+                "search": "10px"
+        },
+        "spacing": {
+                "md": "24px",
+                "lg": "48px",
+                "sm": "12px",
+                "xs": "4px",
+                "margin-desktop": "40px",
+                "gutter": "24px",
+                "xl": "80px",
+                "margin-mobile": "16px",
+                "base": "8px"
+        },
+        "fontFamily": {
+                "body-md": ["Work Sans"],
+                "headline-lg": ["Manrope"],
+                "body-sm": ["Work Sans"],
+                "label-sm": ["Work Sans"],
+                "headline-md": ["Manrope"],
+                "headline-xl": ["Manrope"],
+                "label-md": ["Work Sans"],
+                "body-lg": ["Work Sans"]
+        },
+        "fontSize": {
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  /* Custom Focus Ring for Search */
+  .focus-ring-search:focus-within {
+    border-color: #166534;
+    outline: none;
+    box-shadow: none;
+  }
+</style>
+</head>
+<body class="bg-background min-h-screen flex items-start justify-center pt-20">
+<!-- Search Bar Component Container -->
+<div class="relative w-full max-w-[420px] min-w-[320px] px-margin-mobile md:px-0 mx-auto" id="search-component">
+<!-- Search Input Group -->
+<div aria-label="Task search" class="relative flex items-center bg-surface-container-lowest border border-[#E5E7EB] rounded-search h-[44px] px-sm focus-ring-search transition-colors duration-200" role="search">
+<span aria-hidden="true" class="material-symbols-outlined text-[#64748B] text-body-lg mr-xs" data-icon="search">search</span>
+<input aria-autocomplete="list" aria-controls="search-results-listbox" autocomplete="off" class="w-full bg-transparent border-none focus:ring-0 text-on-surface font-body-md placeholder:text-[#64748B] p-0" id="task-search-input" placeholder="Search tasks, projects..." type="search"/>
+<button aria-label="Clear search" class="hidden items-center justify-center text-[#64748B] hover:text-on-surface transition-colors p-1 rounded-full focus:outline-none focus:bg-surface-container-low" id="clear-search-btn" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-body-md" data-icon="close">close</span>
+</button>
 </div>
+<!-- Search Results Dropdown -->
+<div aria-label="Search results" class="hidden absolute top-full left-0 right-0 mt-xs bg-surface-container-lowest border border-[#E5E7EB] rounded-lg shadow-sm z-50 overflow-hidden" id="search-results-dropdown" role="region">
+<ul class="max-h-[320px] overflow-y-auto py-xs" id="search-results-listbox" role="listbox">
+<!-- Results will be injected here by JS -->
+</ul>
+<div class="hidden p-sm text-center text-[#64748B] font-body-sm" id="no-results-msg">
+        No tasks found.
+      </div>
+</div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('task-search-input');
+      const clearBtn = document.getElementById('clear-search-btn');
+      const dropdown = document.getElementById('search-results-dropdown');
+      const resultsListbox = document.getElementById('search-results-listbox');
+      const noResultsMsg = document.getElementById('no-results-msg');
+      const searchComponent = document.getElementById('search-component');
+
+      // Demo Data
+      const tasks = [
+        { id: 1, title: 'Complete project documentation', category: 'Project', due: 'Today', icon: 'description' },
+        { id: 2, title: 'Review Python assignment', category: 'Study', due: 'Tomorrow', icon: 'code' },
+        { id: 3, title: 'Prepare presentation', category: 'College', due: 'In 2 days', icon: 'presentation' },
+        { id: 4, title: 'Practice coding problems', category: 'Learning', due: 'Next week', icon: 'terminal' },
+        { id: 5, title: 'Submit project report', category: 'Project', due: 'Friday', icon: 'task' }
+      ];
+
+      let selectedIndex = -1;
+      let currentResults = [];
+
+      // Render Results
+      const renderResults = (query) => {
+        resultsListbox.innerHTML = '';
+        selectedIndex = -1;
+
+        if (!query.trim()) {
+          dropdown.classList.add('hidden');
+          return;
+        }
+
+        const lowerQuery = query.toLowerCase();
+        currentResults = tasks.filter(task => 
+          task.title.toLowerCase().includes(lowerQuery) || 
+          task.category.toLowerCase().includes(lowerQuery)
+        );
+
+        if (currentResults.length > 0) {
+          dropdown.classList.remove('hidden');
+          noResultsMsg.classList.add('hidden');
+          resultsListbox.classList.remove('hidden');
+
+          currentResults.forEach((task, index) => {
+            const li = document.createElement('li');
+            li.setAttribute('role', 'option');
+            li.setAttribute('id', `result-option-${index}`);
+            li.className = 'px-sm py-2 cursor-pointer flex items-center justify-between border-b border-[#E5E7EB] last:border-b-0 hover:bg-[#F7F7F2] transition-colors aria-selected:bg-[#F7F7F2]';
+            
+            li.innerHTML = `
+              <div class="flex items-start gap-sm overflow-hidden">
+                <span class="material-symbols-outlined text-[#64748B] text-body-lg mt-0.5" data-icon="${task.icon}">${task.icon}</span>
+                <div class="flex flex-col min-w-0">
+                  <span class="font-label-md text-on-surface truncate block" title="${task.title}">${task.title}</span>
+                  <span class="font-body-sm text-[#64748B] flex items-center gap-xs">
+                    <span class="px-1.5 py-0.5 bg-surface-container rounded-sm text-xs font-medium">${task.category}</span>
+                  </span>
+                </div>
+              </div>
+              <div class="font-label-sm text-[#64748B] whitespace-nowrap pl-xs">
+                ${task.due}
+              </div>
+            `;
+            
+            li.addEventListener('click', () => {
+              selectResult(task);
+            });
+            li.addEventListener('mouseenter', () => {
+              updateSelection(index);
+            });
+            
+            resultsListbox.appendChild(li);
+          });
+        } else {
+          dropdown.classList.remove('hidden');
+          resultsListbox.classList.add('hidden');
+          noResultsMsg.classList.remove('hidden');
+        }
+      };
+
+      // Input Event
+      searchInput.addEventListener('input', (e) => {
+        const val = e.target.value;
+        if (val) {
+          clearBtn.classList.remove('hidden');
+          clearBtn.classList.add('flex');
+        } else {
+          clearBtn.classList.add('hidden');
+          clearBtn.classList.remove('flex');
+        }
+        renderResults(val);
+      });
+
+      // Clear Button
+      clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        searchInput.focus();
+        clearBtn.classList.add('hidden');
+        clearBtn.classList.remove('flex');
+        renderResults('');
+      });
+
+      // Keyboard Navigation
+      searchInput.addEventListener('keydown', (e) => {
+        if (dropdown.classList.contains('hidden') || currentResults.length === 0) return;
+
+        const items = resultsListbox.querySelectorAll('li[role="option"]');
+        
+        switch(e.key) {
+          case 'ArrowDown':
+            e.preventDefault();
+            selectedIndex = (selectedIndex + 1) % currentResults.length;
+            updateSelection(selectedIndex);
+            break;
+          case 'ArrowUp':
+            e.preventDefault();
+            selectedIndex = selectedIndex <= 0 ? currentResults.length - 1 : selectedIndex - 1;
+            updateSelection(selectedIndex);
+            break;
+          case 'Enter':
+            e.preventDefault();
+            if (selectedIndex >= 0 && selectedIndex < currentResults.length) {
+              selectResult(currentResults[selectedIndex]);
+            }
+            break;
+          case 'Escape':
+            e.preventDefault();
+            closeDropdown();
+            break;
+        }
+      });
+
+      // Update Selection Styling
+      const updateSelection = (index) => {
+        selectedIndex = index;
+        const items = resultsListbox.querySelectorAll('li[role="option"]');
+        items.forEach((item, i) => {
+          if (i === index) {
+            item.setAttribute('aria-selected', 'true');
+            item.scrollIntoView({ block: 'nearest' });
+            searchInput.setAttribute('aria-activedescendant', item.id);
+          } else {
+            item.setAttribute('aria-selected', 'false');
+          }
+        });
+      };
+
+      // Select Result Action
+      const selectResult = (task) => {
+        searchInput.value = task.title;
+        closeDropdown();
+        // Here you would typically trigger navigation or search execution
+        console.log('Selected:', task);
+      };
+
+      // Close Dropdown helper
+      const closeDropdown = () => {
+        dropdown.classList.add('hidden');
+        selectedIndex = -1;
+        searchInput.removeAttribute('aria-activedescendant');
+      };
+
+      // Click outside to close
+      document.addEventListener('click', (e) => {
+        if (!searchComponent.contains(e.target)) {
+          closeDropdown();
+        }
+      });
+      
+      // Focus within opens if there is value
+      searchInput.addEventListener('focus', () => {
+         if(searchInput.value) {
+             renderResults(searchInput.value);
+         }
+      })
+    });
+  </script>
+</body></html>

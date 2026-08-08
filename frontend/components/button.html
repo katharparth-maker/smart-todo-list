@@ -1,27 +1,415 @@
-<!--
-  Component: Button
-  Purpose: Reusable button template/reference for consistent button styles
-           across the application (primary, secondary, danger, ghost variants).
-           Actual buttons are rendered inline in page/component HTML;
-           this file serves as a style reference and copy-paste template.
--->
+<!DOCTYPE html>
 
-<!-- Primary Button -->
-<button type="button" class="btn btn--primary">
-  <!-- Label -->
-</button>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskPilot AI - Button Components</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#b7c8e1",
+                        "secondary-fixed": "#a6f4b5",
+                        "surface-container-low": "#f4f4ef",
+                        "surface-bright": "#fafaf5",
+                        "outline-variant": "#c6c6cd",
+                        "inverse-surface": "#2f312e",
+                        "on-secondary-fixed-variant": "#005226",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#bdc6e0",
+                        "surface": "#fafaf5",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#102134",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#7f879f",
+                        "surface-dim": "#dadad5",
+                        "inverse-primary": "#bdc6e0",
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e2e3de",
+                        "on-tertiary-container": "#7989a0",
+                        "on-tertiary-fixed-variant": "#38485d",
+                        "on-background": "#1a1c19",
+                        "on-secondary-fixed": "#00210b",
+                        "on-primary-fixed-variant": "#3e475b",
+                        "tertiary-fixed": "#d3e4fe",
+                        "surface-tint": "#555e74",
+                        "tertiary": "#000917",
+                        "secondary": "#1f6c3a",
+                        "outline": "#76777d",
+                        "on-surface-variant": "#45474c",
+                        "primary": "#01081a",
+                        "primary-fixed": "#d9e2fc",
+                        "on-secondary-container": "#24703e",
+                        "on-error": "#ffffff",
+                        "surface-container": "#eeeee9",
+                        "background": "#fafaf5",
+                        "secondary-fixed-dim": "#8bd79b",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#121b2e",
+                        "on-surface": "#1a1c19",
+                        "secondary-container": "#a4f1b2",
+                        "primary-container": "#172033",
+                        "on-tertiary-fixed": "#0b1c30",
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#e2e3de",
+                        "inverse-on-surface": "#f1f1ec",
+                        "surface-container-high": "#e8e8e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "24px",
+                        "xs": "4px",
+                        "sm": "12px",
+                        "base": "8px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "40px",
+                        "xl": "80px",
+                        "gutter": "24px",
+                        "lg": "48px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Work Sans"],
+                        "body-md": ["Work Sans"],
+                        "body-lg": ["Work Sans"],
+                        "headline-xl": ["Manrope"],
+                        "headline-lg": ["Manrope"],
+                        "body-sm": ["Work Sans"],
+                        "label-md": ["Work Sans"],
+                        "headline-md": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-xl": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Base Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Work Sans', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            border-radius: 0.5rem;
+            white-space: nowrap;
+        }
 
-<!-- Secondary Button -->
-<button type="button" class="btn btn--secondary">
-  <!-- Label -->
-</button>
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
 
-<!-- Danger Button -->
-<button type="button" class="btn btn--danger">
-  <!-- Label -->
-</button>
+        .btn:focus-visible {
+            outline: 2px solid #172033;
+            outline-offset: 2px;
+        }
 
-<!-- Ghost / Outline Button -->
-<button type="button" class="btn btn--ghost">
-  <!-- Label -->
+        /* Sizes */
+        .btn-sm {
+            height: 34px;
+            padding-left: 12px;
+            padding-right: 12px;
+            font-size: 12px;
+            line-height: 16px;
+        }
+
+        .btn-md {
+            height: 44px;
+            padding-left: 16px;
+            padding-right: 16px;
+            font-size: 14px;
+            line-height: 20px;
+        }
+
+        .btn-lg {
+            height: 48px;
+            padding-left: 20px;
+            padding-right: 20px;
+            font-size: 16px;
+            line-height: 24px;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        /* Icon Sizes */
+        .btn-icon-sm { width: 34px; height: 34px; padding: 0; }
+        .btn-icon-md { width: 44px; height: 44px; padding: 0; }
+        .btn-icon-lg { width: 48px; height: 48px; padding: 0; }
+
+        /* Variants */
+        .btn-primary {
+            background-color: #166534;
+            color: #ffffff;
+            border: 1px solid transparent;
+        }
+        .btn-primary:hover:not(:disabled) { background-color: #14532d; }
+
+        .btn-secondary {
+            background-color: #ffffff;
+            color: #172033;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 2px 0 rgba(23, 32, 51, 0.04);
+        }
+        .btn-secondary:hover:not(:disabled) { background-color: #f9fafb; border-color: #d1d5db; }
+
+        .btn-outline {
+            background-color: transparent;
+            color: #166534;
+            border: 1px solid #166534;
+        }
+        .btn-outline:hover:not(:disabled) { background-color: rgba(22, 101, 52, 0.05); }
+
+        .btn-ghost {
+            background-color: transparent;
+            color: #64748b;
+            border: 1px solid transparent;
+        }
+        .btn-ghost:hover:not(:disabled) { background-color: rgba(100, 116, 139, 0.1); color: #475569; }
+
+        .btn-danger {
+            background-color: #ef4444;
+            color: #ffffff;
+            border: 1px solid transparent;
+        }
+        .btn-danger:hover:not(:disabled) { background-color: #dc2626; }
+
+        .btn-success {
+            background-color: #166534;
+            color: #ffffff;
+            border: 1px solid transparent;
+        }
+        .btn-success:hover:not(:disabled) { background-color: #14532d; }
+        
+        .btn-icon {
+            background-color: #ffffff;
+            color: #45474c;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 2px 0 rgba(23, 32, 51, 0.04);
+        }
+        .btn-icon:hover:not(:disabled) { background-color: #f9fafb; color: #172033; border-color: #d1d5db; }
+
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-[#F7F7F2] text-on-background min-h-screen font-body-md">
+<!-- Top App Bar -->
+<header class="bg-surface dark:bg-surface border-b border-outline-variant dark:border-outline shadow-sm flex justify-between items-center w-full px-margin-desktop max-w-7xl mx-auto h-16 sticky top-0 z-50">
+<div class="flex items-center gap-6">
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">TaskPilot AI</h1>
+<nav class="hidden md:flex gap-4">
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-on-surface-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors cursor-pointer active:opacity-80" href="#">Dashboard</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-on-surface-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors cursor-pointer active:opacity-80" href="#">Tasks</a>
+<a class="font-label-md text-label-md text-secondary dark:text-secondary-fixed font-bold border-b-2 border-secondary h-16 flex items-center" href="#">Components</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-on-surface-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors cursor-pointer active:opacity-80" href="#">Team</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="btn btn-primary btn-md">Create Task</button>
+<div class="flex items-center gap-2">
+<button aria-label="Notifications" class="btn btn-icon btn-icon-md border-transparent shadow-none">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
 </button>
+<button aria-label="Settings" class="btn btn-icon btn-icon-md border-transparent shadow-none">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+<div class="w-8 h-8 rounded-full bg-primary-fixed-dim overflow-hidden flex items-center justify-center">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="A small circular avatar of a professional user in a minimalist style, high resolution, soft lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuApl1_O_DxvPDRXi8px3J7G_OWh5_mZV3QBUj5ZQJSYvWF_83sT2WoSbBhYctPJ6xlSImarxyO7adWQ2YV8ojkRVDd6eJD_TsPIixmCO_e7H19AiLxfexO3thtvVtztlihHeaxlKgZBU0BPjU5QYby42zqHU5P3pKl1VhfWVk0gzWGLiJ4_0CBcVxQw5XoDBsDx1qGCpRAJsncrnC4H6z0kKdDrw1OlS4VJh4fWz5KZhcQTOa_N29DmYg"/>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-lg space-y-12">
+<div class="mb-8">
+<h2 class="font-headline-lg text-headline-lg font-bold text-primary mb-2">Button Component System</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">A comprehensive guide to all button variants, sizes, and states for TaskPilot AI.</p>
+</div>
+<!-- Variants Section -->
+<section class="bg-surface rounded-xl border border-outline-variant p-6 md:p-md shadow-[0_2px_4px_rgba(23,32,51,0.04)]">
+<h3 class="font-headline-md text-headline-md font-bold text-primary mb-6 border-b border-outline-variant pb-2">Variants (Medium / Default)</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Primary -->
+<div class="space-y-4">
+<h4 class="font-label-md text-label-md text-on-surface-variant mb-2">Primary</h4>
+<div class="flex flex-col gap-3 items-start">
+<button class="btn btn-primary btn-md">
+<span class="mr-1">+</span> Add Task
+                        </button>
+<button class="btn btn-primary btn-md" disabled="">
+<span class="mr-1">+</span> Add Task
+                        </button>
+<button class="btn btn-primary btn-md">
+<svg class="spinner w-4 h-4 mr-2" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+                            Saving...
+                        </button>
+</div>
+</div>
+<!-- Secondary -->
+<div class="space-y-4">
+<h4 class="font-label-md text-label-md text-on-surface-variant mb-2">Secondary</h4>
+<div class="flex flex-col gap-3 items-start">
+<button class="btn btn-secondary btn-md">Cancel</button>
+<button class="btn btn-secondary btn-md" disabled="">Cancel</button>
+</div>
+</div>
+<!-- Outline -->
+<div class="space-y-4">
+<h4 class="font-label-md text-label-md text-on-surface-variant mb-2">Outline</h4>
+<div class="flex flex-col gap-3 items-start">
+<button class="btn btn-outline btn-md">
+                            View Planner <span class="ml-1">→</span>
+</button>
+<button class="btn btn-outline btn-md" disabled="">
+                            View Planner <span class="ml-1">→</span>
+</button>
+</div>
+</div>
+<!-- Ghost -->
+<div class="space-y-4">
+<h4 class="font-label-md text-label-md text-on-surface-variant mb-2">Ghost</h4>
+<div class="flex flex-col gap-3 items-start">
+<button class="btn btn-ghost btn-md">Dismiss</button>
+<button class="btn btn-ghost btn-md" disabled="">Dismiss</button>
+</div>
+</div>
+<!-- Danger -->
+<div class="space-y-4">
+<h4 class="font-label-md text-label-md text-on-surface-variant mb-2">Danger</h4>
+<div class="flex flex-col gap-3 items-start">
+<button class="btn btn-danger btn-md">Delete Task</button>
+<button class="btn btn-danger btn-md" disabled="">Delete Task</button>
+</div>
+</div>
+<!-- Success -->
+<div class="space-y-4">
+<h4 class="font-label-md text-label-md text-on-surface-variant mb-2">Success</h4>
+<div class="flex flex-col gap-3 items-start">
+<button class="btn btn-success btn-md">
+<span class="mr-1">✓</span> Complete
+                        </button>
+<button class="btn btn-success btn-md" disabled="">
+<span class="mr-1">✓</span> Complete
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Sizes Section -->
+<section class="bg-surface rounded-xl border border-outline-variant p-6 md:p-md shadow-[0_2px_4px_rgba(23,32,51,0.04)]">
+<h3 class="font-headline-md text-headline-md font-bold text-primary mb-6 border-b border-outline-variant pb-2">Sizes</h3>
+<div class="flex flex-wrap gap-8 items-end">
+<div class="flex flex-col gap-2 items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Small (34px)</span>
+<button class="btn btn-primary btn-sm">Add Task</button>
+</div>
+<div class="flex flex-col gap-2 items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Medium (44px)</span>
+<button class="btn btn-primary btn-md">Add Task</button>
+</div>
+<div class="flex flex-col gap-2 items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Large (48px)</span>
+<button class="btn btn-primary btn-lg">Add Task</button>
+</div>
+</div>
+</section>
+<!-- Icon Buttons -->
+<section class="bg-surface rounded-xl border border-outline-variant p-6 md:p-md shadow-[0_2px_4px_rgba(23,32,51,0.04)]">
+<h3 class="font-headline-md text-headline-md font-bold text-primary mb-6 border-b border-outline-variant pb-2">Icon-Only Buttons</h3>
+<div class="flex flex-wrap gap-6 items-center">
+<button aria-label="Edit" class="btn btn-icon btn-icon-md">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+</button>
+<button aria-label="Delete" class="btn btn-icon btn-icon-md">
+<span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span>
+</button>
+<button aria-label="Close" class="btn btn-icon btn-icon-md">
+<span class="material-symbols-outlined text-[24px]" data-icon="close">close</span>
+</button>
+<button aria-label="More" class="btn btn-icon btn-icon-md shadow-none border-transparent hover:border-outline-variant">
+<span class="material-symbols-outlined text-[24px]" data-icon="more_vert">more_vert</span>
+</button>
+<div class="h-8 border-l border-outline-variant mx-2"></div>
+<button aria-label="Edit Small" class="btn btn-icon btn-icon-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="edit">edit</span>
+</button>
+<button aria-label="Edit Large" class="btn btn-icon btn-icon-lg">
+<span class="material-symbols-outlined text-[24px]" data-icon="edit">edit</span>
+</button>
+</div>
+</section>
+<!-- Full Width Form Context -->
+<section class="bg-surface rounded-xl border border-outline-variant p-6 md:p-md shadow-[0_2px_4px_rgba(23,32,51,0.04)]">
+<h3 class="font-headline-md text-headline-md font-bold text-primary mb-6 border-b border-outline-variant pb-2">Full Width (Contextual)</h3>
+<div class="max-w-sm mx-auto bg-white p-6 rounded-lg border border-outline-variant shadow-sm">
+<h4 class="font-headline-sm text-headline-sm font-bold text-primary mb-4">Create New Project</h4>
+<div class="space-y-4">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Project Name</label>
+<input class="w-full h-11 px-3 border border-outline-variant rounded-md focus:border-primary-container focus:ring-2 focus:ring-primary-container focus:ring-opacity-10 outline-none transition-all font-body-sm" placeholder="e.g. Q3 Marketing" type="text"/>
+</div>
+<div class="pt-2 flex flex-col gap-3">
+<button class="btn btn-primary btn-md btn-full">Save Project</button>
+<button class="btn btn-ghost btn-md btn-full">Cancel</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface dark:bg-surface border-t border-outline-variant dark:border-outline w-full py-lg mt-12">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-desktop max-w-7xl mx-auto gap-4">
+<div class="font-label-md text-label-md font-bold text-primary flex items-center gap-2">
+                TaskPilot AI
+            </div>
+<div class="font-body-sm text-body-sm text-on-surface-variant dark:text-on-surface-variant">
+                © 2024 TaskPilot AI. Plan. Focus. Achieve.
+            </div>
+<div class="flex gap-6">
+<a class="font-body-sm text-body-sm text-on-surface-variant dark:text-on-surface-variant hover:text-secondary dark:hover:text-secondary-fixed underline transition-all cursor-pointer" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant dark:text-on-surface-variant hover:text-secondary dark:hover:text-secondary-fixed underline transition-all cursor-pointer" href="#">Terms of Service</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant dark:text-on-surface-variant hover:text-secondary dark:hover:text-secondary-fixed underline transition-all cursor-pointer" href="#">Contact Support</a>
+</div>
+</div>
+</footer>
+</body></html>

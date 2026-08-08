@@ -1,9 +1,141 @@
-<!--
-  Component: Navbar
-  Purpose: Top navigation bar present on all authenticated pages.
-           Contains the app logo, global search trigger, notification bell,
-           and user avatar/menu. Injected into pages via js/ui.js.
--->
-<nav id="navbar" aria-label="Main navigation">
-  <!-- Navbar markup will be implemented in a later step -->
-</nav>
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Navigation Bar</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --navy: #172033;
+            --forest-green: #166534;
+            --off-white: #F7F7F2;
+            --secondary-text: #64748B;
+        }
+        .text-navy { color: var(--navy); }
+        .text-forest-green { color: var(--forest-green); }
+        .text-secondary-text { color: var(--secondary-text); }
+        .bg-off-white { background-color: var(--off-white); }
+        .bg-forest-green { background-color: var(--forest-green); }
+        .focus\:ring-forest-green:focus { --tw-ring-color: var(--forest-green); }
+        .focus\:border-forest-green:focus { border-color: var(--forest-green); }
+    </style>
+</head>
+<body class="bg-gray-50">
+<header class="bg-white border-b border-gray-200 h-16 md:h-18 flex items-center sticky top-0 z-30 w-full px-4 md:px-6">
+<div class="flex items-center justify-between w-full max-w-7xl mx-auto">
+<!-- Left: Mobile Brand & Menu / Desktop Title -->
+<div class="flex items-center gap-3">
+<!-- Mobile Menu Button (☰) -->
+<button aria-label="Open sidebar" class="md:hidden p-2 -ml-2 rounded-md text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-forest-green" onclick="console.log('Toggle sidebar')" type="button">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<!-- Mobile Brand -->
+<div class="md:hidden">
+<span class="text-navy font-bold text-lg">TaskPilot AI</span>
+</div>
+<!-- Desktop Page Title Context -->
+<div class="hidden md:block">
+<h1 class="text-navy font-semibold text-lg md:text-xl leading-tight" id="navbar-page-title">
+          Dashboard
+        </h1>
+<p class="text-secondary-text text-xs font-medium mt-0.5">
+          Welcome back, Sanskruti
+        </p>
+</div>
+</div>
+<!-- Center/Right: Search (Collapses on Mobile to Icon) -->
+<div class="flex-1 max-w-md mx-4 md:mx-8 hidden md:block">
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-forest-green">
+<span class="material-symbols-outlined text-sm">search</span>
+</div>
+<input aria-label="Search tasks" class="block w-full bg-white border border-gray-200 rounded-lg py-2 pl-10 pr-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-forest-green focus:border-forest-green transition-all" placeholder="Search tasks..." type="search"/>
+</div>
+</div>
+<!-- Right: Actions & Profile -->
+<div class="flex items-center gap-2 md:gap-4">
+<!-- Mobile Search Icon -->
+<button aria-label="Search" class="md:hidden p-2 text-gray-500 hover:text-navy hover:bg-gray-100 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-forest-green" type="button">
+<span class="material-symbols-outlined">search</span>
+</button>
+<!-- Notifications -->
+<div class="relative">
+<button aria-label="Notifications" class="p-2 text-gray-500 hover:text-navy hover:bg-gray-100 rounded-full relative transition-colors focus:outline-none focus:ring-2 focus:ring-forest-green" onclick="document.getElementById('notification-panel').classList.toggle('hidden')" type="button">
+<span class="material-symbols-outlined">notifications</span>
+<!-- Unread Indicator (Red) -->
+<span class="absolute top-2 right-2.5 block h-2 w-2 rounded-full bg-red-600 ring-2 ring-white"></span>
+</button>
+<!-- Notification Panel -->
+<div class="hidden absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-xl shadow-lg py-1 z-50" id="notification-panel">
+<div class="px-4 py-3 border-b border-gray-100 flex justify-between items-center">
+<span class="font-semibold text-sm text-navy">Notifications</span>
+<button class="text-xs text-forest-green font-medium">Mark all as read</button>
+</div>
+<div class="max-h-64 overflow-y-auto">
+<div class="px-4 py-3 hover:bg-off-white flex gap-3 transition-colors cursor-pointer border-b border-gray-50">
+<div class="h-8 w-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600">
+<span class="material-symbols-outlined text-sm">schedule</span>
+</div>
+<div class="flex-1">
+<p class="text-xs text-navy font-medium">Task deadline approaching</p>
+<p class="text-[10px] text-gray-500 mt-0.5">Complete project documentation</p>
+</div>
+</div>
+<div class="px-4 py-3 hover:bg-off-white flex gap-3 transition-colors cursor-pointer border-b border-gray-50">
+<div class="h-8 w-8 rounded-full bg-forest-green/10 flex items-center justify-center text-forest-green">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+</div>
+<div class="flex-1">
+<p class="text-xs text-navy font-medium">Task completed</p>
+<p class="text-[10px] text-gray-500 mt-0.5">Q3 Financial Report approved</p>
+</div>
+</div>
+<div class="px-4 py-3 hover:bg-off-white flex gap-3 transition-colors cursor-pointer border-b border-gray-50">
+<div class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+<span class="material-symbols-outlined text-sm">tips_and_updates</span>
+</div>
+<div class="flex-1">
+<p class="text-xs text-navy font-medium">New AI recommendation</p>
+<p class="text-[10px] text-gray-500 mt-0.5">Optimize your afternoon schedule</p>
+</div>
+</div>
+</div>
+<div class="px-4 py-2 border-t border-gray-100 text-center">
+<button class="text-xs text-gray-500 font-medium hover:text-navy">View all notifications</button>
+</div>
+</div>
+</div>
+<!-- User Profile Dropdown (Desktop Only) -->
+<div class="relative hidden md:block">
+<button aria-expanded="false" aria-haspopup="true" class="flex items-center gap-3 p-1 rounded-full md:rounded-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-forest-green" onclick="document.getElementById('user-dropdown').classList.toggle('hidden')" type="button">
+<div class="h-8 w-8 rounded-full bg-navy flex items-center justify-center text-white text-sm font-bold">
+            S
+          </div>
+<div class="text-left">
+<p class="text-sm font-semibold text-navy leading-none">Sanskruti</p>
+</div>
+<span class="material-symbols-outlined text-gray-400 text-sm">expand_more</span>
+</button>
+<!-- Dropdown Menu -->
+<div class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg py-1 z-50" id="user-dropdown">
+<a class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-off-white hover:text-forest-green transition-colors" href="../pages/profile.html">
+<span class="material-symbols-outlined text-sm">person</span>
+            Profile
+          </a>
+<a class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-off-white hover:text-forest-green transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">settings</span>
+            Settings
+          </a>
+<div class="border-t border-gray-100 my-1"></div>
+<button class="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
+<span class="material-symbols-outlined text-sm">logout</span>
+            Logout
+          </button>
+</div>
+</div>
+</div>
+</div>
+</header>
+</body></html>

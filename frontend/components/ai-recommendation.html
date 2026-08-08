@@ -1,9 +1,258 @@
-<!--
-  Component: AI Recommendation Panel
-  Purpose: Displays AI-generated task suggestions and productivity insights
-           fetched from the FastAPI/Gemini backend.
-           Rendered dynamically via js/api.js and shown on Dashboard/Planner.
--->
-<section id="ai-recommendation-panel" aria-label="AI Recommendations">
-  <!-- AI recommendation markup will be implemented in a later step -->
-</section>
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskPilot AI Recommendation Component</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error-container": "#93000a",
+                    "on-primary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-on-surface": "#f1f1ec",
+                    "tertiary": "#000917",
+                    "tertiary-fixed-dim": "#b7c8e1",
+                    "on-tertiary": "#ffffff",
+                    "on-surface": "#1a1c19",
+                    "on-primary-container": "#7f879f",
+                    "background": "#fafaf5",
+                    "surface-container-low": "#f4f4ef",
+                    "on-primary-fixed-variant": "#3e475b",
+                    "surface-variant": "#e2e3de",
+                    "on-surface-variant": "#45474c",
+                    "surface-container": "#eeeee9",
+                    "on-primary-fixed": "#121b2e",
+                    "secondary-fixed": "#a6f4b5",
+                    "inverse-primary": "#bdc6e0",
+                    "secondary-fixed-dim": "#8bd79b",
+                    "surface-container-highest": "#e2e3de",
+                    "secondary-container": "#a4f1b2",
+                    "tertiary-fixed": "#d3e4fe",
+                    "primary-fixed": "#d9e2fc",
+                    "on-tertiary-fixed-variant": "#38485d",
+                    "surface": "#fafaf5",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#102134",
+                    "on-secondary-container": "#24703e",
+                    "on-background": "#1a1c19",
+                    "error": "#ba1a1a",
+                    "secondary": "#1f6c3a",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-fixed": "#00210b",
+                    "surface-container-high": "#e8e8e4",
+                    "surface-bright": "#fafaf5",
+                    "primary": "#01081a",
+                    "surface-tint": "#555e74",
+                    "primary-container": "#172033",
+                    "on-secondary-fixed-variant": "#005226",
+                    "error-container": "#ffdad6",
+                    "inverse-surface": "#2f312e",
+                    "on-tertiary-fixed": "#0b1c30",
+                    "on-tertiary-container": "#7989a0",
+                    "surface-dim": "#dadad5",
+                    "outline-variant": "#c6c6cd",
+                    "primary-fixed-dim": "#bdc6e0",
+                    "outline": "#76777d",
+                    // Brand specific overrides based on prompt requirements
+                    "brand-navy": "#172033",
+                    "brand-forest": "#166534",
+                    "brand-offwhite": "#F7F7F2",
+                    "brand-white": "#FFFFFF",
+                    "brand-gray": "#64748B",
+                    "brand-border": "#E5E7EB",
+                    "brand-success": "#DCFCE7"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px",
+                    "card": "16px"
+            },
+            "spacing": {
+                    "lg": "48px",
+                    "sm": "12px",
+                    "margin-desktop": "40px",
+                    "xl": "80px",
+                    "base": "8px",
+                    "xs": "4px",
+                    "md": "24px",
+                    "gutter": "24px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "label-md": ["Work Sans", "sans-serif"],
+                    "headline-xl": ["Manrope", "sans-serif"],
+                    "headline-lg": ["Manrope", "sans-serif"],
+                    "body-lg": ["Work Sans", "sans-serif"],
+                    "headline-md": ["Manrope", "sans-serif"],
+                    "body-md": ["Work Sans", "sans-serif"],
+                    "label-sm": ["Work Sans", "sans-serif"],
+                    "body-sm": ["Work Sans", "sans-serif"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .ai-indicator-border {
+            border-left: 2px solid theme('colors.brand-forest');
+        }
+    </style>
+</head>
+<body class="bg-brand-offwhite text-brand-navy min-h-screen p-margin-mobile md:p-margin-desktop flex items-center justify-center font-body-md">
+<!-- AI Recommendation Component -->
+<div aria-labelledby="ai-insight-title" class="bg-brand-white border border-brand-border rounded-card shadow-sm p-md w-full max-w-2xl ai-indicator-border relative overflow-hidden transition-all duration-300" data-recommendation-type="priority-insight" id="ai-recommendation-card" role="region">
+<!-- Header -->
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-2">
+<span aria-hidden="true" class="material-symbols-outlined text-brand-forest text-[20px]" data-icon="temp_preferences_custom">temp_preferences_custom</span>
+<div>
+<h3 class="font-headline-md text-headline-md text-brand-navy !text-[16px] !leading-tight" id="ai-insight-title">AI Productivity Insight</h3>
+<p class="font-body-sm text-body-sm text-brand-gray">Personalized for you</p>
+</div>
+</div>
+<button aria-label="Refresh insight" class="text-brand-gray hover:text-brand-navy transition-colors rounded-full p-1 hover:bg-brand-offwhite focus:outline-none focus:ring-2 focus:ring-brand-forest focus:ring-opacity-50" id="refresh-insight-btn">
+<span class="material-symbols-outlined text-[20px]" data-icon="refresh">refresh</span>
+</button>
+</div>
+<!-- Main Content Area -->
+<div class="transition-opacity duration-300" id="insight-content-area">
+<div class="mb-4">
+<span class="inline-flex items-center px-2 py-1 rounded bg-brand-success text-brand-forest font-label-sm text-label-sm mb-2">Recommended</span>
+<h4 class="font-headline-md text-headline-md text-brand-navy !text-[20px] mb-2" id="insight-headline">Focus on your highest-priority task first.</h4>
+<p class="font-body-md text-body-md text-brand-gray" id="insight-description">You have 3 important tasks today. Completing your project documentation before your afternoon meeting may help you stay on track.</p>
+</div>
+<!-- Actions -->
+<div class="flex flex-col sm:flex-row gap-3 mt-6">
+<a class="inline-flex items-center justify-center bg-brand-forest text-brand-white font-label-md text-label-md px-6 h-[44px] rounded hover:bg-opacity-90 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-navy focus:ring-offset-2" href="../pages/planner.html">
+                    View Planner <span class="material-symbols-outlined ml-2 text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</a>
+<button class="inline-flex items-center justify-center bg-transparent border border-brand-border text-brand-navy font-label-md text-label-md px-6 h-[44px] rounded hover:bg-brand-offwhite transition-colors focus:outline-none focus:ring-2 focus:ring-brand-navy focus:ring-offset-2" id="dismiss-insight-btn">
+                    Dismiss
+                </button>
+</div>
+</div>
+<!-- Skeleton Loading State (Hidden by default) -->
+<div class="hidden animate-pulse" id="insight-skeleton">
+<div class="h-5 bg-brand-border rounded w-1/4 mb-3"></div>
+<div class="h-6 bg-brand-border rounded w-3/4 mb-4"></div>
+<div class="space-y-2 mb-6">
+<div class="h-4 bg-brand-border rounded w-full"></div>
+<div class="h-4 bg-brand-border rounded w-5/6"></div>
+</div>
+<div class="flex gap-3">
+<div class="h-[44px] bg-brand-border rounded w-32"></div>
+<div class="h-[44px] bg-brand-border rounded w-24"></div>
+</div>
+</div>
+<!-- Error State (Hidden by default) -->
+<div class="hidden py-4 text-center" id="insight-error">
+<span class="material-symbols-outlined text-brand-gray text-[32px] mb-2" data-icon="info">info</span>
+<p class="font-body-md text-body-md text-brand-gray">Unable to load new insights right now.</p>
+<button class="mt-2 text-brand-forest font-label-sm text-label-sm hover:underline" id="retry-insight-btn">Try Again</button>
+</div>
+<!-- Footer -->
+<div class="mt-6 pt-4 border-t border-brand-border flex items-center justify-between">
+<p class="font-body-sm text-body-sm text-brand-gray flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="auto_awesome">auto_awesome</span>
+                AI suggestion based on your current tasks
+            </p>
+<!-- Optional subtle feedback mechanism could go here -->
+</div>
+</div>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const card = document.getElementById('ai-recommendation-card');
+            const dismissBtn = document.getElementById('dismiss-insight-btn');
+            const refreshBtn = document.getElementById('refresh-insight-btn');
+            const contentArea = document.getElementById('insight-content-area');
+            const skeleton = document.getElementById('insight-skeleton');
+            const errorState = document.getElementById('insight-error');
+            const headline = document.getElementById('insight-headline');
+            const description = document.getElementById('insight-description');
+            const retryBtn = document.getElementById('retry-insight-btn');
+
+            // Demo data for cycling
+            const demoInsights = [
+                {
+                    headline: "Focus on your highest-priority task first.",
+                    description: "You have 3 important tasks today. Completing your project documentation before your afternoon meeting may help you stay on track."
+                },
+                {
+                    headline: "Time for a quick break?",
+                    description: "You've been working continuously for 2 hours. A 5-minute stretch could improve your focus for the upcoming design review."
+                },
+                {
+                    headline: "Delegate to accelerate.",
+                    description: "The 'Update server configs' task looks similar to work usually handled by DevOps. Delegating this might clear your schedule for core development."
+                }
+            ];
+            
+            let currentInsightIndex = 0;
+
+            // Dismiss Action
+            dismissBtn.addEventListener('click', () => {
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    card.style.display = 'none';
+                }, 300);
+            });
+
+            // Simulate Loading and Refreshing
+            const loadNewInsight = (simulateError = false) => {
+                // Show Skeleton
+                contentArea.classList.add('hidden');
+                errorState.classList.add('hidden');
+                skeleton.classList.remove('hidden');
+                refreshBtn.classList.add('animate-spin');
+                refreshBtn.disabled = true;
+
+                setTimeout(() => {
+                    refreshBtn.classList.remove('animate-spin');
+                    refreshBtn.disabled = false;
+                    skeleton.classList.add('hidden');
+
+                    if (simulateError && Math.random() > 0.7) {
+                        // Randomly show error for demo purposes
+                        errorState.classList.remove('hidden');
+                    } else {
+                        // Update content and show
+                        currentInsightIndex = (currentInsightIndex + 1) % demoInsights.length;
+                        headline.textContent = demoInsights[currentInsightIndex].headline;
+                        description.textContent = demoInsights[currentInsightIndex].description;
+                        contentArea.classList.remove('hidden');
+                        
+                        // Small fade in effect for new content
+                        contentArea.style.opacity = '0';
+                        setTimeout(() => {
+                            contentArea.style.opacity = '1';
+                        }, 50);
+                    }
+                }, 800); // 800ms fake loading delay
+            };
+
+            refreshBtn.addEventListener('click', () => loadNewInsight(false));
+            retryBtn.addEventListener('click', () => loadNewInsight(false));
+        });
+    </script>
+</body></html>

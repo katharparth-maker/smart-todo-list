@@ -1,8 +1,225 @@
-<!--
-  Component: Footer
-  Purpose: Site-wide footer with copyright notice, legal links, and
-           social/contact links. Injected into public-facing pages via js/ui.js.
--->
-<footer id="site-footer" aria-label="Site footer">
-  <!-- Footer markup will be implemented in a later step -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskPilot AI Footer</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error": "#ffffff",
+                    "secondary": "#1f6c3a",
+                    "on-surface": "#1a1c19",
+                    "inverse-surface": "#2f312e",
+                    "on-secondary-container": "#24703e",
+                    "primary-fixed": "#d9e2fc",
+                    "inverse-primary": "#bdc6e0",
+                    "inverse-on-surface": "#f1f1ec",
+                    "tertiary-fixed": "#d3e4fe",
+                    "outline-variant": "#c6c6cd",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed-dim": "#8bd79b",
+                    "surface-variant": "#e2e3de",
+                    "on-primary-fixed": "#121b2e",
+                    "secondary-container": "#a4f1b2",
+                    "tertiary-container": "#102134",
+                    "surface-bright": "#fafaf5",
+                    "outline": "#76777d",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#b7c8e1",
+                    "on-background": "#1a1c19",
+                    "on-primary-fixed-variant": "#3e475b",
+                    "surface-container-highest": "#e2e3de",
+                    "surface": "#fafaf5",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-high": "#e8e8e4",
+                    "primary": "#01081a",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#38485d",
+                    "surface-container-low": "#f4f4ef",
+                    "on-tertiary-container": "#7989a0",
+                    "surface-tint": "#555e74",
+                    "on-surface-variant": "#45474c",
+                    "background": "#fafaf5",
+                    "on-primary-container": "#7f879f",
+                    "on-tertiary-fixed": "#0b1c30",
+                    "on-primary": "#ffffff",
+                    "primary-fixed-dim": "#bdc6e0",
+                    "surface-container": "#eeeee9",
+                    "primary-container": "#172033",
+                    "tertiary": "#000917",
+                    "secondary-fixed": "#a6f4b5",
+                    "on-secondary-fixed": "#00210b",
+                    "on-secondary-fixed-variant": "#005226",
+                    "surface-dim": "#dadad5",
+                    "error": "#ba1a1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "24px",
+                    "xl": "80px",
+                    "gutter": "24px",
+                    "base": "8px",
+                    "margin-desktop": "40px",
+                    "margin-mobile": "16px",
+                    "lg": "48px",
+                    "xs": "4px",
+                    "sm": "12px"
+            },
+            "fontFamily": {
+                    "headline-md": [
+                            "Manrope"
+                    ],
+                    "body-md": [
+                            "Work Sans"
+                    ],
+                    "label-sm": [
+                            "Work Sans"
+                    ],
+                    "label-md": [
+                            "Work Sans"
+                    ],
+                    "body-sm": [
+                            "Work Sans"
+                    ],
+                    "headline-xl": [
+                            "Manrope"
+                    ],
+                    "body-lg": [
+                            "Work Sans"
+                    ],
+                    "headline-lg": [
+                            "Manrope"
+                    ]
+            },
+            "fontSize": {
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "label-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "letterSpacing": "0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-sm": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-xl": [
+                            "40px",
+                            {
+                                    "lineHeight": "48px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "700"
+                            }
+                    ]
+            }
+        }
+        }
+      }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .material-symbols-outlined {
+                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col justify-end">
+<!-- Footer Shared Component -->
+<footer class="bg-surface border-t border-outline-variant w-full py-lg mt-auto">
+<div class="px-margin-desktop max-w-7xl mx-auto flex flex-col gap-lg">
+<!-- Top Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-md">
+<!-- Branding -->
+<div class="flex flex-col gap-xs">
+<span class="font-headline-md text-headline-md font-bold text-primary">TaskPilot AI</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Plan. Focus. Achieve.</span>
+</div>
+<!-- Navigation Links -->
+<nav class="flex flex-wrap gap-md">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" href="../pages/dashboard.html">Dashboard</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" href="../pages/tasks.html">Tasks</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" href="../pages/planner.html">Planner</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" href="../pages/profile.html">Profile</a>
+</nav>
+</div>
+<!-- Divider -->
+<hr class="border-t border-outline-variant w-full"/>
+<!-- Bottom Section -->
+<div class="flex flex-col md:flex-row justify-between items-center gap-sm">
+<!-- Copyright & Tagline -->
+<div class="flex flex-col md:flex-row gap-xs md:gap-md items-center">
+<span class="font-body-sm text-body-sm text-on-surface-variant">© 2026 TaskPilot AI</span>
+<span class="hidden md:inline font-body-sm text-body-sm text-outline-variant">•</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Built for smarter productivity.</span>
+</div>
+<!-- Utility Links -->
+<div class="flex flex-wrap gap-md">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" href="#">Terms of Service</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" href="#">Help Center</a>
+</div>
+</div>
+</div>
 </footer>
+</body></html>

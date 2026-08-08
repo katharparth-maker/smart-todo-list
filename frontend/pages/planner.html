@@ -1,17 +1,568 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Planner – TaskPilotAI</title>
-  <!--
-    Page: Planner
-    Purpose: AI-powered daily/weekly planning view.
-             Surfaces AI-generated scheduling suggestions fetched from the
-             FastAPI backend (Gemini). Requires an authenticated Supabase session.
-  -->
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Smart Planner - TaskPilot AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "error": "#ba1a1a",
+                      "secondary": "#1f6c3a",
+                      "on-primary-fixed-variant": "#3e475b",
+                      "on-error": "#ffffff",
+                      "secondary-fixed-dim": "#8bd79b",
+                      "surface-container-lowest": "#ffffff",
+                      "on-surface-variant": "#45474c",
+                      "on-tertiary-container": "#7989a0",
+                      "primary-fixed-dim": "#bdc6e0",
+                      "inverse-on-surface": "#f1f1ec",
+                      "surface-container-low": "#f4f4ef",
+                      "tertiary": "#000917",
+                      "primary-container": "#172033",
+                      "on-tertiary": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "primary-fixed": "#d9e2fc",
+                      "inverse-primary": "#bdc6e0",
+                      "surface-container-high": "#e8e8e4",
+                      "on-secondary-container": "#24703e",
+                      "secondary-container": "#a4f1b2",
+                      "primary": "#01081a",
+                      "secondary-fixed": "#a6f4b5",
+                      "inverse-surface": "#2f312e",
+                      "outline": "#76777d",
+                      "tertiary-fixed-dim": "#b7c8e1",
+                      "tertiary-fixed": "#d3e4fe",
+                      "outline-variant": "#c6c6cd",
+                      "surface-variant": "#e2e3de",
+                      "on-primary-container": "#7f879f",
+                      "surface-bright": "#fafaf5",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed": "#0b1c30",
+                      "surface": "#fafaf5",
+                      "on-primary": "#ffffff",
+                      "surface-tint": "#555e74",
+                      "on-primary-fixed": "#121b2e",
+                      "surface-container-highest": "#e2e3de",
+                      "surface-dim": "#dadad5",
+                      "on-surface": "#1a1c19",
+                      "on-error-container": "#93000a",
+                      "tertiary-container": "#102134",
+                      "on-secondary-fixed": "#00210b",
+                      "on-secondary-fixed-variant": "#005226",
+                      "on-background": "#1a1c19",
+                      "background": "#fafaf5",
+                      "on-tertiary-fixed-variant": "#38485d",
+                      "surface-container": "#eeeee9"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "8px",
+                      "xl": "80px",
+                      "margin-desktop": "40px",
+                      "margin-mobile": "16px",
+                      "md": "24px",
+                      "gutter": "24px",
+                      "xs": "4px",
+                      "sm": "12px",
+                      "lg": "48px"
+              },
+              "fontFamily": {
+                      "headline-xl": ["Manrope"],
+                      "body-md": ["Work Sans"],
+                      "body-lg": ["Work Sans"],
+                      "body-sm": ["Work Sans"],
+                      "headline-md": ["Manrope"],
+                      "label-sm": ["Work Sans"],
+                      "label-md": ["Work Sans"],
+                      "headline-lg": ["Manrope"]
+              },
+              "fontSize": {
+                      "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body {
+            background-color: #fafaf5; /* background */
+            color: #1a1c19; /* on-background */
+        }
+        
+        .shadow-level-1 {
+            box-shadow: 0px 2px 4px rgba(23, 32, 51, 0.04);
+        }
+        
+        .shadow-level-2 {
+            box-shadow: 0px 12px 24px rgba(23, 32, 51, 0.08);
+        }
+        
+        /* Hide scrollbar for clean look */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        
+        /* Timeline styling */
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: 60px 1fr;
+            grid-template-rows: repeat(11, 60px); /* 8AM to 6PM */
+        }
+        
+        .timeline-hour {
+            border-bottom: 1px solid #c6c6cd; /* outline-variant */
+            position: relative;
+        }
+        
+        .timeline-event {
+            position: absolute;
+            left: 72px; /* 60px time + 12px gap */
+            right: 0;
+            border-radius: 0.25rem;
+            border: 1px solid #c6c6cd; /* outline-variant */
+            padding: 8px 12px;
+            overflow: hidden;
+            background-color: #ffffff; /* surface-container-lowest */
+            box-shadow: 0px 2px 4px rgba(23, 32, 51, 0.04);
+            border-left: 3px solid #1f6c3a; /* secondary */
+        }
+        
+        .current-time-line {
+            position: absolute;
+            left: 60px;
+            right: 0;
+            height: 2px;
+            background-color: #1f6c3a; /* secondary */
+            z-index: 10;
+        }
+        
+        .current-time-line::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: -4px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #1f6c3a; /* secondary */
+        }
+        
+        /* Modal background */
+        .modal-bg {
+            background-color: rgba(1, 8, 26, 0.5); /* primary with opacity */
+            backdrop-filter: blur(4px);
+        }
+    </style>
 </head>
-<body>
-  <!-- Planner view will be implemented in a later step -->
-</body>
-</html>
+<body class="flex h-screen overflow-hidden font-body-md bg-background text-on-background">
+<!-- SideNavBar (Desktop) -->
+<aside class="hidden md:flex bg-surface-container-low text-primary font-label-md h-screen w-64 fixed left-0 top-0 border-r border-outline-variant flat no shadows flex-col h-full p-md gap-base z-20">
+<!-- Header -->
+<div class="flex items-center gap-sm mb-lg">
+<div class="w-8 h-8 rounded bg-primary text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">task_alt</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">TaskPilot AI</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Plan. Focus. Achieve.</p>
+</div>
+</div>
+<!-- Navigation -->
+<nav class="flex-1 flex flex-col gap-xs">
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">today</span>
+                My Day
+            </a>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg bg-secondary-container text-on-secondary-container font-bold active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+                Planner
+            </a>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">pending</span>
+                In Progress
+            </a>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">task_alt</span>
+                Completed
+            </a>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">archive</span>
+                Archive
+            </a>
+</nav>
+<!-- CTA & Footer -->
+<div class="mt-auto flex flex-col gap-sm border-t border-outline-variant pt-md">
+<button class="w-full py-2 bg-primary text-on-primary rounded font-label-md hover:opacity-90 transition-opacity">Upgrade to Pro</button>
+<a class="flex items-center gap-sm px-sm py-2 text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+                Help Center
+            </a>
+<a class="flex items-center gap-sm px-sm py-2 text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+                Log out
+            </a>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col md:ml-64 h-full relative z-10 w-full overflow-hidden">
+<!-- TopNavBar -->
+<header class="bg-surface text-primary font-body-md font-headline-md text-headline-md font-bold text-primary docked full-width top-0 border-b border-outline-variant shadow-sm flex justify-between items-center w-full px-margin-desktop h-16 shrink-0 bg-surface">
+<div class="flex items-center gap-md">
+<!-- Mobile Menu Toggle -->
+<button class="md:hidden text-primary p-1">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md font-bold text-primary">Smart Planner</span>
+</div>
+</div>
+<!-- Desktop Nav Links (Hidden on mobile) -->
+<nav class="hidden md:flex gap-md h-full items-center">
+<a class="text-on-surface-variant hover:text-secondary transition-colors cursor-pointer active:opacity-80" href="#">Dashboard</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors cursor-pointer active:opacity-80" href="#">Tasks</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors cursor-pointer active:opacity-80" href="#">Projects</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors cursor-pointer active:opacity-80" href="#">Team</a>
+</nav>
+<div class="flex items-center gap-sm">
+<!-- Mobile Only Title (if needed, but already handled above) -->
+<!-- Search Bar (placeholder) -->
+<div class="hidden lg:flex relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+<input class="pl-10 pr-4 py-1.5 border border-outline-variant rounded-full text-body-sm bg-surface-container-lowest focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary/10 transition-all w-64" placeholder="Search tasks..." type="text"/>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-80 rounded-full hover:bg-surface-container">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-80 rounded-full hover:bg-surface-container hidden sm:block">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="hidden md:flex bg-secondary text-on-primary px-4 py-2 rounded font-label-md ml-2 hover:bg-secondary/90 transition-colors cursor-pointer active:opacity-80">
+                        Create Task
+                    </button>
+<img alt="User profile" class="w-8 h-8 rounded-full ml-2 border border-outline-variant object-cover" data-alt="A clean, professional circular profile picture of a user avatar, set against a dark navy background with crisp white initials, conveying a modern and organized digital workspace." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFQn09nAyCMfa3l5f6aT6DQPs_I5zFk7jymDh3xMpLWgqQA96R5bw04cy40wBMrVEOJ4uA9vM6FQqSynnWaOw909SaO2KXUDDlWH0Sillwde41mUHxUGLVYfhm0MLUEPeX7Fw1cFKs6INQ8ujKdOrBN8Msh601pxzgvaRv3YyPtdkE1TWJsyUwbHEx3DsDGA0mdYWGZhNxU68heR8hBmwGSUqfJp2wYCWFRZG-ussUt16wEQogQK_t8A"/>
+</div>
+</div>
+</header>
+<!-- Main Scrollable Area -->
+<main class="flex-1 overflow-y-auto overflow-x-hidden no-scrollbar bg-background p-margin-mobile md:p-gutter">
+<div class="max-w-[1280px] mx-auto w-full flex flex-col gap-lg">
+<!-- Page Header & Controls -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-md">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-1">Smart Planner</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Plan your day with clarity.</p>
+</div>
+<button class="bg-secondary text-on-primary font-label-md text-label-md px-md py-sm rounded flex items-center gap-xs hover:bg-secondary/90 transition-colors shadow-level-1 w-full md:w-auto justify-center h-[44px]" onclick="document.getElementById('addScheduleModal').classList.remove('hidden')">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                        Add Schedule
+                    </button>
+</div>
+<!-- Navigation Bar -->
+<div class="flex flex-col sm:flex-row justify-between items-center bg-surface-container-lowest border border-outline-variant rounded-lg p-xs shadow-level-1 gap-sm">
+<div class="flex items-center gap-xs w-full sm:w-auto justify-between sm:justify-start">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container rounded transition-colors flex items-center">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<button class="px-sm py-1 font-label-md text-on-surface-variant hover:bg-surface-container rounded transition-colors">
+                            Today
+                        </button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container rounded transition-colors flex items-center">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+<div class="flex items-center gap-xs ml-sm font-label-md text-primary">
+<span class="material-symbols-outlined text-[20px] text-secondary">calendar_month</span>
+                            Friday, August 8
+                        </div>
+</div>
+<div class="flex bg-surface-container p-1 rounded w-full sm:w-auto">
+<button class="flex-1 sm:flex-none px-md py-1 bg-surface-container-lowest text-primary font-label-md rounded shadow-sm">Day</button>
+<button class="flex-1 sm:flex-none px-md py-1 text-on-surface-variant font-label-md rounded hover:bg-surface-container-highest transition-colors">Week</button>
+</div>
+</div>
+<!-- Two Column Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column (Timeline) -->
+<div class="lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-lg p-md shadow-level-1 relative overflow-hidden">
+<div class="timeline-grid font-body-sm text-on-surface-variant">
+<!-- 08:00 AM -->
+<div class="text-right pr-sm pt-2">08 AM</div>
+<div class="timeline-hour"></div>
+<!-- 09:00 AM -->
+<div class="text-right pr-sm pt-2">09 AM</div>
+<div class="timeline-hour">
+<!-- Event 1 -->
+<div class="timeline-event top-2 h-[50px] cursor-pointer hover:shadow-level-2 transition-shadow" onclick="document.getElementById('editScheduleModal').classList.remove('hidden')">
+<div class="flex justify-between items-start">
+<div class="font-label-md text-primary truncate">Python Practice</div>
+<div class="flex gap-1 items-center">
+<span class="w-2 h-2 rounded-full bg-primary-fixed-dim"></span>
+</div>
+</div>
+<div class="flex justify-between items-center mt-1 text-xs text-on-surface-variant">
+<span>09:00 - 10:00</span>
+<span class="bg-surface-container px-1.5 py-0.5 rounded text-[10px]">Learning</span>
+</div>
+</div>
+</div>
+<!-- 10:00 AM -->
+<div class="text-right pr-sm pt-2">10 AM</div>
+<div class="timeline-hour"></div>
+<!-- 11:00 AM -->
+<div class="text-right pr-sm pt-2">11 AM</div>
+<div class="timeline-hour">
+<!-- Event 2 -->
+<div class="timeline-event top-2 h-[80px] border-l-error cursor-pointer hover:shadow-level-2 transition-shadow" onclick="document.getElementById('editScheduleModal').classList.remove('hidden')" style="border-left-color: #ba1a1a;">
+<div class="flex justify-between items-start">
+<div class="font-label-md text-primary truncate">Project Documentation</div>
+<div class="flex gap-1 items-center">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+</div>
+</div>
+<div class="flex justify-between items-center mt-1 text-xs text-on-surface-variant">
+<span>11:00 - 12:30</span>
+<span class="bg-error-container text-on-error-container px-1.5 py-0.5 rounded text-[10px]">Project</span>
+</div>
+</div>
+</div>
+<!-- 12:00 PM -->
+<div class="text-right pr-sm pt-2">12 PM</div>
+<div class="timeline-hour"></div>
+<!-- 01:00 PM -->
+<div class="text-right pr-sm pt-2">01 PM</div>
+<div class="timeline-hour"></div>
+<!-- 02:00 PM -->
+<div class="text-right pr-sm pt-2">02 PM</div>
+<div class="timeline-hour relative">
+<!-- Current Time Indicator (02:35 PM) -->
+<div class="current-time-line top-[35px]">
+<div class="absolute -left-[55px] -top-3 text-secondary font-label-sm bg-surface-container-lowest px-1">02:35</div>
+</div>
+<!-- Event 3 -->
+<div class="timeline-event top-2 h-[50px] border-l-primary-container cursor-pointer hover:shadow-level-2 transition-shadow" onclick="document.getElementById('editScheduleModal').classList.remove('hidden')" style="border-left-color: #172033;">
+<div class="flex justify-between items-start">
+<div class="font-label-md text-primary truncate">Team Meeting</div>
+<div class="flex gap-1 items-center">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+</div>
+</div>
+<div class="flex justify-between items-center mt-1 text-xs text-on-surface-variant">
+<span>14:00 - 15:00</span>
+<span class="bg-surface-container px-1.5 py-0.5 rounded text-[10px]">Project</span>
+</div>
+</div>
+</div>
+<!-- 03:00 PM -->
+<div class="text-right pr-sm pt-2">03 PM</div>
+<div class="timeline-hour"></div>
+<!-- 04:00 PM -->
+<div class="text-right pr-sm pt-2">04 PM</div>
+<div class="timeline-hour">
+<!-- Event 4 -->
+<div class="timeline-event top-2 h-[50px] border-l-secondary-fixed-dim cursor-pointer hover:shadow-level-2 transition-shadow" onclick="document.getElementById('editScheduleModal').classList.remove('hidden')" style="border-left-color: #8bd79b;">
+<div class="flex justify-between items-start">
+<div class="font-label-md text-primary truncate">Review Assignment</div>
+<div class="flex gap-1 items-center">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+</div>
+</div>
+<div class="flex justify-between items-center mt-1 text-xs text-on-surface-variant">
+<span>16:00 - 17:00</span>
+<span class="bg-surface-container px-1.5 py-0.5 rounded text-[10px]">Study</span>
+</div>
+</div>
+</div>
+<!-- 05:00 PM -->
+<div class="text-right pr-sm pt-2">05 PM</div>
+<div class="timeline-hour"></div>
+<!-- 06:00 PM -->
+<div class="text-right pr-sm pt-2">06 PM</div>
+<div class="timeline-hour border-b-0"></div>
+</div>
+</div>
+<!-- Right Column (Sidebar Panels) -->
+<div class="lg:col-span-4 flex flex-col gap-md">
+<!-- Compact Calendar -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md shadow-level-1">
+<div class="flex justify-between items-center mb-sm">
+<h3 class="font-label-md text-primary">August 2026</h3>
+<div class="flex gap-1 text-on-surface-variant">
+<button class="p-1 hover:bg-surface-container rounded"><span class="material-symbols-outlined text-[16px]">chevron_left</span></button>
+<button class="p-1 hover:bg-surface-container rounded"><span class="material-symbols-outlined text-[16px]">chevron_right</span></button>
+</div>
+</div>
+<div class="grid grid-cols-7 gap-1 text-center font-label-sm text-on-surface-variant mb-2">
+<div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
+</div>
+<div class="grid grid-cols-7 gap-1 text-center font-body-sm text-primary">
+<!-- Placeholder days -->
+<div class="text-outline-variant p-1">26</div><div class="text-outline-variant p-1">27</div><div class="text-outline-variant p-1">28</div><div class="text-outline-variant p-1">29</div><div class="text-outline-variant p-1">30</div><div class="text-outline-variant p-1">31</div><div class="p-1 hover:bg-surface-container rounded cursor-pointer">1</div>
+<div class="p-1 hover:bg-surface-container rounded cursor-pointer">2</div><div class="p-1 hover:bg-surface-container rounded cursor-pointer">3</div><div class="p-1 hover:bg-surface-container rounded cursor-pointer">4</div><div class="p-1 hover:bg-surface-container rounded cursor-pointer">5</div><div class="p-1 hover:bg-surface-container rounded cursor-pointer">6</div><div class="p-1 hover:bg-surface-container rounded cursor-pointer">7</div><div class="p-1 bg-secondary text-on-primary rounded font-bold cursor-pointer">8</div>
+<div class="p-1 hover:bg-surface-container rounded cursor-pointer">9</div><div class="p-1 hover:bg-surface-container rounded cursor-pointer">10</div><div class="p-1 hover:bg-surface-container rounded cursor-pointer">11</div><div class="p-1 hover:bg-surface-container rounded cursor-pointer">12</div><div class="p-1 hover:bg-surface-container rounded cursor-pointer">13</div><div class="p-1 hover:bg-surface-container rounded cursor-pointer">14</div><div class="p-1 hover:bg-surface-container rounded cursor-pointer">15</div>
+</div>
+</div>
+<!-- AI Planning Assistant Card -->
+<div class="bg-surface-container-lowest border border-outline-variant border-l-[3px] border-l-secondary rounded-lg p-md shadow-level-1 relative overflow-hidden">
+<!-- Subtle gradient/pattern for AI feel -->
+<div class="absolute inset-0 bg-gradient-to-br from-secondary/5 to-transparent opacity-50 pointer-events-none"></div>
+<div class="flex items-center gap-xs mb-sm relative z-10">
+<span class="material-symbols-outlined text-secondary text-[20px]">auto_awesome</span>
+<h3 class="font-label-md text-primary font-bold">AI Assistant</h3>
+</div>
+<p class="font-body-sm text-on-surface-variant mb-md relative z-10">Based on your tasks and schedule, here is a suggested flow for your open slots:</p>
+<ul class="flex flex-col gap-2 mb-md relative z-10 font-body-sm">
+<li class="flex items-center gap-sm p-2 bg-surface-container-low rounded border border-outline-variant">
+<span class="text-secondary font-label-sm w-12 shrink-0">10:00</span>
+<span class="text-primary truncate">Read documentation</span>
+</li>
+<li class="flex items-center gap-sm p-2 bg-surface-container-low rounded border border-outline-variant">
+<span class="text-secondary font-label-sm w-12 shrink-0">13:00</span>
+<span class="text-primary truncate">Lunch &amp; Walk</span>
+</li>
+<li class="flex items-center gap-sm p-2 bg-surface-container-low rounded border border-outline-variant">
+<span class="text-secondary font-label-sm w-12 shrink-0">15:00</span>
+<span class="text-primary truncate">Email triage</span>
+</li>
+</ul>
+<button class="w-full bg-surface-container-lowest border border-primary-container text-primary-container font-label-md py-2 rounded hover:bg-surface-container-low transition-colors relative z-10 flex items-center justify-center gap-xs h-[44px]">
+                                 Apply Suggested Plan
+                             </button>
+</div>
+<!-- Today's Focus Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md shadow-level-1">
+<h3 class="font-label-md text-primary mb-sm">Today's Focus</h3>
+<div class="bg-error-container/30 border border-error/20 rounded p-sm mb-md">
+<div class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-error mt-0.5 text-[20px]">flag</span>
+<div>
+<h4 class="font-label-md text-primary">Complete Project Documentation</h4>
+<p class="font-body-sm text-on-surface-variant mt-1">High priority task scheduled for 11:00 AM.</p>
+</div>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary font-label-md py-2 rounded hover:opacity-90 transition-opacity h-[44px]">
+                                Start Focus
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Footer space inside main area for scroll padding -->
+<div class="h-lg"></div>
+</main>
+</div>
+<!-- Modals -->
+<!-- Add Schedule Modal -->
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center p-margin-mobile modal-bg" id="addScheduleModal">
+<div class="bg-surface-container-lowest rounded-lg shadow-level-2 border border-outline-variant w-full max-w-md flex flex-col max-h-[90vh]">
+<div class="flex justify-between items-center p-md border-b border-outline-variant">
+<h2 class="font-headline-md text-headline-md text-primary">Add Schedule</h2>
+<button class="text-on-surface-variant hover:text-primary p-1 rounded hover:bg-surface-container" onclick="document.getElementById('addScheduleModal').classList.add('hidden')">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-md overflow-y-auto flex flex-col gap-md">
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-on-surface-variant">Title</label>
+<input class="w-full border border-outline-variant rounded px-3 py-2 text-body-md focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary/10" placeholder="Task name..." type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-sm">
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-on-surface-variant">Start Time</label>
+<input class="w-full border border-outline-variant rounded px-3 py-2 text-body-md focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary/10" type="time"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-on-surface-variant">End Time</label>
+<input class="w-full border border-outline-variant rounded px-3 py-2 text-body-md focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary/10" type="time"/>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-on-surface-variant">Category</label>
+<select class="w-full border border-outline-variant rounded px-3 py-2 text-body-md focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary/10 bg-white">
+<option>Project</option>
+<option>Learning</option>
+<option>Study</option>
+<option>Meeting</option>
+</select>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-on-surface-variant">Priority</label>
+<div class="flex gap-sm">
+<label class="flex items-center gap-xs cursor-pointer">
+<input class="text-primary-container focus:ring-primary-container" name="priority" type="radio"/>
+<span class="font-body-sm text-primary">Normal</span>
+</label>
+<label class="flex items-center gap-xs cursor-pointer">
+<input class="text-error focus:ring-error" name="priority" type="radio"/>
+<span class="font-body-sm text-error">High</span>
+</label>
+</div>
+</div>
+</div>
+<div class="p-md border-t border-outline-variant flex justify-end gap-sm bg-surface-container-low rounded-b-lg">
+<button class="px-4 py-2 font-label-md text-primary-container border border-outline-variant bg-surface-container-lowest rounded hover:bg-surface-container transition-colors h-[44px]" onclick="document.getElementById('addScheduleModal').classList.add('hidden')">Cancel</button>
+<button class="px-4 py-2 font-label-md text-on-primary bg-secondary rounded hover:bg-secondary/90 transition-colors h-[44px]">Save</button>
+</div>
+</div>
+</div>
+<!-- Edit Schedule Modal -->
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center p-margin-mobile modal-bg" id="editScheduleModal">
+<div class="bg-surface-container-lowest rounded-lg shadow-level-2 border border-outline-variant w-full max-w-md flex flex-col max-h-[90vh]">
+<div class="flex justify-between items-center p-md border-b border-outline-variant">
+<h2 class="font-headline-md text-headline-md text-primary">Edit Schedule</h2>
+<button class="text-on-surface-variant hover:text-primary p-1 rounded hover:bg-surface-container" onclick="document.getElementById('editScheduleModal').classList.add('hidden')">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-md overflow-y-auto flex flex-col gap-md">
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-on-surface-variant">Title</label>
+<input class="w-full border border-outline-variant rounded px-3 py-2 text-body-md focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary/10" type="text" value="Project Documentation"/>
+</div>
+<div class="grid grid-cols-2 gap-sm">
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-on-surface-variant">Start Time</label>
+<input class="w-full border border-outline-variant rounded px-3 py-2 text-body-md focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary/10" type="time" value="11:00"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-on-surface-variant">End Time</label>
+<input class="w-full border border-outline-variant rounded px-3 py-2 text-body-md focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary/10" type="time" value="12:30"/>
+</div>
+</div>
+</div>
+<div class="p-md border-t border-outline-variant flex justify-between gap-sm bg-surface-container-low rounded-b-lg">
+<button class="px-4 py-2 font-label-md text-error hover:bg-error-container/50 rounded transition-colors h-[44px]">Delete</button>
+<div class="flex gap-sm">
+<button class="px-4 py-2 font-label-md text-primary-container border border-outline-variant bg-surface-container-lowest rounded hover:bg-surface-container transition-colors h-[44px]" onclick="document.getElementById('editScheduleModal').classList.add('hidden')">Cancel</button>
+<button class="px-4 py-2 font-label-md text-on-primary bg-secondary rounded hover:bg-secondary/90 transition-colors h-[44px]" onclick="document.getElementById('editScheduleModal').classList.add('hidden')">Update</button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

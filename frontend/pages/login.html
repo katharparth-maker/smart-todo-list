@@ -1,318 +1,225 @@
 <!DOCTYPE html>
 
-<html lang="en"><head>
+<html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Login - TaskPilotAI</title>
+<title>Login - TaskPilot AI</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
-          darkMode: "class",
-          theme: {
-            extend: {
-              "colors": {
-                      "surface-dim": "#031427",
-                      "primary-fixed": "#a6f4b5",
-                      "on-tertiary-fixed": "#1a1c19",
-                      "secondary-fixed": "#d9e2fc",
-                      "on-primary-fixed": "#00210b",
-                      "secondary": "#bdc6e0",
-                      "outline": "#899388",
-                      "surface-tint": "#8bd79b",
-                      "surface-bright": "#2a3a4f",
-                      "surface-variant": "#26364a",
-                      "surface-container": "#102034",
-                      "outline-variant": "#404940",
-                      "surface-container-high": "#1b2b3f",
-                      "secondary-container": "#40495e",
-                      "on-surface-variant": "#bfc9bd",
-                      "primary-fixed-dim": "#8bd79b",
-                      "on-secondary-fixed": "#121b2e",
-                      "surface-container-low": "#0b1c30",
-                      "on-tertiary-container": "#cececa",
-                      "on-tertiary": "#2f312e",
-                      "error": "#ffb4ab",
-                      "inverse-primary": "#1f6c3a",
-                      "on-primary": "#003918",
-                      "on-surface": "#d3e4fe",
-                      "secondary-fixed-dim": "#bdc6e0",
-                      "on-primary-fixed-variant": "#005226",
-                      "tertiary-fixed": "#e2e3de",
-                      "inverse-on-surface": "#213145",
-                      "surface-container-highest": "#26364a",
-                      "on-error-container": "#ffdad6",
-                      "on-secondary": "#273044",
-                      "surface-container-lowest": "#000f21",
-                      "on-error": "#690005",
-                      "tertiary-fixed-dim": "#c6c7c2",
-                      "surface": "#031427",
-                      "error-container": "#93000a",
-                      "on-primary-container": "#93e0a2",
-                      "inverse-surface": "#d3e4fe",
-                      "on-background": "#d3e4fe",
-                      "on-tertiary-fixed-variant": "#454744",
-                      "primary": "#8bd79b",
-                      "on-secondary-container": "#afb8d1",
-                      "tertiary": "#c6c7c2",
-                      "tertiary-container": "#575855",
-                      "on-secondary-fixed-variant": "#3e475b",
-                      "background": "#031427",
-                      "primary-container": "#166534"
-              },
-              "borderRadius": {
-                      "DEFAULT": "0.25rem",
-                      "lg": "0.5rem",
-                      "xl": "0.75rem",
-                      "full": "9999px"
-              },
-              "spacing": {
-                      "lg": "24px",
-                      "xs": "4px",
-                      "sm": "8px",
-                      "max-width": "1440px",
-                      "xl": "32px",
-                      "margin-mobile": "16px",
-                      "unit": "4px",
-                      "md": "16px",
-                      "gutter": "24px",
-                      "margin-desktop": "40px"
-              },
-              "fontFamily": {
-                      "body-lg": [
-                              "Inter"
-                      ],
-                      "body-sm": [
-                              "Inter"
-                      ],
-                      "headline-lg-mobile": [
-                              "Inter"
-                      ],
-                      "label-md": [
-                              "Inter"
-                      ],
-                      "headline-lg": [
-                              "Inter"
-                      ],
-                      "headline-md": [
-                              "Inter"
-                      ],
-                      "display-lg": [
-                              "Inter"
-                      ],
-                      "body-md": [
-                              "Inter"
-                      ]
-              },
-              "fontSize": {
-                      "body-lg": [
-                              "18px",
-                              {
-                                      "lineHeight": "28px",
-                                      "fontWeight": "400"
-                              }
-                      ],
-                      "body-sm": [
-                              "14px",
-                              {
-                                      "lineHeight": "20px",
-                                      "fontWeight": "400"
-                              }
-                      ],
-                      "headline-lg-mobile": [
-                              "24px",
-                              {
-                                      "lineHeight": "32px",
-                                      "fontWeight": "600"
-                              }
-                      ],
-                      "label-md": [
-                              "12px",
-                              {
-                                      "lineHeight": "16px",
-                                      "letterSpacing": "0.05em",
-                                      "fontWeight": "600"
-                              }
-                      ],
-                      "headline-lg": [
-                              "32px",
-                              {
-                                      "lineHeight": "40px",
-                                      "letterSpacing": "-0.01em",
-                                      "fontWeight": "600"
-                              }
-                      ],
-                      "headline-md": [
-                              "24px",
-                              {
-                                      "lineHeight": "32px",
-                                      "fontWeight": "600"
-                              }
-                      ],
-                      "display-lg": [
-                              "48px",
-                              {
-                                      "lineHeight": "56px",
-                                      "letterSpacing": "-0.02em",
-                                      "fontWeight": "700"
-                              }
-                      ],
-                      "body-md": [
-                              "16px",
-                              {
-                                      "lineHeight": "24px",
-                                      "fontWeight": "400"
-                              }
-                      ]
-              }
-      },
-          },
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#7989a0",
+                        "on-background": "#1a1c19",
+                        "primary-container": "#172033",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#102134",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#c6c6cd",
+                        "inverse-on-surface": "#f1f1ec",
+                        "tertiary": "#000917",
+                        "tertiary-fixed": "#d3e4fe",
+                        "inverse-primary": "#bdc6e0",
+                        "on-primary-container": "#7f879f",
+                        "secondary-fixed": "#a6f4b5",
+                        "tertiary-fixed-dim": "#b7c8e1",
+                        "background": "#fafaf5",
+                        "on-primary-fixed-variant": "#3e475b",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed-variant": "#005226",
+                        "on-error-container": "#93000a",
+                        "inverse-surface": "#2f312e",
+                        "on-tertiary-fixed-variant": "#38485d",
+                        "error-container": "#ffdad6",
+                        "on-surface-variant": "#45474c",
+                        "on-surface": "#1a1c19",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed": "#00210b",
+                        "primary-fixed-dim": "#bdc6e0",
+                        "secondary": "#1f6c3a",
+                        "outline": "#76777d",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#0b1c30",
+                        "surface-tint": "#555e74",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e2e3de",
+                        "secondary-fixed-dim": "#8bd79b",
+                        "on-secondary-container": "#24703e",
+                        "surface-container-high": "#e8e8e4",
+                        "on-primary-fixed": "#121b2e",
+                        "surface-dim": "#dadad5",
+                        "primary": "#01081a",
+                        "primary-fixed": "#d9e2fc",
+                        "surface-container": "#eeeee9",
+                        "surface-variant": "#e2e3de",
+                        "surface": "#fafaf5",
+                        "surface-container-low": "#f4f4ef",
+                        "secondary-container": "#a4f1b2",
+                        "surface-bright": "#fafaf5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "xs": "4px",
+                        "md": "24px",
+                        "gutter": "24px",
+                        "base": "8px",
+                        "xl": "80px",
+                        "margin-desktop": "40px",
+                        "lg": "48px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Manrope"],
+                        "label-md": ["Work Sans"],
+                        "body-sm": ["Work Sans"],
+                        "headline-lg": ["Manrope"],
+                        "body-md": ["Work Sans"],
+                        "headline-md": ["Manrope"],
+                        "label-sm": ["Work Sans"],
+                        "body-lg": ["Work Sans"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
         }
     </script>
 <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        body {
+            background-color: #F7F7F2; /* Base Level 0 */
         }
-        .material-symbols-outlined[data-weight="fill"] {
-            font-variation-settings: 'FILL' 1;
+        .login-card {
+            background-color: #FFFFFF; /* Level 1 */
+            box-shadow: 0px 12px 24px rgba(23, 32, 51, 0.08); /* Level 2 for modal feel */
+            border: 1px solid #E5E7EB;
         }
-        
-        /* Custom scrollbar for webkit */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+        .input-field {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            transition: all 0.2s ease-in-out;
         }
-        ::-webkit-scrollbar-track {
-            background: #F7F7F2; 
+        .input-field:focus {
+            border-color: #172033;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(1, 8, 26, 0.1);
         }
-        ::-webkit-scrollbar-thumb {
-            background: #E5E7EB; 
-            border-radius: 4px;
+        .btn-primary {
+            background-color: #166534; /* Forest Green override per prompt */
+            color: #FFFFFF;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #64748B; 
+        .btn-primary:hover {
+            background-color: #14532a;
+        }
+        .btn-google {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            color: #172033;
+        }
+        .btn-google:hover {
+            background-color: #f9fafb;
+        }
+        .text-navy {
+            color: #172033;
+        }
+        .text-secondary-txt {
+            color: #64748B;
         }
     </style>
 </head>
-<body class="bg-[#F7F7F2] text-[#172033] font-body-md h-screen w-full flex overflow-hidden">
-<!-- Main Container - Two Column Layout -->
-<div class="flex w-full h-full">
-<!-- Left Column - Branding & Value Prop (Hidden on Mobile) -->
-<div class="hidden lg:flex lg:w-1/2 bg-[#F7F7F2] flex-col justify-between p-margin-desktop border-r border-[#E5E7EB] relative overflow-hidden">
-<!-- Background Abstract Pattern (Subtle) -->
-<div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#166534 1px, transparent 1px); background-size: 24px 24px;"></div>
-<!-- Top Section: Logo -->
-<div class="flex items-center gap-3 z-10">
-<img alt="TaskPilotAI Logo" class="w-10 h-10 object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLvsFx-vp1sX35ZGtJ02ViuSZwAraAQFOS_xF6dM60TSceZE6GWcm9NtVVA1SbHagOPaRhttaXpk7HtC9kdvXWLZTmGvOL7O84KvL14cciAP7JIQerbzvtr8Oxqun4o6OiQ6I4ax_mVBk3uoClY90iatK-z3Gte-d9AO-aP1ngjICQXpVoyGgJh7_KvIebXdlmz8uYYRehvSHFugXmjWucwhLjH3gARNQYn9NIPmO_KjgXsCDYB2NhIxz5If"/>
-<span class="font-headline-md text-headline-md text-[#172033]">TaskPilotAI</span>
-</div>
-<!-- Middle Section: Copy & Illustration -->
-<div class="z-10 flex flex-col gap-6 max-w-lg">
-<h1 class="font-display-lg text-display-lg text-[#172033]">Plan. Focus. Achieve.</h1>
-<p class="font-body-lg text-body-lg text-[#64748B]">
-                    Your AI-powered workspace is ready. Log in to reclaim your time and boost your output.
-                </p>
-<!-- Abstract Productivity Visual Placeholder -->
-<div class="mt-8 rounded-xl overflow-hidden border border-[#E5E7EB] shadow-sm relative h-64 bg-white">
-<img alt="Abstract visual of productivity dashboard with sleek light mode UI and green accents" class="absolute inset-0 w-full h-full object-cover opacity-90" src="https://lh3.googleusercontent.com/aida/AP1WRLtCdqr47tht44hvcjGbp1dDqh_g6U7xCTzaGJHqa6EsBZnyeoLnA5rcy7fBObtcg5FHilfqi3iv1FiQnBGCcLwS3LNSSYUn0MCguBx6fNzoAvggQuG1JiivQibhxva3pmCZMW1yEiHXVHKf-Ian3WwlcpDBvYJOmirtQdtdsJQwkjjbC-D4SCz3m7LtyIxSO9Tga4Cmcn1gA4A2HzpbG3DvZ0M0Cfo5bqQCQsbWh-R8BK70gI3taF8oSYEw"/>
-<!-- Gradient overlay to blend with background -->
-<div class="absolute inset-0 bg-gradient-to-t from-[#F7F7F2] via-transparent to-transparent"></div>
-</div>
-</div>
-<!-- Bottom Section: Trust Statement -->
-<div class="z-10 flex items-center gap-3">
-<div class="flex -space-x-2">
-<!-- Avatar placeholders -->
-<div class="w-8 h-8 rounded-full bg-white border-2 border-[#F7F7F2] flex items-center justify-center text-xs text-[#64748B] shadow-sm">A</div>
-<div class="w-8 h-8 rounded-full bg-white border-2 border-[#F7F7F2] flex items-center justify-center text-xs text-[#64748B] shadow-sm">B</div>
-<div class="w-8 h-8 rounded-full bg-white border-2 border-[#F7F7F2] flex items-center justify-center text-xs text-[#64748B] shadow-sm">C</div>
-</div>
-<span class="font-body-sm text-body-sm text-[#64748B]">Trusted by 10,000+ professionals.</span>
-</div>
-</div>
-<!-- Right Column - Login Form -->
-<div class="w-full lg:w-1/2 flex items-center justify-center p-margin-mobile md:p-margin-desktop bg-[#F7F7F2] overflow-y-auto">
+<body class="min-h-screen flex items-center justify-center p-margin-mobile md:p-margin-desktop font-body-md text-on-surface">
+<div class="w-full max-w-[480px]">
 <!-- Login Card -->
-<div class="w-full max-w-md bg-[#FFFFFF] rounded-xl border border-[#E5E7EB] p-8 shadow-sm flex flex-col gap-6 relative">
-<!-- Card Header -->
-<div class="flex flex-col items-center text-center gap-2">
-<img alt="TaskPilotAI Logo" class="w-12 h-12 object-contain mb-2 lg:hidden" src="https://lh3.googleusercontent.com/aida/AP1WRLvsFx-vp1sX35ZGtJ02ViuSZwAraAQFOS_xF6dM60TSceZE6GWcm9NtVVA1SbHagOPaRhttaXpk7HtC9kdvXWLZTmGvOL7O84KvL14cciAP7JIQerbzvtr8Oxqun4o6OiQ6I4ax_mVBk3uoClY90iatK-z3Gte-d9AO-aP1ngjICQXpVoyGgJh7_KvIebXdlmz8uYYRehvSHFugXmjWucwhLjH3gARNQYn9NIPmO_KjgXsCDYB2NhIxz5If"/>
-<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-[#172033]">Welcome back!</h2>
-<p class="font-body-sm text-body-sm text-[#64748B]">
-                        Login to continue managing your tasks smarter with AI.
-                    </p>
+<div class="login-card rounded-lg p-lg mb-md">
+<!-- Header -->
+<div class="text-center mb-lg">
+<div class="flex justify-center items-center gap-base mb-xs">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1; font-size: 32px;">task_alt</span>
+<h1 class="font-headline-md text-headline-md text-primary">TaskPilot AI</h1>
+</div>
+<p class="font-body-sm text-body-sm text-secondary-txt">Plan. Focus. Achieve.</p>
+<h2 class="font-headline-lg text-headline-lg text-navy mt-md mb-xs">Welcome back!</h2>
+<p class="font-body-sm text-body-sm text-secondary-txt">Login to continue managing your tasks smarter with AI.</p>
 </div>
 <!-- Form -->
-<form class="flex flex-col gap-5 mt-4" onsubmit="event.preventDefault(); document.getElementById('loading-state').classList.remove('hidden'); setTimeout(function() { document.getElementById('loading-state').classList.add('hidden'); }, 2000);">
-<!-- Email Field -->
-<div class="flex flex-col gap-1.5">
-<label class="font-label-md text-label-md text-[#172033]" for="email">Email Address</label>
+<form class="flex flex-col gap-md">
+<!-- Email -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-navy" for="email">Email Address</label>
+<input class="input-field rounded h-[44px] px-sm font-body-md text-body-md w-full" id="email" placeholder="you@example.com" required="" type="email"/>
+</div>
+<!-- Password -->
+<div class="flex flex-col gap-xs relative">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-navy" for="password">Password</label>
+<a class="font-label-sm text-label-sm text-navy hover:underline" href="#">Forgot password?</a>
+</div>
 <div class="relative">
-<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#64748B]">
-<span class="material-symbols-outlined text-[20px]" data-icon="mail">mail</span>
-</div>
-<input class="w-full pl-10 pr-4 py-2.5 bg-white text-[#172033] font-body-md text-body-md rounded-lg border border-[#E5E7EB] focus:border-[#166534] focus:ring-1 focus:ring-[#166534] focus:outline-none transition-colors placeholder:text-[#64748B]/60" id="email" name="email" placeholder="Enter your email" required="" type="email"/>
-</div>
-</div>
-<!-- Password Field -->
-<div class="flex flex-col gap-1.5">
-<label class="font-label-md text-label-md text-[#172033]" for="password">Password</label>
-<div class="relative">
-<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#64748B]">
-<span class="material-symbols-outlined text-[20px]" data-icon="lock">lock</span>
-</div>
-<input class="w-full pl-10 pr-10 py-2.5 bg-white text-[#172033] font-body-md text-body-md rounded-lg border border-[#E5E7EB] focus:border-[#166534] focus:ring-1 focus:ring-[#166534] focus:outline-none transition-colors placeholder:text-[#64748B]/60" id="password" name="password" placeholder="Enter your password" required="" type="password"/>
-<button class="absolute inset-y-0 right-0 pr-3 flex items-center text-[#64748B] hover:text-[#172033] transition-colors" onclick="const p = document.getElementById('password'); const i = this.querySelector('span'); if(p.type==='password'){p.type='text'; i.textContent='visibility_off';}else{p.type='password'; i.textContent='visibility';}" type="button">
-<span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span>
+<input class="input-field rounded h-[44px] px-sm pr-[40px] font-body-md text-body-md w-full" id="password" placeholder="••••••••" required="" type="password"/>
+<button class="absolute right-sm top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-navy transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
 </button>
 </div>
 </div>
-<!-- Options Row -->
-<div class="flex items-center justify-between mt-1">
-<label class="flex items-center gap-2 cursor-pointer group">
-<input class="w-4 h-4 rounded border-[#E5E7EB] text-[#166534] bg-white focus:ring-[#166534] focus:ring-offset-0 focus:ring-offset-transparent" type="checkbox"/>
-<span class="font-body-sm text-body-sm text-[#64748B] group-hover:text-[#172033] transition-colors">Remember me</span>
-</label>
-<a class="font-label-md text-label-md text-[#166534] hover:text-[#1f6c3a] transition-colors" href="#">Forgot password?</a>
-</div>
-<!-- Submit Button -->
-<button class="w-full py-2.5 mt-2 bg-[#166534] text-white font-label-md text-label-md rounded-lg flex items-center justify-center gap-2 hover:bg-[#1f6c3a] transition-all active:scale-[0.98] relative overflow-hidden group" type="submit">
-<span>Login</span>
-<span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
-<!-- Loading Overlay (Hidden by default) -->
-<div class="absolute inset-0 bg-[#166534] flex items-center justify-center hidden" id="loading-state">
-<svg class="animate-spin h-5 w-5 text-white" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-<path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
-</svg>
-</div>
-</button>
+<!-- Submit -->
+<button class="btn-primary rounded h-[44px] font-label-md text-label-md w-full flex justify-center items-center mt-sm transition-colors" type="submit">
+                    Login
+                </button>
 </form>
 <!-- Divider -->
-<div class="flex items-center gap-4 mt-2">
-<div class="h-px bg-[#E5E7EB] flex-1"></div>
-<span class="font-body-sm text-body-sm text-[#64748B]">or continue with</span>
-<div class="h-px bg-[#E5E7EB] flex-1"></div>
+<div class="flex items-center my-md">
+<div class="flex-grow border-t border-outline-variant opacity-50"></div>
+<span class="px-sm font-body-sm text-body-sm text-secondary-txt bg-surface-container-lowest">or continue with</span>
+<div class="flex-grow border-t border-outline-variant opacity-50"></div>
 </div>
-<!-- Social Login -->
-<button class="w-full py-2.5 bg-white border border-[#E5E7EB] text-[#172033] font-label-md text-label-md rounded-lg flex items-center justify-center gap-3 hover:bg-[#F7F7F2] transition-colors active:scale-[0.98]" type="button">
-<svg class="w-5 h-5" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
-<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
-<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path>
-<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+<!-- Google Login -->
+<button class="btn-google rounded h-[44px] font-label-md text-label-md w-full flex justify-center items-center gap-sm transition-colors">
+<svg fill="none" height="18" viewbox="0 0 18 18" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M17.64 9.20455C17.64 8.56636 17.5827 7.95273 17.4764 7.36364H9V10.845H13.8436C13.635 11.97 13.0009 12.9232 12.0477 13.5614V15.8195H14.9564C16.6582 14.2527 17.64 11.9455 17.64 9.20455Z" fill="#4285F4"></path>
+<path d="M9 18C11.43 18 13.4673 17.1941 14.9564 15.8195L12.0477 13.5614C11.2418 14.1014 10.2109 14.4205 9 14.4205C6.65591 14.4205 4.67182 12.8373 3.96409 10.71H0.957275V13.0418C2.43818 15.9832 5.48182 18 9 18Z" fill="#34A853"></path>
+<path d="M3.96409 10.71C3.78409 10.17 3.68182 9.59318 3.68182 9C3.68182 8.40682 3.78409 7.83 3.96409 7.29V4.95818H0.957275C0.347727 6.17318 0 7.54773 0 9C0 10.4523 0.347727 11.8268 0.957275 13.0418L3.96409 10.71Z" fill="#FBBC05"></path>
+<path d="M9 3.57955C10.3214 3.57955 11.5077 4.03364 12.4405 4.92545L15.0218 2.34409C13.4632 0.891818 11.4259 0 9 0C5.48182 0 2.43818 2.01682 0.957275 4.95818L3.96409 7.29C4.67182 5.16273 6.65591 3.57955 9 3.57955Z" fill="#EA4335"></path>
 </svg>
-                    Continue with Google
-                </button>
+                Continue with Google
+            </button>
+</div>
 <!-- Footer Link -->
-<div class="mt-4 text-center">
-<span class="font-body-sm text-body-sm text-[#64748B]">Don't have an account? </span>
-<a class="font-label-md text-label-md text-[#166534] hover:text-[#1f6c3a] transition-colors" href="#">Sign up</a>
+<div class="text-center mb-lg">
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Don't have an account? 
+                <a class="font-label-md text-label-md text-navy hover:underline" href="#">Sign up</a>
+</p>
+</div>
+<!-- Motivational Quote Card (AI Indicator) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md shadow-sm border-l-4 border-l-secondary relative overflow-hidden">
+<div class="absolute top-sm right-sm opacity-20">
+<span class="material-symbols-outlined text-[40px] text-secondary">auto_awesome</span>
+</div>
+<div class="flex gap-sm items-start relative z-10">
+<span class="material-symbols-outlined text-secondary mt-xs" style="font-size: 20px;">lightbulb</span>
+<div>
+<h3 class="font-label-md text-label-md text-primary mb-xs">Productivity Insight</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant italic">"Planning is bringing the future into the present so that you can do something about it now."</p>
 </div>
 </div>
-<!-- Optional Background Glow on Right Column for Depth -->
-<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#166534]/5 rounded-full blur-[100px] pointer-events-none z-[-1]"></div>
 </div>
 </div>
 </body></html>
