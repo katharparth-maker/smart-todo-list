@@ -11,8 +11,10 @@
  *   - Full support for both components/calendar.html and pages/planner.html
  */
 
-import { getTasks, saveTasks, toggleTaskStatus, openTaskModal } from './tasks.js';
-import { showToast } from './ui.js';
+import { getTasks, saveTasks, toggleTaskStatus, openTaskModal, createTask } from './tasks.js';
+import { showToast, loadAndRenderApiReminders } from './ui.js';
+import { createReminderViaAPI } from './api.js';
+
 
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -67,7 +69,9 @@ export function renderCalendar() {
   const month = currentViewDate.getMonth();
 
   // 1. Update Month/Year Header Labels
-  const monthYearHeaders = document.querySelectorAll('#calendar-month-year, .mini-calendar-header, main h3:contains("2026")');
+  const monthYearHeaders = Array.from(document.querySelectorAll('#calendar-month-year, .mini-calendar-header, main h3')).filter(el => {
+    return el.id === 'calendar-month-year' || el.classList.contains('mini-calendar-header') || el.textContent.includes('2026');
+  });
   monthYearHeaders.forEach(el => {
     el.textContent = `${MONTH_NAMES[month]} ${year}`;
   });
@@ -394,6 +398,68 @@ function getEndTime(start) {
   return `${String(h).padStart(2, '0')}:${m}`;
 }
 
+function getSuggestedPlanItems() {
+  return [
+    { title: 'Read documentation', dueTime: '10:00', category: 'Study', priority: 'Medium' },
+    { title: 'Lunch & Walk', dueTime: '13:00', category: 'Personal', priority: 'Low' },
+    { title: 'Email triage', dueTime: '15:00', category: 'Work', priority: 'Medium' }
+  ];
+}
+
+export function applySuggestedPlan() {
+  const suggestions = getSuggestedPlanItems();
+  const baseDate = formatDateKey(selectedDate || new Date());
+  const existingTasks = getTasks();
+  let createdCount = 0;
+
+  suggestions.forEach(item => {
+    const exists = existingTasks.some(task =>
+      task.title === item.title &&
+      task.dueDate === baseDate &&
+      task.dueTime === item.dueTime
+    );
+
+    if (!exists) {
+      createTask({
+        title: item.title,
+        category: item.category,
+        priority: item.priority,
+        dueDate: baseDate,
+        dueTime: item.dueTime,
+        isAiSuggested: true
+      });
+      createdCount += 1;
+    }
+  });
+
+  if (createdCount > 0) {
+    showToast(`Applied suggested plan with ${createdCount} task${createdCount > 1 ? 's' : ''}.`, 'success');
+    renderCalendar();
+  } else {
+    showToast('Suggested plan is already in your tasks.', 'info');
+  }
+}
+
+export function startFocusSession() {
+  const todayKey = formatDateKey(selectedDate || new Date());
+  const tasks = getTasksForDate(todayKey).filter(task => task.status !== 'completed');
+
+  if (tasks.length === 0) {
+    showToast('No pending focus task found for today.', 'warning');
+    return;
+  }
+
+  const priorityOrder = { High: 3, Medium: 2, Low: 1 };
+  tasks.sort((a, b) => {
+    const priorityDiff = (priorityOrder[b.priority] || 0) - (priorityOrder[a.priority] || 0);
+    if (priorityDiff !== 0) return priorityDiff;
+    return (a.dueTime || '').localeCompare(b.dueTime || '');
+  });
+
+  const focusTask = tasks[0];
+  showToast(`Focus started on “${focusTask.title}”.`, 'success', 5000);
+}
+
 /**
  * Safe HTML string escaper.
  * @param {string} str
@@ -409,15 +475,49 @@ function escapeHTML(str) {
     .replace(/'/g, '&#039;');
 }
 
+function upsertReminderTaskLocally(reminder) {
+  const task = reminder?.task;
+  if (!task || !task.id) return;
+
+  const tasks = getTasks();
+  const priority = task.priority
+    ? String(task.priority).charAt(0).toUpperCase() + String(task.priority).slice(1)
+    : 'Medium';
+  const frontendTask = {
+    id: String(task.id),
+    title: task.title || reminder.message || 'Task Reminder',
+    description: task.description || '',
+    priority,
+    category: task.category || 'General',
+    dueDate: task.due_date ? String(task.due_date).split('T')[0] : '',
+    dueTime: task.due_time || '',
+    status: task.status || 'pending',
+    createdAt: task.created_at || new Date().toISOString()
+  };
+
+  const existingIndex = tasks.findIndex(t => String(t.id) === frontendTask.id);
+  if (existingIndex >= 0) {
+    tasks[existingIndex] = { ...tasks[existingIndex], ...frontendTask };
+  } else {
+    tasks.unshift(frontendTask);
+  }
+  saveTasks(tasks);
+}
+
 /**
  * Wire calendar navigation and date buttons across the document.
  * @param {HTMLElement|Document} [root=document]
  */
 export function setupPlannerListeners(root = document) {
   // 1. Previous Month Buttons
-  const prevButtons = root.querySelectorAll(
-    'button[aria-label="Previous month"], button[onclick*="prevMonth"], main button:has(span:contains("chevron_left"))'
-  );
+  const prevButtons = Array.from(root.querySelectorAll(
+    'button[aria-label="Previous month"], button[onclick*="prevMonth"], main button'
+  )).filter(btn => {
+    if (btn.getAttribute('aria-label') === 'Previous month') return true;
+    if (btn.getAttribute('onclick')?.includes('prevMonth')) return true;
+    const span = btn.querySelector('span');
+    return span && span.textContent.trim().includes('chevron_left');
+  });
   prevButtons.forEach(btn => {
     btn.onclick = (e) => {
       e.preventDefault();
@@ -426,9 +526,14 @@ export function setupPlannerListeners(root = document) {
   });
 
   // 2. Next Month Buttons
-  const nextButtons = root.querySelectorAll(
-    'button[aria-label="Next month"], button[onclick*="nextMonth"], main button:has(span:contains("chevron_right"))'
-  );
+  const nextButtons = Array.from(root.querySelectorAll(
+    'button[aria-label="Next month"], button[onclick*="nextMonth"], main button'
+  )).filter(btn => {
+    if (btn.getAttribute('aria-label') === 'Next month') return true;
+    if (btn.getAttribute('onclick')?.includes('nextMonth')) return true;
+    const span = btn.querySelector('span');
+    return span && span.textContent.trim().includes('chevron_right');
+  });
   nextButtons.forEach(btn => {
     btn.onclick = (e) => {
       e.preventDefault();
@@ -437,30 +542,153 @@ export function setupPlannerListeners(root = document) {
   });
 
   // 3. Today Buttons
-  const todayButtons = root.querySelectorAll(
-    'button[aria-label="Today"], button[onclick*="goToToday"], button:contains("Today")'
-  );
+  const todayButtons = Array.from(root.querySelectorAll(
+    'button[aria-label="Today"], button[onclick*="goToToday"], button'
+  )).filter(btn => {
+    if (btn.getAttribute('aria-label') === 'Today') return true;
+    if (btn.getAttribute('onclick')?.includes('goToToday')) return true;
+    return btn.textContent.trim().toLowerCase() === 'today';
+  });
   todayButtons.forEach(btn => {
-    if (btn.textContent.trim().toLowerCase() === 'today') {
-      btn.onclick = (e) => {
-        e.preventDefault();
-        goToToday();
-      };
-    }
+    btn.onclick = (e) => {
+      e.preventDefault();
+      goToToday();
+    };
   });
 
   // 4. Add Schedule Button on planner.html
-  const addScheduleButtons = root.querySelectorAll('button:contains("Add Schedule"), button:contains("Create Task")');
+  const addScheduleButtons = Array.from(root.querySelectorAll('button')).filter(btn => {
+    const text = btn.textContent.trim();
+    return text.includes('Add Schedule');
+  });
   addScheduleButtons.forEach(btn => {
     btn.onclick = (e) => {
       e.preventDefault();
-      openTaskModal({
-        dueDate: formatDateKey(selectedDate),
-        dueTime: '10:00'
-      });
+      const modal = document.getElementById('addScheduleModal');
+      if (modal) {
+        const dateInput = document.getElementById('schedule-date');
+        if (dateInput && !dateInput.value) {
+          dateInput.value = formatDateKey(selectedDate || new Date());
+        }
+        modal.classList.remove('hidden');
+      }
     };
   });
+
+  // 5. Apply Suggested Plan Button
+  const applySuggestedBtn = root.querySelector('#btn-apply-suggested-plan') || Array.from(root.querySelectorAll('button')).find(btn => btn.textContent.trim().includes('Apply Suggested Plan'));
+  if (applySuggestedBtn) {
+    applySuggestedBtn.onclick = (e) => {
+      e.preventDefault();
+      applySuggestedPlan();
+    };
+  }
+
+  // 6. Start Focus Button
+  const startFocusBtn = root.querySelector('#btn-start-focus') || Array.from(root.querySelectorAll('button')).find(btn => btn.textContent.trim().includes('Start Focus'));
+  if (startFocusBtn) {
+    startFocusBtn.onclick = (e) => {
+      e.preventDefault();
+      startFocusSession();
+    };
+  }
 }
+
+/**
+ * Bind submission handler for addScheduleModal (creates a real reminder via API).
+ */
+export function initAddScheduleForm() {
+  const form = document.getElementById('addScheduleForm');
+  if (!form) {
+    console.warn('[TaskPilot Planner] #addScheduleForm not found in DOM');
+    return;
+  }
+
+  console.log('[TaskPilot Planner] Initialized #addScheduleForm submit listener');
+
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    console.log('[TaskPilot Planner] #addScheduleForm submit event fired');
+
+    const titleInput = document.getElementById('schedule-title');
+    const dateInput = document.getElementById('schedule-date');
+    const timeInput = document.getElementById('schedule-time');
+    const categoryInput = document.getElementById('schedule-category');
+    const priorityInput = form.querySelector('input[name="priority"]:checked');
+    const submitBtn = document.getElementById('btn-save-schedule') || form.querySelector('button[type="submit"]');
+
+    console.log('[TaskPilot Planner] Input values:', {
+      title: titleInput?.value,
+      date: dateInput?.value,
+      time: timeInput?.value
+    });
+
+    if (!titleInput || !titleInput.value.trim()) {
+      if (titleInput) titleInput.focus();
+      return;
+    }
+
+    const originalBtnHTML = submitBtn ? submitBtn.innerHTML : 'Save';
+    const prevError = form.querySelector('#schedule-modal-error');
+    if (prevError) prevError.remove();
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `
+        <span class="material-symbols-outlined text-[18px] animate-spin">progress_activity</span>
+        Saving...
+      `;
+    }
+
+    try {
+      const dateVal = (dateInput && dateInput.value) ? dateInput.value : formatDateKey(selectedDate || new Date());
+      const timeVal = (timeInput && timeInput.value) ? timeInput.value : '09:00';
+      const selectedPriority = (priorityInput?.value || 'Normal').toLowerCase();
+
+      const reminderPayload = {
+        title: titleInput.value.trim(),
+        due_date: dateVal,
+        due_time: timeVal,
+        category: categoryInput?.value || 'General',
+        priority: selectedPriority === 'high' ? 'high' : 'medium',
+        status: 'pending'
+      };
+
+      console.log('[TaskPilot Planner] Calling createReminderViaAPI with payload:', reminderPayload);
+
+      const created = await createReminderViaAPI(reminderPayload);
+      console.log('[TaskPilot Planner] createReminderViaAPI success:', created);
+      upsertReminderTaskLocally(created);
+      renderCalendar();
+
+      showToast('Reminder created successfully! 🎉', 'success');
+
+      // Reset form and close modal
+      form.reset();
+      const modal = document.getElementById('addScheduleModal');
+      if (modal) modal.classList.add('hidden');
+
+      // Refresh reminders list in the UI
+      await loadAndRenderApiReminders();
+    } catch (err) {
+      console.error('[TaskPilot Planner] Reminder creation failed:', err);
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnHTML;
+      }
+      const errorBanner = document.createElement('div');
+      errorBanner.id = 'schedule-modal-error';
+      errorBanner.className = 'p-3 rounded-lg bg-error-container border border-error/30 text-on-error-container font-body-sm text-body-sm flex items-center gap-2';
+      errorBanner.innerHTML = `
+        <span class="material-symbols-outlined text-error text-[18px] shrink-0">error</span>
+        <span>${escapeHTML(err.message || 'Failed to create reminder. Please try again.')}</span>
+      `;
+      form.insertBefore(errorBanner, form.querySelector('.border-t') || form.lastElementChild);
+    }
+  };
+}
+
+
 
 /**
  * Initialize the Planner & Calendar module on page load.
@@ -472,8 +700,10 @@ export function initPlanner() {
   if (isPlanner || hasCalendar) {
     renderCalendar();
     setupPlannerListeners(document);
+    initAddScheduleForm();
   }
 }
+
 
 // Auto-bootstrap when loaded as a module in the browser
 if (typeof document !== 'undefined') {

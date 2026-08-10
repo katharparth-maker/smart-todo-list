@@ -197,29 +197,24 @@
 <!-- Navigation -->
 <nav class="flex-1 flex flex-col gap-xs">
 <a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all active:scale-95 duration-150" href="#">
-<span class="material-symbols-outlined">today</span>
-                My Day
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">task</span>
+                Tasks
             </a>
 <a class="flex items-center gap-sm px-sm py-sm rounded-lg bg-secondary-container text-on-secondary-container font-bold active:scale-95 duration-150" href="#">
 <span class="material-symbols-outlined">calendar_month</span>
                 Planner
             </a>
 <a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all active:scale-95 duration-150" href="#">
-<span class="material-symbols-outlined">pending</span>
-                In Progress
-            </a>
-<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all active:scale-95 duration-150" href="#">
-<span class="material-symbols-outlined">task_alt</span>
-                Completed
-            </a>
-<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all active:scale-95 duration-150" href="#">
-<span class="material-symbols-outlined">archive</span>
-                Archive
+<span class="material-symbols-outlined">person</span>
+                Profile
             </a>
 </nav>
 <!-- CTA & Footer -->
 <div class="mt-auto flex flex-col gap-sm border-t border-outline-variant pt-md">
-<button class="w-full py-2 bg-primary text-on-primary rounded font-label-md hover:opacity-90 transition-opacity">Upgrade to Pro</button>
 <a class="flex items-center gap-sm px-sm py-2 text-on-surface-variant hover:text-primary transition-colors" href="#">
 <span class="material-symbols-outlined">help</span>
                 Help Center
@@ -244,30 +239,11 @@
 </div>
 </div>
 <!-- Desktop Nav Links (Hidden on mobile) -->
-<nav class="hidden md:flex gap-md h-full items-center">
-<a class="text-on-surface-variant hover:text-secondary transition-colors cursor-pointer active:opacity-80" href="#">Dashboard</a>
-<a class="text-on-surface-variant hover:text-secondary transition-colors cursor-pointer active:opacity-80" href="#">Tasks</a>
-<a class="text-on-surface-variant hover:text-secondary transition-colors cursor-pointer active:opacity-80" href="#">Projects</a>
-<a class="text-on-surface-variant hover:text-secondary transition-colors cursor-pointer active:opacity-80" href="#">Team</a>
-</nav>
 <div class="flex items-center gap-sm">
-<!-- Mobile Only Title (if needed, but already handled above) -->
 <!-- Search Bar (placeholder) -->
 <div class="hidden lg:flex relative">
 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
 <input class="pl-10 pr-4 py-1.5 border border-outline-variant rounded-full text-body-sm bg-surface-container-lowest focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary/10 transition-all w-64" placeholder="Search tasks..." type="text"/>
-</div>
-<div class="flex items-center gap-2">
-<button class="p-2 text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-80 rounded-full hover:bg-surface-container">
-<span class="material-symbols-outlined">notifications</span>
-</button>
-<button class="p-2 text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-80 rounded-full hover:bg-surface-container hidden sm:block">
-<span class="material-symbols-outlined">settings</span>
-</button>
-<button class="hidden md:flex bg-secondary text-on-primary px-4 py-2 rounded font-label-md ml-2 hover:bg-secondary/90 transition-colors cursor-pointer active:opacity-80">
-                        Create Task
-                    </button>
-<img alt="User profile" class="w-8 h-8 rounded-full ml-2 border border-outline-variant object-cover" data-alt="A clean, professional circular profile picture of a user avatar, set against a dark navy background with crisp white initials, conveying a modern and organized digital workspace." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFQn09nAyCMfa3l5f6aT6DQPs_I5zFk7jymDh3xMpLWgqQA96R5bw04cy40wBMrVEOJ4uA9vM6FQqSynnWaOw909SaO2KXUDDlWH0Sillwde41mUHxUGLVYfhm0MLUEPeX7Fw1cFKs6INQ8ujKdOrBN8Msh601pxzgvaRv3YyPtdkE1TWJsyUwbHEx3DsDGA0mdYWGZhNxU68heR8hBmwGSUqfJp2wYCWFRZG-ussUt16wEQogQK_t8A"/>
 </div>
 </div>
 </header>
@@ -451,7 +427,7 @@
 <span class="text-primary truncate">Email triage</span>
 </li>
 </ul>
-<button class="w-full bg-surface-container-lowest border border-primary-container text-primary-container font-label-md py-2 rounded hover:bg-surface-container-low transition-colors relative z-10 flex items-center justify-center gap-xs h-[44px]">
+<button id="btn-apply-suggested-plan" class="w-full bg-surface-container-lowest border border-primary-container text-primary-container font-label-md py-2 rounded hover:bg-surface-container-low transition-colors relative z-10 flex items-center justify-center gap-xs h-[44px]">
                                  Apply Suggested Plan
                              </button>
 </div>
@@ -467,7 +443,7 @@
 </div>
 </div>
 </div>
-<button class="w-full bg-primary text-on-primary font-label-md py-2 rounded hover:opacity-90 transition-opacity h-[44px]">
+<button id="btn-start-focus" class="w-full bg-primary text-on-primary font-label-md py-2 rounded hover:opacity-90 transition-opacity h-[44px]">
                                 Start Focus
                             </button>
 </div>
@@ -484,28 +460,28 @@
 <div class="bg-surface-container-lowest rounded-lg shadow-level-2 border border-outline-variant w-full max-w-md flex flex-col max-h-[90vh]">
 <div class="flex justify-between items-center p-md border-b border-outline-variant">
 <h2 class="font-headline-md text-headline-md text-primary">Add Schedule</h2>
-<button class="text-on-surface-variant hover:text-primary p-1 rounded hover:bg-surface-container" onclick="document.getElementById('addScheduleModal').classList.add('hidden')">
+<button type="button" class="text-on-surface-variant hover:text-primary p-1 rounded hover:bg-surface-container" onclick="document.getElementById('addScheduleModal').classList.add('hidden')">
 <span class="material-symbols-outlined">close</span>
 </button>
 </div>
-<div class="p-md overflow-y-auto flex flex-col gap-md">
+<form id="addScheduleForm" class="p-md overflow-y-auto flex flex-col gap-md">
 <div class="flex flex-col gap-1">
-<label class="font-label-sm text-on-surface-variant">Title</label>
-<input class="w-full border border-outline-variant rounded px-3 py-2 text-body-md focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary/10" placeholder="Task name..." type="text"/>
+<label class="font-label-sm text-on-surface-variant" for="schedule-title">Title *</label>
+<input id="schedule-title" class="w-full border border-outline-variant rounded px-3 py-2 text-body-md focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary/10" placeholder="Schedule name..." required type="text"/>
 </div>
 <div class="grid grid-cols-2 gap-sm">
 <div class="flex flex-col gap-1">
-<label class="font-label-sm text-on-surface-variant">Start Time</label>
-<input class="w-full border border-outline-variant rounded px-3 py-2 text-body-md focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary/10" type="time"/>
+<label class="font-label-sm text-on-surface-variant" for="schedule-date">Date</label>
+<input id="schedule-date" class="w-full border border-outline-variant rounded px-3 py-2 text-body-md focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary/10" type="date"/>
 </div>
 <div class="flex flex-col gap-1">
-<label class="font-label-sm text-on-surface-variant">End Time</label>
-<input class="w-full border border-outline-variant rounded px-3 py-2 text-body-md focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary/10" type="time"/>
+<label class="font-label-sm text-on-surface-variant" for="schedule-time">Start Time</label>
+<input id="schedule-time" class="w-full border border-outline-variant rounded px-3 py-2 text-body-md focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary/10" type="time" value="09:00"/>
 </div>
 </div>
 <div class="flex flex-col gap-1">
-<label class="font-label-sm text-on-surface-variant">Category</label>
-<select class="w-full border border-outline-variant rounded px-3 py-2 text-body-md focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary/10 bg-white">
+<label class="font-label-sm text-on-surface-variant" for="schedule-category">Category</label>
+<select id="schedule-category" class="w-full border border-outline-variant rounded px-3 py-2 text-body-md focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary/10 bg-white">
 <option>Project</option>
 <option>Learning</option>
 <option>Study</option>
@@ -516,22 +492,23 @@
 <label class="font-label-sm text-on-surface-variant">Priority</label>
 <div class="flex gap-sm">
 <label class="flex items-center gap-xs cursor-pointer">
-<input class="text-primary-container focus:ring-primary-container" name="priority" type="radio"/>
+<input class="text-primary-container focus:ring-primary-container" name="priority" type="radio" value="Normal" checked/>
 <span class="font-body-sm text-primary">Normal</span>
 </label>
 <label class="flex items-center gap-xs cursor-pointer">
-<input class="text-error focus:ring-error" name="priority" type="radio"/>
+<input class="text-error focus:ring-error" name="priority" type="radio" value="High"/>
 <span class="font-body-sm text-error">High</span>
 </label>
 </div>
 </div>
+<div class="pt-md border-t border-outline-variant flex justify-end gap-sm bg-surface-container-low rounded-b-lg -mx-md -mb-md p-md mt-auto">
+<button type="button" class="px-4 py-2 font-label-md text-primary-container border border-outline-variant bg-surface-container-lowest rounded hover:bg-surface-container transition-colors h-[44px]" onclick="document.getElementById('addScheduleModal').classList.add('hidden')">Cancel</button>
+<button type="submit" id="btn-save-schedule" class="px-4 py-2 font-label-md text-on-primary bg-secondary rounded hover:bg-secondary/90 transition-colors h-[44px] flex items-center justify-center gap-1">Save</button>
 </div>
-<div class="p-md border-t border-outline-variant flex justify-end gap-sm bg-surface-container-low rounded-b-lg">
-<button class="px-4 py-2 font-label-md text-primary-container border border-outline-variant bg-surface-container-lowest rounded hover:bg-surface-container transition-colors h-[44px]" onclick="document.getElementById('addScheduleModal').classList.add('hidden')">Cancel</button>
-<button class="px-4 py-2 font-label-md text-on-primary bg-secondary rounded hover:bg-secondary/90 transition-colors h-[44px]">Save</button>
+</form>
 </div>
 </div>
-</div>
+
 <!-- Edit Schedule Modal -->
 <div class="hidden fixed inset-0 z-50 flex items-center justify-center p-margin-mobile modal-bg" id="editScheduleModal">
 <div class="bg-surface-container-lowest rounded-lg shadow-level-2 border border-outline-variant w-full max-w-md flex flex-col max-h-[90vh]">
@@ -566,5 +543,7 @@
 </div>
 </div>
 </div>
+<!-- Supabase JS (required before main.js module) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script type="module" src="../js/main.js"></script>
 </body></html>

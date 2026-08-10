@@ -125,8 +125,8 @@
 </div>
 <nav class="flex-1 flex flex-col gap-xs">
 <a class="flex items-center gap-sm p-sm rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all active:scale-95 duration-150 font-label-md text-label-md" href="#">
-<span class="material-symbols-outlined" data-icon="today">today</span>
-                My Day
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
             </a>
 <!-- Active State Navigation -->
 <a class="flex items-center gap-sm p-sm rounded-DEFAULT bg-secondary-container text-on-secondary-container font-bold active:scale-95 duration-150 font-label-md text-label-md" href="#">
@@ -135,15 +135,11 @@
             </a>
 <a class="flex items-center gap-sm p-sm rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all active:scale-95 duration-150 font-label-md text-label-md" href="#">
 <span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
-                Upcoming
+                Planner
             </a>
 <a class="flex items-center gap-sm p-sm rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all active:scale-95 duration-150 font-label-md text-label-md" href="#">
-<span class="material-symbols-outlined" data-icon="pending">pending</span>
-                In Progress
-            </a>
-<a class="flex items-center gap-sm p-sm rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all active:scale-95 duration-150 font-label-md text-label-md" href="#">
-<span class="material-symbols-outlined" data-icon="archive">archive</span>
-                Archive
+<span class="material-symbols-outlined" data-icon="person">person</span>
+                Profile
             </a>
 </nav>
 <div class="mt-auto flex flex-col gap-xs pt-md border-t border-outline-variant">
@@ -155,7 +151,6 @@
 <span class="material-symbols-outlined" data-icon="logout">logout</span>
                 Log out
             </a>
-<button class="mt-sm w-full py-2 bg-primary-container text-on-primary border border-outline rounded-DEFAULT font-label-md text-label-md hover:opacity-90 transition-opacity">Upgrade to Pro</button>
 </div>
 </aside>
 <!-- Main Content Area -->
@@ -179,7 +174,7 @@
 <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
 <span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
 </button>
-<img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant object-cover ml-xs" data-alt="A professional headshot of an individual in a bright, modern office setting. The lighting is high-key and crisp, conveying a sense of corporate professionalism and minimalist style. The color palette emphasizes clean whites, deep navy, and subtle skin tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIUVM36BHCkB2wB8MTqW8oQz11SAViEoq1VSNXIlkclQre9TP6kPi5wJhgBc_7e86naO2gsMX7Ofq_LyX-g6nl7QvCnkB2zNMYxgMruDOzurhWuImWVkKwr7OTgP1fXcVeRYsvERcYXEAOPSZ3BR_irCbb1LIUuaij1jxRZ2Cm77-IYoCHWEyorqsR4tsmR4aZim8CzHXmFXCN_ChPxiQFzAL-yFQ-4g3YcKYQHrcI6QOUKi6S7cqSxQ"/>
+
 </div>
 </header>
 <div class="flex-1 p-margin-mobile md:p-margin-desktop max-w-7xl mx-auto w-full">
@@ -189,7 +184,7 @@
 <h2 class="font-headline-lg text-headline-lg text-primary mb-xs">My Tasks</h2>
 <p class="font-body-md text-body-md text-on-surface-variant">Organize, prioritize and complete your work</p>
 </div>
-<button class="flex items-center gap-xs bg-secondary text-on-secondary px-md py-sm rounded-DEFAULT font-label-md text-label-md h-[44px] hover:opacity-90 transition-opacity shadow-sm">
+<button id="btn-add-task" class="flex items-center gap-xs bg-secondary text-on-secondary px-md py-sm rounded-DEFAULT font-label-md text-label-md h-[44px] hover:opacity-90 transition-opacity shadow-sm">
 <span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
                     Add Task
                 </button>
@@ -198,21 +193,22 @@
 <div class="grid grid-cols-2 md:grid-cols-4 gap-md mb-lg">
 <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md shadow-level1">
 <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-xs">All Tasks</p>
-<p class="font-headline-lg text-headline-lg text-primary">12</p>
+<p class="font-headline-lg text-headline-lg text-primary">0</p>
 </div>
 <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md shadow-level1">
 <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-xs">Today</p>
-<p class="font-headline-lg text-headline-lg text-primary">5</p>
+<p class="font-headline-lg text-headline-lg text-primary">0</p>
 </div>
 <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md shadow-level1">
 <p class="font-label-sm text-label-sm text-secondary uppercase tracking-wider mb-xs">Completed</p>
-<p class="font-headline-lg text-headline-lg text-secondary">7</p>
+<p class="font-headline-lg text-headline-lg text-secondary">0</p>
 </div>
 <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md shadow-level1">
 <p class="font-label-sm text-label-sm text-error uppercase tracking-wider mb-xs">Overdue</p>
-<p class="font-headline-lg text-headline-lg text-error">1</p>
+<p class="font-headline-lg text-headline-lg text-error">0</p>
 </div>
 </div>
+
 <!-- Controls (Filter/Sort) & Tabs -->
 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-md gap-md">
 <div class="flex gap-sm overflow-x-auto w-full md:w-auto pb-2 md:pb-0 hide-scrollbar">
@@ -237,107 +233,29 @@
 </button>
 </div>
 </div>
-<!-- Task List -->
-<div class="flex flex-col gap-sm">
-<!-- Task 1 -->
-<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md flex items-start gap-md hover:bg-[#F1F1ED] transition-colors shadow-level1 group">
-<input class="mt-1 w-5 h-5 rounded-DEFAULT border-outline-variant text-secondary focus:ring-secondary cursor-pointer" type="checkbox"/>
-<div class="flex-1">
-<div class="flex items-center justify-between mb-xs">
-<h3 class="font-label-md text-label-md text-primary font-bold">Complete project documentation</h3>
-<div class="flex gap-xs items-center">
-<span class="px-2 py-1 rounded-DEFAULT text-[10px] font-bold uppercase tracking-wide bg-[#FEE2E2] text-[#991B1B]">High</span>
-</div>
-</div>
-<p class="font-body-sm text-body-sm text-on-surface-variant mb-sm line-clamp-1">Finalize the technical specs and API documentation for the V2 release.</p>
-<div class="flex items-center gap-md text-on-surface-variant font-body-sm text-body-sm">
-<span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]" data-icon="folder">folder</span> Project</span>
-<span class="flex items-center gap-xs text-error font-medium"><span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span> Today 4:00 PM</span>
-<span class="flex items-center gap-xs border-l-2 border-secondary pl-xs text-secondary"><span class="material-symbols-outlined text-[14px]" data-icon="auto_awesome">auto_awesome</span> AI Suggested</span>
-</div>
-</div>
-</div>
-<!-- Task 2 -->
-<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md flex items-start gap-md hover:bg-[#F1F1ED] transition-colors shadow-level1">
-<input class="mt-1 w-5 h-5 rounded-DEFAULT border-outline-variant text-secondary focus:ring-secondary cursor-pointer" type="checkbox"/>
-<div class="flex-1">
-<div class="flex items-center justify-between mb-xs">
-<h3 class="font-label-md text-label-md text-primary font-bold">Review Python assignment</h3>
-<div class="flex gap-xs items-center">
-<span class="px-2 py-1 rounded-DEFAULT text-[10px] font-bold uppercase tracking-wide bg-[#FEF9C3] text-[#854D0E]">Medium</span>
-</div>
-</div>
-<div class="flex items-center gap-md text-on-surface-variant font-body-sm text-body-sm mt-sm">
-<span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]" data-icon="school">school</span> Study</span>
-<span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span> Today 7:00 PM</span>
-</div>
-</div>
-</div>
-<!-- Task 3 -->
-<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md flex items-start gap-md hover:bg-[#F1F1ED] transition-colors shadow-level1">
-<input class="mt-1 w-5 h-5 rounded-DEFAULT border-outline-variant text-secondary focus:ring-secondary cursor-pointer" type="checkbox"/>
-<div class="flex-1">
-<div class="flex items-center justify-between mb-xs">
-<h3 class="font-label-md text-label-md text-primary font-bold">Prepare presentation</h3>
-<div class="flex gap-xs items-center">
-<span class="px-2 py-1 rounded-DEFAULT text-[10px] font-bold uppercase tracking-wide bg-[#FEE2E2] text-[#991B1B]">High</span>
-</div>
-</div>
-<div class="flex items-center gap-md text-on-surface-variant font-body-sm text-body-sm mt-sm">
-<span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]" data-icon="menu_book">menu_book</span> College</span>
-<span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span> Tomorrow 10:00 AM</span>
-</div>
-</div>
-</div>
-<!-- Task 4 -->
-<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md flex items-start gap-md hover:bg-[#F1F1ED] transition-colors shadow-level1">
-<input class="mt-1 w-5 h-5 rounded-DEFAULT border-outline-variant text-secondary focus:ring-secondary cursor-pointer" type="checkbox"/>
-<div class="flex-1">
-<div class="flex items-center justify-between mb-xs">
-<h3 class="font-label-md text-label-md text-primary font-bold">Practice coding problems</h3>
-<div class="flex gap-xs items-center">
-<span class="px-2 py-1 rounded-DEFAULT text-[10px] font-bold uppercase tracking-wide bg-[#DCFCE7] text-[#166534]">Low</span>
-</div>
-</div>
-<div class="flex items-center gap-md text-on-surface-variant font-body-sm text-body-sm mt-sm">
-<span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]" data-icon="code">code</span> Learning</span>
-<span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span> Sat 6:00 PM</span>
-</div>
-</div>
-</div>
-<!-- Task 5 -->
-<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md flex items-start gap-md hover:bg-[#F1F1ED] transition-colors shadow-level1">
-<input class="mt-1 w-5 h-5 rounded-DEFAULT border-outline-variant text-secondary focus:ring-secondary cursor-pointer" type="checkbox"/>
-<div class="flex-1">
-<div class="flex items-center justify-between mb-xs">
-<h3 class="font-label-md text-label-md text-primary font-bold">Team meeting</h3>
-<div class="flex gap-xs items-center">
-<span class="px-2 py-1 rounded-DEFAULT text-[10px] font-bold uppercase tracking-wide bg-[#FEF9C3] text-[#854D0E]">Medium</span>
-</div>
-</div>
-<p class="font-body-sm text-body-sm text-on-surface-variant mb-sm line-clamp-1">Weekly sync to discuss sprint progress and blockers.</p>
-<div class="flex items-center gap-md text-on-surface-variant font-body-sm text-body-sm">
-<span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]" data-icon="groups">groups</span> Project</span>
-<span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span> Mon 2:00 PM</span>
-</div>
-</div>
-</div>
-<!-- Completed Task Example -->
-<div class="bg-[#F8FAFC] border border-outline-variant rounded-lg p-md flex items-start gap-md opacity-60 shadow-none">
-<div class="mt-1 flex items-center justify-center w-5 h-5 rounded-DEFAULT bg-[#DCFCE7] text-[#166534]">
-<span class="material-symbols-outlined text-[14px]" data-icon="check">check</span>
-</div>
-<div class="flex-1">
-<h3 class="font-label-md text-label-md text-on-surface-variant line-through mb-xs">Buy groceries</h3>
-<div class="flex items-center gap-md text-on-surface-variant font-body-sm text-body-sm">
-<span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]" data-icon="shopping_cart">shopping_cart</span> Personal</span>
-</div>
-</div>
-</div>
-</div>
+  <!-- Task list is rendered by tasks.js / loadAndRenderApiTasks() -->
+  <div id="tasks-container" class="flex flex-col gap-sm"></div>
     <!-- Bottom spacing -->
     <div class="h-xl"></div>
 </div>
 </main>
+<!-- Clear any stale mock localStorage tasks before JS initialises -->
+<script>
+  (function () {
+    try {
+      const raw = localStorage.getItem('taskpilot_tasks');
+      if (raw) {
+        const tasks = JSON.parse(raw);
+        // If every stored task has an id starting with 'task-' it is the old mock seed—clear it.
+        const allMock = Array.isArray(tasks) && tasks.length > 0 && tasks.every(t => String(t.id).startsWith('task-'));
+        if (allMock) {
+          localStorage.removeItem('taskpilot_tasks');
+        }
+      }
+    } catch (_) {}
+  })();
+</script>
+<!-- Supabase JS (required before main.js module) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script type="module" src="../js/main.js"></script>
 </body></html>

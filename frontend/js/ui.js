@@ -13,6 +13,8 @@
  */
 
 import { getTasks, openTaskModal } from './tasks.js';
+import { fetchRemindersFromAPI } from './api.js';
+
 
 // In-memory cache for fetched component HTML strings
 const componentCache = new Map();
@@ -65,16 +67,14 @@ const DEFAULT_NOTIFICATIONS = [
 export function getNotifications() {
   try {
     const raw = localStorage.getItem(NOTIFS_STORAGE_KEY);
-    if (!raw) {
-      localStorage.setItem(NOTIFS_STORAGE_KEY, JSON.stringify(DEFAULT_NOTIFICATIONS));
-      return [...DEFAULT_NOTIFICATIONS];
-    }
+    if (!raw) return [];
     return JSON.parse(raw);
   } catch (err) {
     console.error('[TaskPilot UI] Failed to load notifications:', err);
-    return [...DEFAULT_NOTIFICATIONS];
+    return [];
   }
 }
+
 
 /**
  * Save notifications array to localStorage.
@@ -86,6 +86,50 @@ export function saveNotifications(notifs) {
   } catch (err) {
     console.error('[TaskPilot UI] Failed to save notifications:', err);
   }
+}
+
+const reminderPopupState = {
+  timerId: null,
+  shownReminderIds: new Set()
+};
+
+function getReminderDueTimestamp(notification) {
+  if (!notification) return null;
+
+  if (notification.remindAt) {
+    const parsed = new Date(notification.remindAt);
+    if (!isNaN(parsed.getTime())) return parsed;
+  }
+
+  return null;
+}
+
+function handleDueReminder(notification) {
+  if (!notification || !notification.id) return;
+  if (reminderPopupState.shownReminderIds.has(notification.id)) return;
+
+  const dueAt = getReminderDueTimestamp(notification);
+  if (!dueAt) return;
+
+  const now = new Date();
+  if (dueAt <= now) {
+    reminderPopupState.shownReminderIds.add(notification.id);
+    showToast(`${notification.title}: ${notification.message}`, 'info', 5000);
+  }
+}
+
+function checkForDueReminders(notifications = []) {
+  if (!Array.isArray(notifications)) return;
+  const pendingNotifications = notifications.filter(n => n.status === 'pending');
+  pendingNotifications.forEach(handleDueReminder);
+}
+
+function scheduleReminderPopupPolling() {
+  if (reminderPopupState.timerId) return;
+  reminderPopupState.timerId = setInterval(() => {
+    const notifications = getNotifications();
+    checkForDueReminders(notifications);
+  }, 60_000);
 }
 
 /**
@@ -161,18 +205,107 @@ export function refreshAllNotificationPanels() {
  * @param {HTMLElement} listContainer
  * @param {Array<Object>} notifs
  */
+/**
+ * Map backend API reminder object fields to frontend notification/reminder model.
+ * @param {Object} r - Backend reminder row
+ * @returns {Object}
+ */
+export function mapApiReminderToFrontend(r) {
+  if (!r) return null;
+  const timeDisplay = formatReminderTime(r.remind_at || r.created_at);
+  return {
+    id: String(r.id),
+    taskId: r.task_id || null,
+    title: r.message || 'Task Reminder',
+    message: r.message || (r.remind_at ? `Remind at ${r.remind_at}` : 'Reminder'),
+    time: timeDisplay,
+    remindAt: r.remind_at || null,
+    status: r.status || 'pending',
+    unread: r.status === 'pending',
+    icon: 'notifications'
+  };
+}
+
+function formatReminderTime(dateStr) {
+  if (!dateStr) return '';
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    const now = new Date();
+    const isToday = d.toDateString() === now.toDateString();
+    const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (isToday) return `Today at ${timeStr}`;
+    return `${d.toLocaleDateString([], { month: 'short', day: 'numeric' })} at ${timeStr}`;
+  } catch (_) {
+    return dateStr;
+  }
+}
+
+/**
+ * Fetch user's reminders from FastAPI backend (GET /reminders) and render them on active page.
+ * Handles loading state, empty list, and API errors gracefully.
+ */
+export async function loadAndRenderApiReminders() {
+  const lists = document.querySelectorAll('#notif-list');
+  if (lists.length === 0) return;
+
+  // 1. Loading state
+  lists.forEach(listContainer => {
+    listContainer.innerHTML = `
+      <div class="p-6 text-center text-on-surface-variant font-body-sm flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined text-secondary text-[20px] animate-spin">progress_activity</span>
+        <span>Loading reminders...</span>
+      </div>
+    `;
+  });
+
+  try {
+    // 2. Fetch reminders from backend GET /reminders
+    const rawReminders = await fetchRemindersFromAPI();
+    const reminders = rawReminders.map(mapApiReminderToFrontend).filter(Boolean);
+    saveNotifications(reminders);
+
+    // 3. Render loaded reminders (or empty state)
+    refreshAllNotificationPanels();
+    checkForDueReminders(reminders);
+    scheduleReminderPopupPolling();
+  } catch (err) {
+    console.error('[TaskPilot UI] API fetch reminders error:', err);
+
+    // 4. API Error state
+    lists.forEach(listContainer => {
+      listContainer.innerHTML = `
+        <div class="p-4 text-center text-error font-body-sm flex flex-col items-center gap-2">
+          <span class="material-symbols-outlined text-error text-[24px]">error</span>
+          <span>${escapeHTML(err.message || 'Failed to load reminders')}</span>
+          <button class="btn-retry-reminders px-3 py-1 bg-secondary text-on-secondary rounded text-xs hover:bg-secondary/90 transition-colors">Retry</button>
+        </div>
+      `;
+      const retryBtn = listContainer.querySelector('.btn-retry-reminders');
+      if (retryBtn) {
+        retryBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          loadAndRenderApiReminders();
+        };
+      }
+    });
+  }
+}
+
 function renderNotificationListHTML(listContainer, notifs) {
   if (!listContainer) return;
 
   if (notifs.length === 0) {
     listContainer.innerHTML = `
-      <div class="p-6 text-center text-secondary font-body-sm">
+      <div class="p-6 text-center text-secondary-gray font-body-sm">
         <span class="material-symbols-outlined text-[32px] text-outline mb-1 block">notifications_paused</span>
-        You're all caught up!
+        <p class="font-body-md text-body-md text-secondary-gray">No reminders found.</p>
       </div>
     `;
     return;
   }
+
 
   listContainer.innerHTML = notifs.map(n => `
     <div class="notif-item ${n.unread ? 'unread bg-off-white-bg bg-[#F7F7F2]' : 'bg-[#FFFFFF]'} p-4 border-b border-gray-border hover:bg-gray-50 transition-colors cursor-pointer group relative flex gap-3" role="menuitem" tabindex="0" data-id="${n.id}">
@@ -697,9 +830,17 @@ export function initDropdownEvents() {
  * Initialize notification trigger buttons, unread badge, and notification panel list.
  */
 export function initNotificationComponent() {
-  const notifTriggers = document.querySelectorAll(
-    '#notif-trigger, button[aria-label*="Notification"], button:has(span[data-icon="notifications"]), header button:has(.material-symbols-outlined:contains("notifications"))'
+  const candidates = document.querySelectorAll(
+    '#notif-trigger, button[aria-label*="Notification"], button[aria-label*="notification"], button:has(span[data-icon="notifications"]), header button'
   );
+  const notifTriggers = Array.from(candidates).filter(trigger => {
+    if (trigger.id === 'notif-trigger') return true;
+    const aria = trigger.getAttribute('aria-label') || '';
+    if (aria.toLowerCase().includes('notification')) return true;
+    if (trigger.querySelector('span[data-icon="notifications"]')) return true;
+    const icon = trigger.querySelector('.material-symbols-outlined');
+    return icon && icon.textContent.trim().includes('notifications');
+  });
 
   notifTriggers.forEach(trigger => {
     let panel = document.getElementById('notif-panel') || document.getElementById('notification-panel');
@@ -759,7 +900,9 @@ export function initNotificationComponent() {
   });
 
   refreshAllNotificationPanels();
+  loadAndRenderApiReminders();
 }
+
 
 /**
  * Fetch and cache raw HTML of a component template.
@@ -1027,6 +1170,9 @@ if (typeof window !== 'undefined') {
     markAllNotificationsAsRead,
     showToast,
     toggleModal,
-    initGlobalInteractions
+    initGlobalInteractions,
+    loadAndRenderApiReminders,
+    mapApiReminderToFrontend
   };
 }
+

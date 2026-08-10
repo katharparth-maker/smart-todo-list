@@ -12,6 +12,10 @@
  */
 
 import { showToast, toggleModal } from './ui.js';
+import { fetchTasksFromAPI, createTaskViaAPI, updateTaskViaAPI, deleteTaskViaAPI } from './api.js';
+
+
+
 
 export const STORAGE_KEY = 'taskpilot_tasks';
 
@@ -113,14 +117,11 @@ function getRelativeDateString(offsetDays = 0) {
 export function getTasks() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_TASKS));
-      return [...DEFAULT_TASKS];
-    }
+    if (!raw) return [];
     return JSON.parse(raw);
   } catch (err) {
     console.error('[TaskPilot Tasks] Failed to parse localStorage tasks:', err);
-    return [...DEFAULT_TASKS];
+    return [];
   }
 }
 
@@ -443,6 +444,111 @@ let currentFilterState = {
   status: 'All'
 };
 
+let currentApiTasks = null;
+
+/**
+ * Map backend API task object fields to frontend task model.
+ * @param {Object} task
+ * @returns {Object}
+ */
+export function mapApiTaskToFrontend(task) {
+  if (!task) return null;
+  return {
+    id: String(task.id),
+    title: task.title || '',
+    description: task.description || '',
+    priority: normalizePriority(task.priority),
+    category: task.category || 'General',
+    dueDate: task.due_date ? String(task.due_date).split('T')[0] : (task.dueDate || ''),
+    dueTime: task.due_time || task.dueTime || '',
+    status: task.status || 'pending',
+    isAiSuggested: Boolean(task.is_ai_suggested || task.isAiSuggested),
+    createdAt: task.created_at || task.createdAt || new Date().toISOString()
+  };
+}
+
+function normalizePriority(p) {
+  if (!p) return 'Medium';
+  const str = String(p).trim().toLowerCase();
+  if (str === 'high') return 'High';
+  if (str === 'low') return 'Low';
+  return 'Medium';
+}
+
+/**
+ * Fetch user's tasks from FastAPI backend and render them on active page.
+ * Handles loading state, empty list, and API errors gracefully.
+ */
+export async function loadAndRenderApiTasks() {
+  const isTasksPage = window.location.pathname.includes('tasks.html');
+  const isDashboardPage = window.location.pathname.includes('dashboard.html');
+
+  if (!isTasksPage && !isDashboardPage) return;
+
+  const taskListContainer = isTasksPage
+    ? (document.querySelector('#tasks-container') || document.querySelector('main .flex.flex-col.gap-sm'))
+    : document.querySelector('main ul.divide-y');
+
+  // 1. Loading state (Requirement 8)
+  if (taskListContainer) {
+    if (isTasksPage) {
+      taskListContainer.innerHTML = `
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-lg text-center flex flex-col items-center justify-center gap-sm my-md">
+          <span class="material-symbols-outlined text-secondary text-[36px] animate-spin">progress_activity</span>
+          <p class="font-body-md text-on-surface-variant font-medium">Loading your tasks...</p>
+        </div>
+      `;
+    } else if (isDashboardPage) {
+      taskListContainer.innerHTML = `
+        <li class="p-6 text-center text-on-surface-variant font-body-sm flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined text-secondary text-[20px] animate-spin">progress_activity</span>
+          <span>Loading tasks...</span>
+        </li>
+      `;
+    }
+  }
+
+  try {
+    // 2. Fetch tasks from backend GET /tasks (Requirements 1-5)
+    const rawTasks = await fetchTasksFromAPI();
+    const tasks = rawTasks.map(mapApiTaskToFrontend).filter(Boolean);
+    currentApiTasks = tasks;
+    saveTasks(tasks);
+
+    // 3. Render tasks (Requirements 6, 7, 9)
+    if (isTasksPage) {
+      renderTasksPage(tasks);
+    }
+    if (isDashboardPage) {
+      renderDashboardTasks(tasks);
+    }
+  } catch (err) {
+    console.error('[TaskPilot Tasks] API fetch error:', err);
+
+    // 4. API Error state handling (Requirement 10)
+    if (taskListContainer) {
+      if (isTasksPage) {
+        taskListContainer.innerHTML = `
+          <div class="bg-surface-container-lowest border border-error/30 rounded-lg p-lg text-center flex flex-col items-center justify-center gap-sm my-md">
+            <span class="material-symbols-outlined text-error text-[36px]">error</span>
+            <h3 class="font-headline-sm text-headline-sm font-bold text-primary">Unable to load tasks</h3>
+            <p class="font-body-sm text-on-surface-variant max-w-sm">${escapeHTML(err.message || 'Could not connect to backend server.')}</p>
+            <button id="btn-retry-tasks" class="mt-2 px-4 py-1.5 bg-secondary text-on-secondary rounded font-label-md hover:bg-secondary/90 transition-colors">Retry</button>
+          </div>
+        `;
+        const retryBtn = taskListContainer.querySelector('#btn-retry-tasks');
+        if (retryBtn) retryBtn.onclick = () => loadAndRenderApiTasks();
+      } else if (isDashboardPage) {
+        taskListContainer.innerHTML = `
+          <li class="p-6 text-center text-error font-body-sm">
+            Unable to load tasks from server.
+          </li>
+        `;
+      }
+    }
+  }
+}
+
 /**
  * Initialize and render the Tasks page (frontend/pages/tasks.html).
  */
@@ -456,9 +562,10 @@ export function initTasksPage() {
 
 /**
  * Render task summary stats and task list on tasks.html.
+ * @param {Array<Object>} [taskList]
  */
-export function renderTasksPage() {
-  const allTasks = getTasks();
+export function renderTasksPage(taskList) {
+  const allTasks = taskList || (currentApiTasks || getTasks());
   const stats = calculateTaskStatistics(allTasks);
 
   // 1. Update Task Summary Cards
@@ -466,7 +573,8 @@ export function renderTasksPage() {
 
   // 2. Filter tasks and render list
   const filtered = filterTasks(allTasks, currentFilterState);
-  const taskListContainer = document.querySelector('main .flex.flex-col.gap-sm') || document.querySelector('#tasks-container');
+  const taskListContainer = document.querySelector('#tasks-container') || document.querySelector('main .flex.flex-col.gap-sm');
+
 
   if (taskListContainer) {
     if (filtered.length === 0) {
@@ -484,6 +592,7 @@ export function renderTasksPage() {
     bindTaskCardActions(taskListContainer);
   }
 }
+
 
 /**
  * Update the 4 stat cards on tasks.html.
@@ -537,8 +646,21 @@ function setupTasksPageListeners() {
     });
   }
 
-  // 3. Add Task Button
-  const addTaskButtons = document.querySelectorAll('button:has(span[data-icon="add"]), button:contains("Add Task"), button:contains("Create Task")');
+  // 3. Add Task Button – bind by ID first, then text fallback
+  const addTaskByID = document.getElementById('btn-add-task');
+  if (addTaskByID) {
+    addTaskByID.onclick = (e) => {
+      e.preventDefault();
+      openTaskModal();
+    };
+  }
+
+  const addTaskButtons = Array.from(document.querySelectorAll('button')).filter(btn => {
+    if (btn.id === 'btn-add-task') return false; // already handled above
+    if (btn.querySelector('span[data-icon="add"]')) return true;
+    const text = btn.textContent.trim();
+    return text.includes('Add Task') || text.includes('Create Task');
+  });
   addTaskButtons.forEach(btn => {
     const text = btn.textContent.trim();
     if (text.includes('Add Task') || text.includes('Create Task') || text.includes('New Task')) {
@@ -563,9 +685,10 @@ export function initDashboardTasks() {
 
 /**
  * Render today's task list and update summary statistic numbers on dashboard.html.
+ * @param {Array<Object>} [taskList]
  */
-export function renderDashboardTasks() {
-  const allTasks = getTasks();
+export function renderDashboardTasks(taskList) {
+  const allTasks = taskList || (currentApiTasks || getTasks());
   const stats = calculateTaskStatistics(allTasks);
 
   const summaryGrid = document.querySelector('main .grid.grid-cols-2.lg\\:grid-cols-4');
@@ -630,7 +753,11 @@ export function renderDashboardTasks() {
  * Setup listeners on dashboard.html.
  */
 function setupDashboardListeners() {
-  const createButtons = document.querySelectorAll('button:contains("Create Task"), button:contains("New Task"), button:has(span[data-icon="add_task"])');
+  const createButtons = Array.from(document.querySelectorAll('button')).filter(btn => {
+    if (btn.querySelector('span[data-icon="add_task"]')) return true;
+    const text = btn.textContent.trim();
+    return text.includes('Create Task') || text.includes('New Task');
+  });
   createButtons.forEach(btn => {
     btn.onclick = (e) => {
       e.preventDefault();
@@ -672,14 +799,45 @@ function bindTaskCardActions(container) {
 
   const deleteButtons = container.querySelectorAll('.btn-delete-task');
   deleteButtons.forEach(btn => {
-    btn.onclick = (e) => {
+    btn.onclick = async (e) => {
       e.preventDefault();
       e.stopPropagation();
       const card = btn.closest('[data-id]');
       if (!card) return;
       const taskId = card.getAttribute('data-id');
-      if (confirm('Are you sure you want to delete this task?')) {
-        deleteTask(taskId);
+
+      // Confirmation dialog (existing browser pattern)
+      if (!confirm('Are you sure you want to delete this task? This cannot be undone.')) return;
+
+      // Loading state: disable button and show spinner
+      const originalBtnHTML = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<span class="material-symbols-outlined animate-spin" style="font-size: 16px;">progress_activity</span>';
+
+      try {
+        await deleteTaskViaAPI(taskId);
+
+        // Optimistically remove the card from the DOM immediately
+        card.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.97)';
+        setTimeout(() => {
+          card.remove();
+          // Re-render stats and check for empty state
+          renderTasksPage(currentApiTasks ? currentApiTasks.filter(t => String(t.id) !== String(taskId)) : []);
+          if (currentApiTasks) {
+            currentApiTasks = currentApiTasks.filter(t => String(t.id) !== String(taskId));
+            saveTasks(currentApiTasks);
+          }
+        }, 200);
+
+        showToast('Task deleted.', 'info');
+      } catch (err) {
+        console.error('[TaskPilot] Task deletion failed:', err);
+        // Restore button
+        btn.disabled = false;
+        btn.innerHTML = originalBtnHTML;
+        showToast(err.message || 'Failed to delete task. Please try again.', 'error');
       }
     };
   });
@@ -791,36 +949,107 @@ export function openTaskModal(taskToEdit = null) {
     if (e.target === modal) closeModal();
   };
 
-  form.onsubmit = (e) => {
+  form.onsubmit = async (e) => {
     e.preventDefault();
     const titleInput = document.getElementById('modal-task-title');
     const descInput = document.getElementById('modal-task-desc');
     const prioritySelect = document.getElementById('modal-task-priority');
     const categorySelect = document.getElementById('modal-task-category');
     const dateInput = document.getElementById('modal-task-date');
-    const timeInput = document.getElementById('modal-task-time');
 
     if (!titleInput.value.trim()) {
       titleInput.focus();
       return;
     }
 
-    const payload = {
-      title: titleInput.value.trim(),
-      description: descInput.value.trim(),
-      priority: prioritySelect.value,
-      category: categorySelect.value,
-      dueDate: dateInput.value,
-      dueTime: timeInput.value
-    };
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtnHTML = submitBtn ? submitBtn.innerHTML : '';
+
+    // Remove any previous error banner
+    const prevError = form.querySelector('#modal-task-error');
+    if (prevError) prevError.remove();
 
     if (isEdit) {
-      updateTask(taskToEdit.id, payload);
-    } else {
-      createTask(payload);
+      // --- UPDATE via API (PUT /tasks/{id}) ---
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `
+          <span class="material-symbols-outlined text-[18px] animate-spin">progress_activity</span>
+          Updating...
+        `;
+      }
+
+      try {
+        const updates = {
+          title:       titleInput.value.trim(),
+          description: descInput.value.trim() || undefined,
+          priority:    prioritySelect.value,      // updateTaskViaAPI lowercases it
+          category:    categorySelect.value || undefined,
+          due_date:    dateInput.value || undefined  // snake_case for backend
+        };
+
+        await updateTaskViaAPI(taskToEdit.id, updates);
+        showToast('Task updated successfully! ✅', 'success');
+        closeModal();
+        await loadAndRenderApiTasks();
+      } catch (err) {
+        console.error('[TaskPilot] Task update failed:', err);
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnHTML;
+        }
+        const errorBanner = document.createElement('div');
+        errorBanner.id = 'modal-task-error';
+        errorBanner.className = 'flex items-center gap-2 p-3 rounded-lg bg-error-container border border-error/30 text-on-error-container font-body-sm text-body-sm';
+        errorBanner.innerHTML = `
+          <span class="material-symbols-outlined text-error text-[18px] shrink-0">error</span>
+          <span>${escapeHTML(err.message || 'Failed to update task. Please try again.')}</span>
+        `;
+        form.insertBefore(errorBanner, form.querySelector('.flex.items-center.justify-end'));
+      }
+      return;
     }
 
-    closeModal();
+    // --- CREATE via API ---
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `
+        <span class="material-symbols-outlined text-[18px] animate-spin">progress_activity</span>
+        Saving...
+      `;
+    }
+
+    try {
+      const payload = {
+        title: titleInput.value.trim(),
+        description: descInput.value.trim() || undefined,
+        priority: prioritySelect.value,           // e.g. "High" — createTaskViaAPI lowercases it
+        category: categorySelect.value || undefined,
+        due_date: dateInput.value || undefined     // snake_case for backend
+      };
+
+      await createTaskViaAPI(payload);
+      showToast('Task created successfully! 🎉', 'success');
+      closeModal();
+      // Refresh task list from API so the new task appears
+      await loadAndRenderApiTasks();
+    } catch (err) {
+      console.error('[TaskPilot] Task creation failed:', err);
+      // Restore submit button
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnHTML;
+      }
+      // Show inline error banner inside the form
+      const errorBanner = document.createElement('div');
+      errorBanner.id = 'modal-task-error';
+      errorBanner.className = 'flex items-center gap-2 p-3 rounded-lg bg-error-container border border-error/30 text-on-error-container font-body-sm text-body-sm';
+      errorBanner.innerHTML = `
+        <span class="material-symbols-outlined text-error text-[18px] shrink-0">error</span>
+        <span>${escapeHTML(err.message || 'Failed to create task. Please try again.')}</span>
+      `;
+      form.insertBefore(errorBanner, form.querySelector('.flex.items-center.justify-end'));
+    }
   };
 
   const titleField = document.getElementById('modal-task-title');
@@ -841,6 +1070,7 @@ export function refreshCurrentPageTasks() {
 export function initTaskManagement() {
   initTasksPage();
   initDashboardTasks();
+  loadAndRenderApiTasks();
 }
 
 // Expose on window for inline scripts and templates
@@ -856,6 +1086,9 @@ if (typeof window !== 'undefined') {
     searchTasks,
     filterTasks,
     openTaskModal,
-    initTaskManagement
+    initTaskManagement,
+    loadAndRenderApiTasks,
+    mapApiTaskToFrontend
   };
 }
+

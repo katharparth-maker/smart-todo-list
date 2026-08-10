@@ -1,3 +1,5 @@
+import { supabase } from './supabase.js';
+
 /**
  * TaskPilotAI – Authentication & Form Validation Module
  * File: frontend/js/auth.js
@@ -197,9 +199,14 @@ export function setFormLoading(button, isLoading, loadingText = 'Please wait...'
  * @param {HTMLElement|Document} [root=document]
  */
 export function initPasswordToggles(root = document) {
-  const toggleButtons = root.querySelectorAll(
-    '.password-toggle, button:has(span.material-symbols-outlined:contains("visibility")), [onclick*="togglePassword"]'
-  );
+  const toggleButtons = Array.from(root.querySelectorAll(
+    '.password-toggle, [onclick*="togglePassword"], button'
+  )).filter(btn => {
+    if (btn.classList.contains('password-toggle')) return true;
+    if (btn.getAttribute('onclick')?.includes('togglePassword')) return true;
+    const icon = btn.querySelector('span.material-symbols-outlined');
+    return icon && icon.textContent.trim().includes('visibility');
+  });
 
   // Standard handler function exposed globally and locally
   window.togglePassword = function (inputId, iconEl) {
@@ -305,6 +312,23 @@ export function initAuthForms(root = document) {
   const loginForm = root.querySelector('form:not(#signupForm)');
   const emailInput = root.getElementById('email');
   const passwordInput = root.getElementById('password');
+
+  // Wire Demo Login button if present
+  const demoLoginBtn = root.getElementById('btn-demo-login');
+  if (demoLoginBtn) {
+    demoLoginBtn.onclick = async (e) => {
+      e.preventDefault();
+      setFormLoading(demoLoginBtn, true, 'Logging in demo mode...');
+      try {
+        await handleDemoLogin();
+      } catch (err) {
+        console.error('[TaskPilot Auth] Demo login failed:', err);
+        window.location.href = 'dashboard.html';
+      } finally {
+        setFormLoading(demoLoginBtn, false);
+      }
+    };
+  }
 
   if (loginForm && !root.getElementById('signupForm') && emailInput && passwordInput) {
     // Clear errors on input change
@@ -440,49 +464,202 @@ export function initAuthForms(root = document) {
 }
 
 /**
- * Authentication action handler prepared for Supabase integration.
- * Simulates network response and redirects to dashboard upon success.
+ * Sign in with Supabase email/password.
+ * On success, Supabase stores the session automatically and redirects to the dashboard.
+ * On failure, throws an Error with a user-friendly message.
  * @param {{ email: string, password: string }} credentials
  */
 export async function handleLoginSubmission(credentials) {
-  // Simulated asynchronous verification (will be replaced by supabase.auth.signInWithPassword)
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      console.info('[TaskPilot Auth] Credentials validated for:', credentials.email);
-      window.location.href = 'dashboard.html';
-      resolve({ user: { email: credentials.email } });
-    }, 1000);
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: credentials.email,
+    password: credentials.password
   });
+
+  if (error) {
+    console.error('[TaskPilot Auth] Login error:', error.message);
+    throw new Error(error.message || 'Login failed. Please check your credentials.');
+  }
+
+  console.info('[TaskPilot Auth] Logged in:', data.user.email);
+  window.location.href = 'dashboard.html';
+  return data;
 }
 
 /**
- * Registration action handler prepared for Supabase integration.
- * Simulates network response and redirects upon success.
+ * Perform a 1-click Demo Login for instant testing.
+ * Attempts authentication with demo credentials, or redirects directly to dashboard.
+ */
+export async function handleDemoLogin() {
+  const demoCredentials = {
+    email: 'demo@taskpilot.ai',
+    password: 'DemoPassword123!'
+  };
+
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword(demoCredentials);
+    if (!error && data?.session) {
+      window.location.href = 'dashboard.html';
+      return data;
+    }
+  } catch (_) {}
+
+  try {
+    const { data: signupData, error: signupError } = await supabase.auth.signUp({
+      email: demoCredentials.email,
+      password: demoCredentials.password,
+      options: { data: { full_name: 'Demo User' } }
+    });
+    if (!signupError && signupData?.session) {
+      window.location.href = 'dashboard.html';
+      return signupData;
+    }
+  } catch (_) {}
+
+  window.location.href = 'dashboard.html';
+}
+
+/**
+ * Register a new user with Supabase email/password.
+ * Stores the full name in user_metadata.
+ * On success, redirects to the dashboard.
+ * On failure, throws an Error with a user-friendly message.
  * @param {{ fullName: string, email: string, password: string }} data
  */
 export async function handleSignupSubmission(data) {
-  // Simulated asynchronous registration (will be replaced by supabase.auth.signUp)
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      console.info('[TaskPilot Auth] Account registered for:', data.email);
-      window.location.href = 'dashboard.html';
-      resolve({ user: { email: data.email, fullName: data.fullName } });
-    }, 1200);
+  const { data: authData, error } = await supabase.auth.signUp({
+    email: data.email,
+    password: data.password,
+    options: {
+      data: { full_name: data.fullName }
+    }
   });
+
+  if (error) {
+    console.error('[TaskPilot Auth] Signup error:', error.message);
+    throw new Error(error.message || 'Signup failed. Please try again.');
+  }
+
+  console.info('[TaskPilot Auth] Account created for:', authData.user?.email);
+  window.location.href = 'dashboard.html';
+  return authData;
 }
 
 /**
- * Placeholder for Supabase signOut.
+ * Sign out the current user via Supabase and redirect to login.
  */
 export async function signOut() {
-  window.location.href = 'login.html';
+  await supabase.auth.signOut();
+  window.location.href = '../pages/login.html';
 }
 
 /**
- * Placeholder for Supabase getSession.
+ * Return the current Supabase session, or null if unauthenticated.
+ * @returns {Promise<import('@supabase/supabase-js').Session|null>}
  */
 export async function getSession() {
-  return null;
+  const { data: { session } } = await supabase.auth.getSession();
+  return session;
+}
+
+/**
+ * Fetch profile data for the authenticated user and update dashboard UI elements.
+ */
+export async function loadDashboardUserInfo() {
+  try {
+    const session = await getSession();
+    if (!session || !session.user) return;
+
+    const user = session.user;
+    let profile = null;
+
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .maybeSingle();
+
+      if (data) {
+        profile = data;
+      } else {
+        const { data: altData } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        if (altData) profile = altData;
+      }
+    } catch (err) {
+      console.warn('[TaskPilot Auth] Error fetching profile:', err);
+    }
+
+    const name =
+      profile?.full_name ||
+      profile?.name ||
+      profile?.display_name ||
+      profile?.username ||
+      user.user_metadata?.full_name ||
+      user.user_metadata?.name ||
+      (user.email ? user.email.split('@')[0] : 'User');
+
+    const email =
+      profile?.email ||
+      user.email ||
+      '';
+
+    const userNameElements = document.querySelectorAll('#user-name, .user-name, [data-user-name]');
+    userNameElements.forEach(el => {
+      el.textContent = name;
+    });
+
+    const userEmailElements = document.querySelectorAll('#user-email, .user-email, [data-user-email]');
+    userEmailElements.forEach(el => {
+      el.textContent = email;
+    });
+
+    if (userNameElements.length === 0) {
+      const sidebarFooterP = document.querySelectorAll('aside .mt-auto .overflow-hidden p');
+      if (sidebarFooterP.length >= 1) {
+        sidebarFooterP[0].textContent = name;
+      }
+      if (sidebarFooterP.length >= 2 && email) {
+        sidebarFooterP[1].textContent = email;
+      }
+    }
+
+    const welcomeHeadings = document.querySelectorAll('#welcome-heading, .welcome-heading');
+    if (welcomeHeadings.length > 0) {
+      welcomeHeadings.forEach(el => {
+        const firstName = name.split(' ')[0] || name;
+        el.textContent = `Good morning, ${firstName} 👋`;
+      });
+    } else {
+      const welcomeH2 = document.querySelector('main h2');
+      if (welcomeH2 && (welcomeH2.textContent.includes('Good morning,') || welcomeH2.textContent.includes('Welcome back,'))) {
+        const firstName = name.split(' ')[0] || name;
+        welcomeH2.textContent = `Good morning, ${firstName} 👋`;
+      }
+    }
+
+    // Update avatar initial
+    const initial = (name[0] || 'U').toUpperCase();
+    const avatarInitials = document.querySelectorAll('.profile-avatar-initial, #profile-avatar-initial');
+    avatarInitials.forEach(el => {
+      el.textContent = initial;
+    });
+
+    // Update profile form inputs if present
+    const profileFullNameInput = document.getElementById('profile-full-name');
+    if (profileFullNameInput) {
+      profileFullNameInput.value = name;
+    }
+    const profileEmailInput = document.getElementById('profile-email-input');
+    if (profileEmailInput) {
+      profileEmailInput.value = email;
+    }
+  } catch (err) {
+    console.error('[TaskPilot Auth] Failed to load dashboard user info:', err);
+  }
 }
 
 // Expose on window for inline scripts
@@ -501,6 +678,8 @@ if (typeof window !== 'undefined') {
     handleLoginSubmission,
     handleSignupSubmission,
     signOut,
-    getSession
+    getSession,
+    loadDashboardUserInfo
   };
 }
+

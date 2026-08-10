@@ -214,7 +214,7 @@
 <!-- Mobile Drawer Overlay -->
 <div aria-hidden="true" class="fixed inset-0 bg-primary/50 z-40 hidden md:hidden" id="mobile-drawer-overlay"></div>
 <!-- SideNavBar (Shared Component) -->
-<aside class="bg-surface-container-low text-primary font-label-md h-screen w-64 fixed left-0 top-0 border-r border-outline-variant flex flex-col p-md gap-base z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out md:static md:flex-shrink-0" id="sidebar">
+<aside class="bg-surface-container-low text-primary font-label-md h-screen w-64 fixed left-0 top-0 border-r border-outline-variant flex flex-col p-md gap-base z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out" id="sidebar">
 <!-- Header / Brand -->
 <div class="flex items-center gap-sm mb-lg">
 <div class="w-8 h-8 rounded-lg bg-secondary text-on-secondary flex items-center justify-center shrink-0 shadow-sm">
@@ -249,8 +249,8 @@
 <div class="flex items-center gap-sm px-sm py-2 mb-2">
 <img alt="User Avatar" class="w-10 h-10 rounded-full object-cover border border-outline-variant shrink-0" data-alt="A small, professional circular profile picture of a young adult with a neutral expression against a clean, light background. Minimalist lighting, high quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC97659k3k7lrKc4cUvDZM4PCmvfDQPbJLgilkRexwoSf_ZBuwnmPfQycRkmhLPdsNSNEkq80E4JeZXZVSe1qaO0oVCUon7hfxlsfrct4aheIhEE5na76WaftTDUipplO-M6LUE21qytpokdU-YuGBc_VDLcYuJDg2pONu3ngS_fMHI6r7UWDjB4TZffU6YT5miHTS4Yu1RMXEGN4nWHdXFPBJSOSPiFbNlFhUZ1Ck8f6rK0mQqOCTPbw"/>
 <div class="overflow-hidden">
-<p class="truncate font-bold text-sm text-primary">Sarah Jenkins</p>
-<p class="truncate text-xs text-on-surface-variant font-normal">sarah.j@example.com</p>
+<p class="truncate font-bold text-sm text-primary" id="user-name">Sarah Jenkins</p>
+<p class="truncate text-xs text-on-surface-variant font-normal" id="user-email">sarah.j@example.com</p>
 </div>
 </div>
 <a class="flex items-center gap-sm px-sm py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all active:scale-95 duration-150" href="#">
@@ -260,7 +260,7 @@
 </div>
 </aside>
 <!-- Main Content Wrapper -->
-<div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+<div class="flex-1 flex flex-col min-w-0 md:ml-64 h-screen overflow-hidden">
 <!-- TopNavBar (Shared Component inspired) -->
 <header class="bg-surface text-primary font-body-md border-b border-outline-variant shadow-sm h-16 flex items-center justify-between px-margin-mobile md:px-margin-desktop sticky top-0 z-30 shrink-0">
 <div class="flex items-center gap-4">
@@ -281,9 +281,6 @@
 <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
 <span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full border border-surface"></span>
 </button>
-<button aria-label="Settings" class="text-on-surface-variant hover:text-primary transition-colors hidden sm:block">
-<span class="material-symbols-outlined" data-icon="settings">settings</span>
-</button>
 <!-- Mobile Avatar (when sidebar is hidden) -->
 <img alt="User profile" class="w-8 h-8 rounded-full object-cover border border-outline-variant md:hidden" data-alt="A small, professional circular profile picture of a young adult with a neutral expression against a clean, light background. Minimalist lighting, high quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADJrv5jbK21spPUUqkbgClRFXw46JXfErKrGOh0ToIsJa7hvX1WjFrtH24fn2J89WqziHGZ0SWatRdx9OanUiKTr3RGPMqsIw1JH6yCB0CKDItQeJVy9kGhxn10Ep8n8UbjYTh3iIeu9ZbJkZrc4sdu_-cUvxHCMJMbGwH0uZG6Wc2hlk-rt5rL_U8XWNz2OCXmj4wYdR5gMtXv4NCrmuL24inyiWK5XEl8QiqB9-12wjTw88W28CgSg"/>
 </div>
@@ -294,7 +291,7 @@
 <!-- Welcome Section -->
 <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
 <div>
-<h2 class="font-headline-lg text-headline-lg font-bold text-primary mb-1">Good morning, Sarah 👋</h2>
+<h2 class="font-headline-lg text-headline-lg font-bold text-primary mb-1" id="welcome-heading">Good morning, Sarah 👋</h2>
 <p class="font-body-md text-body-md text-on-surface-variant">Friday, August 8, 2026</p>
 </div>
 <button class="inline-flex items-center justify-center h-11 px-6 bg-secondary hover:bg-secondary/90 text-on-secondary rounded-lg font-label-md transition-colors shadow-sm shrink-0">
@@ -354,7 +351,7 @@
 <div class="lg:col-span-8 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-[0px_2px_4px_rgba(23,32,51,0.04)] flex flex-col overflow-hidden h-[500px]">
 <div class="p-md border-b border-outline-variant flex justify-between items-center bg-surface-bright">
 <h3 class="font-headline-md text-headline-md font-bold text-primary">Today's Tasks</h3>
-<button class="text-secondary font-label-md hover:underline">View All</button>
+<a class="text-secondary font-label-md hover:underline cursor-pointer" href="tasks.html">View All</a>
 </div>
 <div class="flex-1 overflow-y-auto p-0">
 <ul class="divide-y divide-outline-variant">
@@ -423,27 +420,27 @@
 <p class="font-body-sm text-on-surface-variant mb-4 relative z-10 leading-relaxed">
                                 You typically complete complex engineering tasks 20% faster in the mornings. Consider moving PR reviews before lunch.
                             </p>
-<button class="w-full h-10 border border-outline hover:border-primary hover:bg-surface-container-low text-primary rounded-lg font-label-md transition-all relative z-10">
+<a class="w-full h-10 border border-outline hover:border-primary hover:bg-surface-container-low text-primary rounded-lg font-label-md transition-all relative z-10 flex items-center justify-center cursor-pointer" href="planner.html">
                                 View Planner Recommendations
-                            </button>
+                            </a>
 </div>
 <!-- Card 5: Quick Actions -->
 <div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant shadow-[0px_2px_4px_rgba(23,32,51,0.04)] flex-1">
 <h3 class="font-label-md font-bold text-primary mb-4">Quick Actions</h3>
 <div class="grid grid-cols-2 gap-3">
-<button class="flex flex-col items-center justify-center gap-2 p-3 rounded-lg border border-outline-variant hover:border-secondary hover:bg-secondary-container/10 transition-colors text-on-surface-variant hover:text-secondary">
+<button class="flex flex-col items-center justify-center gap-2 p-3 rounded-lg border border-outline-variant hover:border-secondary hover:bg-secondary-container/10 transition-colors text-on-surface-variant hover:text-secondary cursor-pointer">
 <span class="material-symbols-outlined" data-icon="add_task">add_task</span>
 <span class="text-xs font-medium">New Task</span>
 </button>
-<button class="flex flex-col items-center justify-center gap-2 p-3 rounded-lg border border-outline-variant hover:border-secondary hover:bg-secondary-container/10 transition-colors text-on-surface-variant hover:text-secondary">
+<button class="flex flex-col items-center justify-center gap-2 p-3 rounded-lg border border-outline-variant hover:border-secondary hover:bg-secondary-container/10 transition-colors text-on-surface-variant hover:text-secondary cursor-pointer">
 <span class="material-symbols-outlined" data-icon="group_add">group_add</span>
 <span class="text-xs font-medium">Invite Team</span>
 </button>
-<button class="flex flex-col items-center justify-center gap-2 p-3 rounded-lg border border-outline-variant hover:border-secondary hover:bg-secondary-container/10 transition-colors text-on-surface-variant hover:text-secondary">
+<button class="flex flex-col items-center justify-center gap-2 p-3 rounded-lg border border-outline-variant hover:border-secondary hover:bg-secondary-container/10 transition-colors text-on-surface-variant hover:text-secondary cursor-pointer">
 <span class="material-symbols-outlined" data-icon="insert_chart">insert_chart</span>
 <span class="text-xs font-medium">Reports</span>
 </button>
-<button class="flex flex-col items-center justify-center gap-2 p-3 rounded-lg border border-outline-variant hover:border-secondary hover:bg-secondary-container/10 transition-colors text-on-surface-variant hover:text-secondary">
+<button class="flex flex-col items-center justify-center gap-2 p-3 rounded-lg border border-outline-variant hover:border-secondary hover:bg-secondary-container/10 transition-colors text-on-surface-variant hover:text-secondary cursor-pointer">
 <span class="material-symbols-outlined" data-icon="settings_suggest">settings_suggest</span>
 <span class="text-xs font-medium">Configure AI</span>
 </button>
@@ -465,7 +462,7 @@
 <span>50%</span>
 <span>0%</span>
 </div>
-<div class="w-full flex justify-around items-end h-full ml-8 pb-6 relative">
+<div class="flex-1 flex justify-around items-end h-full ml-8 pb-6 relative">
 <!-- Bars -->
 <div class="w-[10%] bg-surface-variant rounded-t-sm h-[40%] relative group">
 <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-on-primary text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">40%</div>
@@ -563,5 +560,7 @@
             overlay.addEventListener('click', toggleMenu);
         });
     </script>
+    <!-- Supabase JS (required before main.js module) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module" src="../js/main.js"></script>
 </body></html>

@@ -144,16 +144,16 @@
 </div>
 <nav class="flex-1 space-y-1">
 <a class="flex items-center gap-sm px-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all" href="#">
-<span class="material-symbols-outlined" data-icon="today">today</span>
-<span class="font-label-md text-label-md">My Day</span>
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="task">task</span>
+<span class="font-label-md text-label-md">Tasks</span>
 </a>
 <a class="flex items-center gap-sm px-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all" href="#">
 <span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
-<span class="font-label-md text-label-md">Upcoming</span>
-</a>
-<a class="flex items-center gap-sm px-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all" href="#">
-<span class="material-symbols-outlined" data-icon="pending">pending</span>
-<span class="font-label-md text-label-md">In Progress</span>
+<span class="font-label-md text-label-md">Planner</span>
 </a>
 <a class="flex items-center gap-sm px-sm py-2 rounded-lg bg-secondary-container text-on-secondary-container font-bold" href="#">
 <span class="material-symbols-outlined" data-icon="person">person</span>
@@ -204,11 +204,11 @@
 <div class="lg:col-span-1 space-y-gutter">
 <!-- Profile Header -->
 <div class="bg-surface rounded-lg shadow-[0px_2px_4px_rgba(23,32,51,0.04)] border border-outline-variant p-md flex flex-col items-center text-center">
-<div class="w-24 h-24 rounded-full bg-primary-container text-on-primary flex items-center justify-center text-3xl font-bold mb-sm">
+<div class="w-24 h-24 rounded-full bg-primary-container text-on-primary flex items-center justify-center text-3xl font-bold mb-sm profile-avatar-initial" id="profile-avatar-initial">
                             S
                         </div>
-<h3 class="font-headline-md text-headline-md text-on-surface font-bold">Sanskruti</h3>
-<p class="font-body-md text-body-md text-on-surface-variant">sanskruti@example.com</p>
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold" id="user-name">Sanskruti</h3>
+<p class="font-body-md text-body-md text-on-surface-variant" id="user-email">sanskruti@example.com</p>
 <p class="font-label-md text-label-md text-secondary mt-1 bg-secondary-fixed opacity-80 px-2 py-0.5 rounded">Productivity enthusiast</p>
 <button class="mt-md w-full h-11 bg-secondary text-on-secondary rounded font-label-md text-label-md hover:bg-opacity-90 transition-all">
                             Edit Profile
@@ -236,11 +236,11 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-sm">
 <div>
 <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Full Name</label>
-<input class="w-full h-11 px-3 border border-outline-variant rounded focus:border-primary-container focus:ring-2 focus:ring-primary-container focus:ring-opacity-10 bg-surface outline-none transition-all" type="text" value="Sanskruti"/>
+<input class="w-full h-11 px-3 border border-outline-variant rounded focus:border-primary-container focus:ring-2 focus:ring-primary-container focus:ring-opacity-10 bg-surface outline-none transition-all" id="profile-full-name" type="text" value="Sanskruti"/>
 </div>
 <div>
-<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Username</label>
-<input class="w-full h-11 px-3 border border-outline-variant rounded focus:border-primary-container focus:ring-2 focus:ring-primary-container focus:ring-opacity-10 bg-surface outline-none transition-all" type="text" value="@sanskruti"/>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Email / Username</label>
+<input class="w-full h-11 px-3 border border-outline-variant rounded focus:border-primary-container focus:ring-2 focus:ring-primary-container focus:ring-opacity-10 bg-surface outline-none transition-all" id="profile-email-input" type="text" value="sanskruti@example.com"/>
 </div>
 </div>
 <div>
@@ -341,9 +341,17 @@
 </div>
 </div>
 <nav class="flex-1 space-y-1">
-<a class="flex items-center gap-sm px-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high" href="#">
-<span class="material-symbols-outlined" data-icon="today">today</span>
-<span class="font-label-md text-label-md">My Day</span>
+<a class="flex items-center gap-sm px-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="task">task</span>
+<span class="font-label-md text-label-md">Tasks</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="font-label-md text-label-md">Planner</span>
 </a>
 <a class="flex items-center gap-sm px-sm py-2 rounded-lg bg-secondary-container text-on-secondary-container font-bold" href="#">
 <span class="material-symbols-outlined" data-icon="person">person</span>
@@ -421,5 +429,7 @@
             });
         });
     </script>
+    <!-- Supabase JS (required before main.js module) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module" src="../js/main.js"></script>
 </body></html>

@@ -38,14 +38,34 @@ class PlannerUpdate(BaseModel):
 router = APIRouter(prefix="/planner", tags=["planner"])
 
 
-@router.get("", response_model=List[Dict[str, Any]])
+@router.get(
+    "",
+    response_model=List[Dict[str, Any]],
+    summary="List planner entries",
+    description="Retrieve all timeline planner entries for the authenticated user.",
+    responses={
+        200: {"description": "List of planner entries"},
+        401: {"description": "Unauthenticated - Missing or invalid Bearer token"},
+    },
+)
 @router.get("/", response_model=List[Dict[str, Any]], include_in_schema=False)
 def list_planner_entries(current_user=Depends(get_current_user)):
     user_id = getattr(current_user, "id", None)
     return planner_service.get_planner_entries_for_user(user_id)
 
 
-@router.post("", status_code=status.HTTP_201_CREATED)
+@router.post(
+    "",
+    status_code=status.HTTP_201_CREATED,
+    summary="Create planner entry",
+    description="Schedule a new timeline event or task slot.",
+    responses={
+        201: {"description": "Planner entry created successfully"},
+        400: {"description": "Invalid time window (end_time must be later than start_time)"},
+        401: {"description": "Unauthenticated - Missing or invalid Bearer token"},
+        422: {"description": "Validation error in request body"},
+    },
+)
 @router.post("/", status_code=status.HTTP_201_CREATED, include_in_schema=False)
 def create_planner_entry(
     planner_in: PlannerCreate, current_user=Depends(get_current_user)
@@ -62,7 +82,16 @@ def create_planner_entry(
     return planner_service.create_planner_entry_for_user(user_id, planner_data)
 
 
-@router.get("/{planner_id}")
+@router.get(
+    "/{planner_id}",
+    summary="Get planner entry by ID",
+    description="Retrieve details of a specific planner entry.",
+    responses={
+        200: {"description": "Planner entry details"},
+        401: {"description": "Unauthenticated - Missing or invalid Bearer token"},
+        404: {"description": "Planner entry not found"},
+    },
+)
 def get_planner_entry(planner_id: str, current_user=Depends(get_current_user)):
     user_id = getattr(current_user, "id", None)
     entry = planner_service.get_planner_entry_by_id_for_user(planner_id, user_id)
@@ -74,7 +103,18 @@ def get_planner_entry(planner_id: str, current_user=Depends(get_current_user)):
     return entry
 
 
-@router.put("/{planner_id}")
+@router.put(
+    "/{planner_id}",
+    summary="Update planner entry",
+    description="Update an existing timeline planner entry.",
+    responses={
+        200: {"description": "Updated planner entry"},
+        400: {"description": "Invalid time window"},
+        401: {"description": "Unauthenticated - Missing or invalid Bearer token"},
+        404: {"description": "Planner entry not found"},
+        422: {"description": "Validation error"},
+    },
+)
 def update_planner_entry(
     planner_id: str,
     planner_in: PlannerUpdate,
@@ -105,7 +145,16 @@ def update_planner_entry(
     return updated_entry
 
 
-@router.delete("/{planner_id}")
+@router.delete(
+    "/{planner_id}",
+    summary="Delete planner entry",
+    description="Delete a timeline planner entry by ID.",
+    responses={
+        200: {"description": "Planner entry deleted successfully"},
+        401: {"description": "Unauthenticated - Missing or invalid Bearer token"},
+        404: {"description": "Planner entry not found"},
+    },
+)
 def delete_planner_entry(planner_id: str, current_user=Depends(get_current_user)):
     user_id = getattr(current_user, "id", None)
     deleted_entry = planner_service.delete_planner_entry_for_user(planner_id, user_id)

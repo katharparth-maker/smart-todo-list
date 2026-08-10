@@ -82,7 +82,17 @@ class DailyPlanResponse(BaseModel):
 router = APIRouter(prefix="/ai", tags=["ai"])
 
 
-@router.post("/test", response_model=AITestResponse)
+@router.post(
+    "/test",
+    response_model=AITestResponse,
+    summary="Test AI prompt",
+    description="Send a raw prompt to the AI service and receive a response.",
+    responses={
+        200: {"description": "AI generated response"},
+        401: {"description": "Unauthenticated - Missing or invalid Bearer token"},
+        500: {"description": "AI service error"},
+    },
+)
 @router.post("/test/", response_model=AITestResponse, include_in_schema=False)
 def ai_test(request_data: AITestRequest, current_user=Depends(get_current_user)):
     try:
@@ -95,7 +105,18 @@ def ai_test(request_data: AITestRequest, current_user=Depends(get_current_user))
         )
 
 
-@router.post("/analyze-tasks", response_model=TaskAnalysisResponse)
+@router.post(
+    "/analyze-tasks",
+    response_model=TaskAnalysisResponse,
+    summary="Analyze tasks with AI",
+    description="Analyze a list of tasks for priority ordering, urgency, and productivity advice.",
+    responses={
+        200: {"description": "Task analysis result"},
+        401: {"description": "Unauthenticated - Missing or invalid Bearer token"},
+        422: {"description": "Validation error in task list"},
+        500: {"description": "Task analysis error"},
+    },
+)
 @router.post("/analyze-tasks/", response_model=TaskAnalysisResponse, include_in_schema=False)
 def analyze_user_tasks(
     request_data: TaskAnalysisRequest,
@@ -122,7 +143,19 @@ def analyze_user_tasks(
         )
 
 
-@router.post("/daily-plan", response_model=DailyPlanResponse)
+@router.post(
+    "/daily-plan",
+    response_model=DailyPlanResponse,
+    summary="Generate daily AI plan",
+    description="Generate an optimized hourly timeline schedule for a date given available time window and tasks.",
+    responses={
+        200: {"description": "Generated daily schedule plan"},
+        400: {"description": "Invalid time window"},
+        401: {"description": "Unauthenticated - Missing or invalid Bearer token"},
+        422: {"description": "Validation error"},
+        500: {"description": "Daily planner service error"},
+    },
+)
 @router.post("/daily-plan/", response_model=DailyPlanResponse, include_in_schema=False)
 def create_daily_plan(
     request_data: DailyPlanRequest,

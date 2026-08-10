@@ -181,8 +181,12 @@
 </div>
 </div>
 <!-- Submit -->
-<button class="btn-primary rounded h-[44px] font-label-md text-label-md w-full flex justify-center items-center mt-sm transition-colors" type="submit">
+<button class="btn-primary rounded h-[44px] font-label-md text-label-md w-full flex justify-center items-center mt-sm transition-colors cursor-pointer" type="submit">
                     Login
+                </button>
+<button class="btn-secondary rounded h-[44px] font-label-md text-label-md w-full flex justify-center items-center gap-2 mt-2 transition-colors cursor-pointer" id="btn-demo-login" type="button">
+<span class="material-symbols-outlined text-[20px]">rocket_launch</span>
+                    Demo Login (Explore App)
                 </button>
 </form>
 <!-- Divider -->
@@ -223,5 +227,7 @@
 </div>
 </div>
     </div>
+    <!-- Supabase JS (required before main.js module) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module" src="../js/main.js"></script>
 </body></html>
